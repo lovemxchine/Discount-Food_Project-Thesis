@@ -16,9 +16,14 @@ app.listen(port, () => {
   console.log("Server is running on port " + port);
 });
 
-app.get('/index', (req,res)=>{
+app.get('/api/customer/', (req,res)=>{
   return res.status(200).send({status: "okay"})
 })
+
+app.get('/api/shopkeeper/', (req,res)=>{
+  return res.status(200).send({status: "okay"})
+})
+
 
 
 
