@@ -17,7 +17,7 @@ class RegisterRole extends StatelessWidget {
             children: [
              ElevatedButton(
             onPressed: () {
-             // Navigator.push(context, MaterialPageRoute(builder: (context) => Register())); 
+              Navigator.pushNamed(context, '/registerRole/customer');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFFF6838), // Button color
@@ -45,7 +45,7 @@ class RegisterRole extends StatelessWidget {
           SizedBox(height: 20,)
           ,ElevatedButton(
             onPressed: () {
-             // Navigator.push(context, MaterialPageRoute(builder: (context) => Register())); 
+              Navigator.pushNamed(context, '/registerRole/shopkeeper');       
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFFF6838), // Button color

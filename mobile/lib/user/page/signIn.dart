@@ -37,6 +37,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
