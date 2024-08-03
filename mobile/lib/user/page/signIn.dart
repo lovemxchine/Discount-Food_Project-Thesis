@@ -1,14 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/user/service/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Login extends StatefulWidget {
-  const  Login({super.key});
+class SignIn extends StatefulWidget {
+  const SignIn({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignIn> createState() => _SignInState();
 
 }
 
-class _LoginState extends State<Login> {
+class _SignInState extends State<SignIn> {
+  final FirebaseAuthService _auth = FirebaseAuthService();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   String email = '';
@@ -101,6 +106,7 @@ class _LoginState extends State<Login> {
                   text:const TextSpan(
                     text: 'Sign In as Guest ',
                 style: TextStyle(
+                  fontSize: 16,
                   color: Color(0xFFFF6838)
                     ),
                   ),            
@@ -109,7 +115,7 @@ class _LoginState extends State<Login> {
               const SizedBox( height: 20,),
               ElevatedButton(
             onPressed: () {
-              // request api to login
+              _signIn(); 
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Color(0xFFFF6838), // Button color
@@ -124,10 +130,49 @@ class _LoginState extends State<Login> {
                 fontSize: 16,
                 color: Colors.white)),
           ),
+          const SizedBox(height: 35),
+          RichText(text: TextSpan(
+            text: 'Don\'t have an account ? ',
+            style:const  TextStyle(
+              color: Colors.black,
+              fontSize: 16
+            ),
+            children: <TextSpan>[
+              TextSpan(
+                text: 'Sign Up',
+                style:const TextStyle(
+                  color: Color(0xFFFF6838),
+                  fontSize: 16
+                ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.pushNamed(context, '/registerRole');
+                  }
+              )
+            ]
+          ))
             ],
           )
         ),
       ),
     );
   }
+  void _signIn() async {
+    String email = emailController.text;
+    String password = passwordController.text;
+
+   try{ User? user = await _auth.signInWithEmailAndPassword(email, password); 
+
+    if (user != null) {
+      SharedPreferences prefs = await SharedPreferences
+          .getInstance(); //สร้างตัวแปรสำหรับ sharedpreference
+      print("Login is successfully signed");
+    }
+    } on FirebaseAuthException catch (e) {
+      _auth.handleFirebaseAuthError(e);
+      print(e.message);
+    }   
+  }
 }
+
+  
