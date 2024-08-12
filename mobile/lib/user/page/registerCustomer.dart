@@ -40,7 +40,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
         surfaceTintColor: Colors.white,
       )
       ,body: PageView(
-        scrollDirection: Axis.vertical,
+        scrollDirection: Axis.vertical, 
         children: [
           Container(
             color: const Color.fromARGB(255, 255, 255, 255), 
