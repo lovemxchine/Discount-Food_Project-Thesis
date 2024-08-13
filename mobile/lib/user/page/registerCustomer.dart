@@ -159,13 +159,13 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
                       ),
                       const SizedBox(height: 20),
                       buildUnderlineTextField(
-                          nameController, 'ชื่อ', 'ชื่อ', false),
+                          nameController, 'ชื่อ', 'ชื่อ', false, false),
                       const SizedBox(height: 16),
-                      buildUnderlineTextField(
-                          surnameController, 'นามสกุล', 'นามสกุล', false),
+                      buildUnderlineTextField(surnameController, 'นามสกุล',
+                          'นามสกุล', false, false),
                       const SizedBox(height: 16),
                       buildUnderlineTextField(telController, 'เบอร์โทรศัพท์',
-                          'เบอร์โทรศัพท์', false),
+                          'เบอร์โทรศัพท์', false, false),
                       const SizedBox(height: 16),
                       buildDateField(birthdayController, context),
                       const SizedBox(height: 280),

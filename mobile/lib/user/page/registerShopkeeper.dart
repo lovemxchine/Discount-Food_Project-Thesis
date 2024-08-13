@@ -24,6 +24,23 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
   final TextEditingController birthdayController = TextEditingController();
   final TextEditingController placeController = TextEditingController();
   final TextEditingController postcodeController = TextEditingController();
+  final TextEditingController nameShopkeeperController =
+      TextEditingController();
+  final TextEditingController surnameShopkeeperController =
+      TextEditingController();
+  final TextEditingController nationalityShopkeeperController =
+      TextEditingController();
+  final TextEditingController birthdayShopkeeperController =
+      TextEditingController();
+  final TextEditingController provinceShopkeeperController =
+      TextEditingController();
+  final TextEditingController districtShopkeeperController =
+      TextEditingController();
+  final TextEditingController subdistrictShopkeeperController =
+      TextEditingController();
+  final TextEditingController postcodeShopkeeperController =
+      TextEditingController();
+
   bool firstPageValidate = false;
   bool secondPageValidate = false;
   bool thirdPageValidate = false;
@@ -237,153 +254,167 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                   ))),
             ),
             SingleChildScrollView(
-              padding: const EdgeInsets.only(left: 40, right: 40),
               child: Container(
                 color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 20),
-                      const Text(
-                        'ข้อมูลร้านค้า',
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'เราจะแสดงข้อมูลต่อไปนี้ของคุณให้ลูกค้าบนแอปฯ',
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                      const SizedBox(height: 20),
-                      buildUnderlineTextField(
-                          shopNameController, 'ชื่อร้าน', 'ชื่อร้าน', false),
-                      const SizedBox(height: 16),
-                      buildUnderlineTextField(branchController,
-                          'ชื่อสาขา / ย่าน (ถ้ามี)', 'ชื่อสาขา', false),
-                      const SizedBox(height: 16),
-                      const Text('ที่อยู่ร้าน'),
-                      const SizedBox(height: 8),
-                      SizedBox(
-                        height: 60,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            // Add your button press logic here
-                          },
-                          style: ElevatedButton.styleFrom(
-                            side: const BorderSide(color: Color(0xFFD1D1D1)),
-                            elevation: 1,
-                            shadowColor: Colors.black.withOpacity(0.1),
-                            backgroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.location_on_outlined,
-                                  color: Colors.grey[600], size: 20),
-                              const SizedBox(width: 12),
-                              Text(
-                                'ปักหมุดที่ตั้งร้าน',
-                                style: TextStyle(
-                                  fontFamily: GoogleFonts.mitr().fontFamily,
-                                  color: Colors.grey[800],
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const Icon(Icons.location_on_outlined,
-                                  color: Colors.transparent, size: 20),
-                            ],
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 40, right: 40),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        const Text(
+                          'ข้อมูลร้านค้า',
+                          style: TextStyle(
+                            fontSize: 24,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      buildUnderlineTextField(
-                          placeController,
-                          'เลขที่อยู่ร้าน หรือ ข้อมูลสถานที่ตั้งร้าน (โดยละเอียด)',
-                          'กรอกเลขที่บ้านพร้อมชื่อถนน หรืออสถานที่ใกล้เคียง',
-                          false),
-                      const SizedBox(height: 16),
-                      SelectOption(
-                        label: "จังหวัด",
-                        options: provinceToDistricts.keys.toList(),
-                        selectedValue: selectedProvince,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedProvince = newValue!;
-                            selectedDistrict =
-                                provinceToDistricts[selectedProvince]!.first;
-                            selectedSubDistrict =
-                                districtToSubDistricts[selectedDistrict]!.first;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      SelectOption(
-                        label: "อำเภอ / เขต",
-                        options: provinceToDistricts[selectedProvince]!,
-                        selectedValue: selectedDistrict,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedDistrict = newValue!;
-                            selectedSubDistrict =
-                                districtToSubDistricts[selectedDistrict]!.first;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      SelectOption(
-                        label: "ตำบล / แขวง",
-                        options: districtToSubDistricts[selectedDistrict]!,
-                        selectedValue: selectedSubDistrict,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedDistrict = newValue!;
-                            selectedSubDistrict =
-                                districtToSubDistricts[selectedDistrict]!.first;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      buildUnderlineTextField(postcodeController,
-                          'รหัสไปรษณีย์', 'รหัสไปรษณีย์', false),
-                      const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 280,
-                            child: ElevatedButton(
-                              onPressed: secondPageValidate ? nextPage : null,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: secondPageValidate
-                                    ? Colors.blue
-                                    : const Color.fromARGB(135, 199, 199, 199),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                              child: Text(
-                                'ดำเนินการต่อ',
-                                style: TextStyle(
-                                    color: secondPageValidate
-                                        ? Colors.white
-                                        : const Color.fromARGB(255, 60, 60, 60),
-                                    fontSize: 16),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'เราจะแสดงข้อมูลต่อไปนี้ของคุณให้ลูกค้าบนแอปฯ',
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                        const SizedBox(height: 20),
+                        buildUnderlineTextField(shopNameController, 'ชื่อร้าน',
+                            'ชื่อร้าน', false, false),
+                        const SizedBox(height: 16),
+                        buildUnderlineTextField(
+                            branchController,
+                            'ชื่อสาขา / ย่าน (ถ้ามี)',
+                            'ชื่อสาขา',
+                            false,
+                            false),
+                        const SizedBox(height: 16),
+                        const Text('ที่อยู่ร้าน'),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          height: 60,
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              // Add your button press logic here
+                            },
+                            style: ElevatedButton.styleFrom(
+                              side: const BorderSide(color: Color(0xFFD1D1D1)),
+                              elevation: 1,
+                              shadowColor: Colors.black.withOpacity(0.1),
+                              backgroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
                               ),
                             ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.location_on_outlined,
+                                    color: Colors.grey[600], size: 20),
+                                const SizedBox(width: 12),
+                                Text(
+                                  'ปักหมุดที่ตั้งร้าน',
+                                  style: TextStyle(
+                                    fontFamily: GoogleFonts.mitr().fontFamily,
+                                    color: Colors.grey[800],
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const Icon(Icons.location_on_outlined,
+                                    color: Colors.transparent, size: 20),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        const SizedBox(height: 8),
+                        buildUnderlineTextField(
+                            placeController,
+                            'เลขที่อยู่ร้าน หรือ ข้อมูลสถานที่ตั้งร้าน (โดยละเอียด)',
+                            'กรอกเลขที่บ้านพร้อมชื่อถนน หรืออสถานที่ใกล้เคียง',
+                            false,
+                            false),
+                        const SizedBox(height: 16),
+                        SelectOption(
+                          label: "จังหวัด",
+                          options: provinceToDistricts.keys.toList(),
+                          selectedValue: selectedProvince,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedProvince = newValue!;
+                              selectedDistrict =
+                                  provinceToDistricts[selectedProvince]!.first;
+                              selectedSubDistrict =
+                                  districtToSubDistricts[selectedDistrict]!
+                                      .first;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        SelectOption(
+                          label: "อำเภอ / เขต",
+                          options: provinceToDistricts[selectedProvince]!,
+                          selectedValue: selectedDistrict,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedDistrict = newValue!;
+                              selectedSubDistrict =
+                                  districtToSubDistricts[selectedDistrict]!
+                                      .first;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        SelectOption(
+                          label: "ตำบล / แขวง",
+                          options: districtToSubDistricts[selectedDistrict]!,
+                          selectedValue: selectedSubDistrict,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedDistrict = newValue!;
+                              selectedSubDistrict =
+                                  districtToSubDistricts[selectedDistrict]!
+                                      .first;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        buildUnderlineTextField(postcodeController,
+                            'รหัสไปรษณีย์', 'รหัสไปรษณีย์', false, false),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 280,
+                              child: ElevatedButton(
+                                onPressed: secondPageValidate ? nextPage : null,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: secondPageValidate
+                                      ? Colors.blue
+                                      : const Color.fromARGB(
+                                          135, 199, 199, 199),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                ),
+                                child: Text(
+                                  secondPageValidate
+                                      ? 'ดำเนินการต่อ'
+                                      : 'กรุณากรอกข้อมูลให้ครบ',
+                                  style: TextStyle(
+                                      color: secondPageValidate
+                                          ? Colors.white
+                                          : const Color.fromARGB(
+                                              255, 60, 60, 60),
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -400,7 +431,8 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                       const Text(
                         'รายละเอียดสำหรับติดต่อร้านค้า',
                         style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                          fontSize: 24,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       const Text(
@@ -409,36 +441,36 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                       ),
                       const SizedBox(height: 20),
                       buildUnderlineTextField(telController, 'เบอร์โทรศัพท์',
-                          'เบอร์โทรศัพท์', false),
+                          'เบอร์โทรศัพท์', false, false),
                       const SizedBox(height: 16),
                       buildUnderlineTextField(
-                          emailController, 'อีเมล', 'อีเมล', false),
-                      const SizedBox(height: 280),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 280,
-                            child: ElevatedButton(
-                              onPressed: secondPageValidate ? nextPage : null,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    const Color.fromARGB(135, 199, 199, 199),
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                              ),
-                              child: const Text(
-                                'บันทึก',
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 60, 60, 60),
-                                    fontSize: 16),
+                          emailController, 'อีเมล', 'อีเมล', false, true),
+                      const SizedBox(height: 380),
+                      Center(
+                        child: SizedBox(
+                          width: 230,
+                          child: ElevatedButton(
+                            onPressed: firstPageValidate ? nextPage : null,
+                            style: ElevatedButton.styleFrom(
+                              shadowColor: Colors.transparent,
+                              backgroundColor:
+                                  firstPageValidate ? Colors.blue : Colors.grey,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
                               ),
                             ),
+                            child: Text(
+                              'ไปหน้าถัดไป',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: GoogleFonts.mitr().fontFamily,
+                                  color: firstPageValidate
+                                      ? Colors.white
+                                      : const Color.fromARGB(255, 56, 56, 56)),
+                            ),
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -446,50 +478,209 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
               ),
             ),
             SingleChildScrollView(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'รายละเอียดร้าน',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'กรอกข้อมูลให้ครบถ้วนเพื่อให้ลูกค้าติดต่อได้',
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                  ),
-                  SizedBox(height: 24),
-                  TextField(
-                    decoration: InputDecoration(
-                      labelText: 'ชื่อร้าน*',
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'แนะนำชื่อร้าน รูปแบบการขาย และ สินค้าที่ขายหลักๆ',
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                  ),
-                  SizedBox(height: 24),
-                  _buildImageUploadButton('รูปหน้าร้าน'),
-                  SizedBox(height: 16),
-                  _buildImageUploadButton('รูปโปรไฟล์'),
-                  SizedBox(height: 16),
-                  _buildImageUploadButton('รูปพื้นหลังร้าน'),
-                  SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: Text('ถัดไป'),
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 16),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 40, right: 40),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    const Text(
+                      'รายละเอียดร้าน',
+                      style: TextStyle(
+                        fontSize: 24,
                       ),
                     ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'กรอกข้อมูลให้ครบถ้วนเพื่อให้ลูกค้าติดต่อได้',
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    ),
+                    const SizedBox(height: 24),
+                    buildUnderlineTextField(shopNameController, 'ชื่อร้าน',
+                        'ชื่อร้าน', false, false),
+                    const SizedBox(height: 16),
+                    Text(
+                      'การใช้รูปภาพช่วยดึงดูดลูกค้าได้ โดยรูปหน้าปกจะแสดงที่ด้านบนเมนูร้าน รูปประจำร้านสร้างเอกลักษณ์ และใบทะเบียนพาณิชย์เป็นหลักฐานว่าร้านเปิดอย่างถูกต้องตามกฎหมาย',
+                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    ),
+                    const SizedBox(height: 24),
+                    CustomImageUploadButton(
+                        label: 'รูปหน้าปกร้าน', onPressed: () {}),
+                    const SizedBox(height: 16),
+                    CustomImageUploadButton(
+                        label: 'รูปประจำร้าน', onPressed: () {}),
+                    const SizedBox(height: 16),
+                    CustomImageUploadButton(
+                        label: 'ใบทะเบียนพาณิชย์', onPressed: () {}),
+                    const SizedBox(height: 77),
+                    Center(
+                      child: SizedBox(
+                        width: 230,
+                        child: ElevatedButton(
+                          onPressed: firstPageValidate ? nextPage : null,
+                          style: ElevatedButton.styleFrom(
+                            shadowColor: Colors.transparent,
+                            backgroundColor:
+                                firstPageValidate ? Colors.blue : Colors.grey,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          child: Text(
+                            'ไปหน้าถัดไป',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: GoogleFonts.mitr().fontFamily,
+                                color: firstPageValidate
+                                    ? Colors.white
+                                    : const Color.fromARGB(255, 56, 56, 56)),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SingleChildScrollView(
+              child: Container(
+                color: Colors.white,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 40, right: 40),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 20),
+                        const Text(
+                          'ข้อมูลผู้ดูแล',
+                          style: TextStyle(
+                            fontSize: 24,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'เราจะแสดงข้อมูลต่อไปนี้ของคุณให้ลูกค้าบนแอปฯ',
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            Container(
+                              width: 160,
+                              child: buildUnderlineTextField(
+                                  nameShopkeeperController,
+                                  'ชื่อ ของผู้ดูแล',
+                                  'ชื่อร้าน',
+                                  false,
+                                  false),
+                            ),
+                            const SizedBox(height: 20),
+                            Container(
+                              width: 160,
+                              child: buildUnderlineTextField(
+                                  nameShopkeeperController,
+                                  'ชื่อ ของผู้ดูแล',
+                                  'ชื่อร้าน',
+                                  false,
+                                  false),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        buildUnderlineTextField(surnameShopkeeperController,
+                            'นามสกุล ของผู้ดูแล ', 'นามสกุล', false, false),
+                        const SizedBox(height: 16),
+                        buildUnderlineTextField(nationalityShopkeeperController,
+                            'เชื้อชาติ', 'เชื้อชาติ', false, false),
+                        const SizedBox(height: 8),
+                        buildUnderlineTextField(
+                            placeController,
+                            'ที่อยู่อาศัย (โดยละเอียด)',
+                            'กรอกเลขที่บ้านพร้อมชื่อถนน หรืออสถานที่ใกล้เคียง',
+                            false,
+                            false),
+                        const SizedBox(height: 16),
+                        SelectOption(
+                          label: "จังหวัด",
+                          options: provinceToDistricts.keys.toList(),
+                          selectedValue: selectedProvince,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedProvince = newValue!;
+                              selectedDistrict =
+                                  provinceToDistricts[selectedProvince]!.first;
+                              selectedSubDistrict =
+                                  districtToSubDistricts[selectedDistrict]!
+                                      .first;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        SelectOption(
+                          label: "อำเภอ / เขต",
+                          options: provinceToDistricts[selectedProvince]!,
+                          selectedValue: selectedDistrict,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedDistrict = newValue!;
+                              selectedSubDistrict =
+                                  districtToSubDistricts[selectedDistrict]!
+                                      .first;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        SelectOption(
+                          label: "ตำบล / แขวง",
+                          options: districtToSubDistricts[selectedDistrict]!,
+                          selectedValue: selectedSubDistrict,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedDistrict = newValue!;
+                              selectedSubDistrict =
+                                  districtToSubDistricts[selectedDistrict]!
+                                      .first;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                        buildUnderlineTextField(postcodeShopkeeperController,
+                            'รหัสไปรษณีย์', 'รหัสไปรษณีย์', false, false),
+                        const SizedBox(height: 24),
+                        Center(
+                          child: SizedBox(
+                            width: 280,
+                            child: ElevatedButton(
+                              onPressed: secondPageValidate ? nextPage : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: secondPageValidate
+                                    ? Colors.blue
+                                    : const Color.fromARGB(135, 199, 199, 199),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                              child: Text(
+                                secondPageValidate
+                                    ? 'ดำเนินการต่อ'
+                                    : 'กรุณากรอกข้อมูลให้ครบ',
+                                style: TextStyle(
+                                    color: secondPageValidate
+                                        ? Colors.white
+                                        : const Color.fromARGB(255, 60, 60, 60),
+                                    fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
+                ),
               ),
             ),
           ],

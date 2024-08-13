@@ -12,7 +12,7 @@ const db = admin.firestore();
 
 app.use(express.json(), cors({ origin: true }));
 
-const port = 8080;
+const port = 3000;
 
 app.get("/api/user/customer/", (req, res) => {
   return res.status(200).send({ status: "okay" });

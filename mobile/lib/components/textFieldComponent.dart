@@ -2,29 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-Widget _buildImageUploadButton(String label) {
-  return OutlinedButton(
-    onPressed: () {},
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            Icon(Icons.camera_alt, color: Colors.grey),
-            SizedBox(width: 8),
-            Text(label, style: TextStyle(color: Colors.black)),
-          ],
-        ),
-        Icon(Icons.chevron_right, color: Colors.grey),
-      ],
-    ),
-    style: OutlinedButton.styleFrom(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-      side: BorderSide(color: Colors.grey.shade300),
-    ),
-  );
-}
-
 Widget buildBorderTextField(TextEditingController controller, String label,
     String hintText, bool obscureText) {
   return TextField(
@@ -47,8 +24,9 @@ Widget buildBorderTextField(TextEditingController controller, String label,
 }
 
 Widget buildUnderlineTextField(TextEditingController controller, String label,
-    String hintText, bool obscureText) {
+    String hintText, bool obscureText, bool readOnly) {
   return TextField(
+    readOnly: readOnly,
     controller: controller,
     obscureText: obscureText,
     decoration: InputDecoration(
@@ -198,6 +176,76 @@ class SelectOption extends StatelessWidget {
         );
       }).toList(),
       onChanged: onChanged,
+    );
+  }
+}
+
+class buildImageUploadButton extends StatelessWidget {
+  final String label;
+  final Function() onPressed;
+
+  buildImageUploadButton({
+    required this.label,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Text(label),
+    );
+  }
+}
+
+class CustomImageUploadButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+  final Widget? leadingIcon;
+  final Widget? trailingIcon;
+
+  const CustomImageUploadButton({
+    Key? key,
+    required this.label,
+    required this.onPressed,
+    this.leadingIcon,
+    this.trailingIcon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 80,
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Row(
+              children: [
+                SizedBox(width: 12),
+                leadingIcon ??
+                    Icon(Icons.camera_alt, color: Colors.grey, size: 24),
+                SizedBox(width: 40),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: TextStyle(fontSize: 14, color: Colors.black87),
+                  ),
+                ),
+                trailingIcon ??
+                    Icon(Icons.chevron_right, color: Colors.grey, size: 24),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
