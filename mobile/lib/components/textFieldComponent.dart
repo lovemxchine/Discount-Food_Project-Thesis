@@ -75,70 +75,6 @@ Widget buildDateField(TextEditingController controller, BuildContext context) {
   );
 }
 
-// class SelectOption extends StatefulWidget {
-//   final List<String> options;
-//   final String selectedProvince;
-//   final String label;
-
-//   SelectOption({
-//     required this.options,
-//     required this.selectedProvince,
-//     required this.label,
-//   });
-
-//   @override
-//   _SelectOptionState createState() => _SelectOptionState();
-// }
-
-// class _SelectOptionState extends State<SelectOption> {
-//   late String _selectedProvince;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _selectedProvince = widget.selectedProvince;
-
-//     // Debugging statements
-//     print('Selected Province: $_selectedProvince');
-//     print('Options: ${widget.options}');
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // Check if the selectedProvince is in the options list
-//     if (!widget.options.contains(_selectedProvince)) {
-//       _selectedProvince = widget.options.isNotEmpty ? widget.options.first : '';
-//     }
-
-//     return DropdownButtonFormField<String>(
-//       style: TextStyle(
-//           color: const Color.fromARGB(255, 59, 59, 59),
-//           fontSize: 12,
-//           fontFamily: GoogleFonts.mitr().fontFamily),
-//       decoration: InputDecoration(
-//         labelStyle: TextStyle(color: Colors.black, fontSize: 18),
-//         contentPadding: EdgeInsets.only(top: 5),
-//         labelText: widget.label,
-//         border: UnderlineInputBorder(),
-//         focusedBorder: UnderlineInputBorder(
-//           borderSide: BorderSide(color: Colors.black),
-//         ),
-//       ),
-//       value: _selectedProvince,
-//       items: widget.options.map((String province) {
-//         return DropdownMenuItem<String>(
-//           value: province,
-//           child: Text(province),
-//         );
-//       }).toList(),
-//       onChanged: (String? newValue) {
-//         setState(() {
-//           _selectedProvince = newValue!;
-//         });
-//       },
-//     );
-//   }
-// }
 class SelectOption extends StatelessWidget {
   final String label;
   final List<String> options;
@@ -171,7 +107,7 @@ class SelectOption extends StatelessWidget {
       value: selectedValue,
       items: options.map((String value) {
         return DropdownMenuItem<String>(
-          value: value,
+          value: value ?? '',
           child: Text(value),
         );
       }).toList(),

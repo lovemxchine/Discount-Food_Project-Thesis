@@ -28,6 +28,8 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
       TextEditingController();
   final TextEditingController surnameShopkeeperController =
       TextEditingController();
+  final TextEditingController placeShopkeeperController =
+      TextEditingController();
   final TextEditingController nationalityShopkeeperController =
       TextEditingController();
   final TextEditingController birthdayShopkeeperController =
@@ -40,14 +42,17 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
       TextEditingController();
   final TextEditingController postcodeShopkeeperController =
       TextEditingController();
+  final TextEditingController telShopkeeperController = TextEditingController();
+  final TextEditingController emailShopkeeperController =
+      TextEditingController();
 
   bool firstPageValidate = false;
   bool secondPageValidate = false;
   bool thirdPageValidate = false;
   bool fourthPageValidate = false;
-  String selectedProvince = 'กรุงเทพมหานคร';
-  String selectedDistrict = '';
-  String selectedSubDistrict = '';
+  String? selectedProvince = 'กรุงเทพมหานคร';
+  String? selectedDistrict = '';
+  String? selectedSubDistrict = '';
   int currentPage = 0;
 
   final PageController _pageController = PageController();
@@ -78,8 +83,18 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
     postcodeController.addListener(checkFields);
     telController.addListener(checkFields);
     birthdayController.addListener(checkFields);
-    selectedDistrict = provinceToDistricts[selectedProvince]!.first;
-    selectedSubDistrict = districtToSubDistricts[selectedDistrict]!.first;
+    nameShopkeeperController.addListener(checkFields);
+    surnameShopkeeperController.addListener(checkFields);
+    placeShopkeeperController.addListener(checkFields);
+    provinceShopkeeperController.addListener(checkFields);
+    districtShopkeeperController.addListener(checkFields);
+    subdistrictShopkeeperController.addListener(checkFields);
+    postcodeShopkeeperController.addListener(checkFields);
+    if (provinceToDistricts.isNotEmpty) {
+      selectedProvince = provinceToDistricts.keys.first;
+      selectedDistrict = provinceToDistricts[selectedProvince]!.first;
+      selectedSubDistrict = districtToSubDistricts[selectedDistrict]!.first;
+    }
     _pageController.addListener(() {
       setState(() {
         currentPage = _pageController.page?.round() ?? 0;
@@ -92,9 +107,17 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
       firstPageValidate =
           emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
       secondPageValidate = shopNameController.text.isNotEmpty &&
-          // branchController.text.isNotEmpty &&
           postcodeController.text.isNotEmpty &&
           placeController.text.isNotEmpty;
+      thirdPageValidate =
+          telController.text.isNotEmpty && emailController.text.isNotEmpty;
+      fourthPageValidate = nameShopkeeperController.text.isNotEmpty &&
+          surnameShopkeeperController.text.isNotEmpty &&
+          placeShopkeeperController.text.isNotEmpty &&
+          provinceShopkeeperController.text.isNotEmpty &&
+          districtShopkeeperController.text.isNotEmpty &&
+          subdistrictShopkeeperController.text.isNotEmpty &&
+          postcodeShopkeeperController.text.isNotEmpty;
     });
   }
 
@@ -271,7 +294,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                         ),
                         const SizedBox(height: 8),
                         const Text(
-                          'เราจะแสดงข้อมูลต่อไปนี้ของคุณให้ลูกค้าบนแอปฯ',
+                          'ข้อมูลของผู้ดูแลร้านค้า ไว้ติดต่อร้านค้ากรณีที่เกิดปัญหา',
                           style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                         const SizedBox(height: 20),
@@ -333,49 +356,53 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                             false,
                             false),
                         const SizedBox(height: 16),
-                        SelectOption(
-                          label: "จังหวัด",
-                          options: provinceToDistricts.keys.toList(),
-                          selectedValue: selectedProvince,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedProvince = newValue!;
-                              selectedDistrict =
-                                  provinceToDistricts[selectedProvince]!.first;
-                              selectedSubDistrict =
-                                  districtToSubDistricts[selectedDistrict]!
-                                      .first;
-                            });
-                          },
-                        ),
+                        if (selectedProvince != null)
+                          SelectOption(
+                            label: "จังหวัด",
+                            options: provinceToDistricts.keys.toList(),
+                            selectedValue: selectedProvince ?? '',
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedProvince = newValue!;
+                                selectedDistrict =
+                                    provinceToDistricts[selectedProvince]!
+                                        .first;
+                                selectedSubDistrict =
+                                    districtToSubDistricts[selectedDistrict]!
+                                        .first;
+                              });
+                            },
+                          ),
                         const SizedBox(height: 16),
-                        SelectOption(
-                          label: "อำเภอ / เขต",
-                          options: provinceToDistricts[selectedProvince]!,
-                          selectedValue: selectedDistrict,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedDistrict = newValue!;
-                              selectedSubDistrict =
-                                  districtToSubDistricts[selectedDistrict]!
-                                      .first;
-                            });
-                          },
-                        ),
+                        if (selectedProvince != null)
+                          SelectOption(
+                            label: "อำเภอ / เขต",
+                            options: provinceToDistricts[selectedProvince]!,
+                            selectedValue: selectedDistrict ?? '',
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedDistrict = newValue!;
+                                selectedSubDistrict =
+                                    districtToSubDistricts[selectedDistrict]!
+                                        .first;
+                              });
+                            },
+                          ),
                         const SizedBox(height: 16),
-                        SelectOption(
-                          label: "ตำบล / แขวง",
-                          options: districtToSubDistricts[selectedDistrict]!,
-                          selectedValue: selectedSubDistrict,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedDistrict = newValue!;
-                              selectedSubDistrict =
-                                  districtToSubDistricts[selectedDistrict]!
-                                      .first;
-                            });
-                          },
-                        ),
+                        if (selectedProvince != null)
+                          SelectOption(
+                            label: "ตำบล / แขวง",
+                            options: districtToSubDistricts[selectedDistrict]!,
+                            selectedValue: selectedSubDistrict ?? '',
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedDistrict = newValue!;
+                                selectedSubDistrict =
+                                    districtToSubDistricts[selectedDistrict]!
+                                        .first;
+                              });
+                            },
+                          ),
                         const SizedBox(height: 16),
                         buildUnderlineTextField(postcodeController,
                             'รหัสไปรษณีย์', 'รหัสไปรษณีย์', false, false),
@@ -386,7 +413,8 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                             SizedBox(
                               width: 280,
                               child: ElevatedButton(
-                                onPressed: secondPageValidate ? nextPage : null,
+                                onPressed:
+                                    secondPageValidate ? checkSendData : null,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: secondPageValidate
                                       ? Colors.blue
@@ -400,7 +428,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                                 ),
                                 child: Text(
                                   secondPageValidate
-                                      ? 'ดำเนินการต่อ'
+                                      ? 'ดำเนินการต่อ1'
                                       : 'กรุณากรอกข้อมูลให้ครบ',
                                   style: TextStyle(
                                       color: secondPageValidate
@@ -440,11 +468,11 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                       const SizedBox(height: 20),
-                      buildUnderlineTextField(telController, 'เบอร์โทรศัพท์',
-                          'เบอร์โทรศัพท์', false, false),
+                      buildUnderlineTextField(telShopkeeperController,
+                          'เบอร์โทรศัพท์', 'เบอร์โทรศัพท์', false, false),
                       const SizedBox(height: 16),
-                      buildUnderlineTextField(
-                          emailController, 'อีเมล', 'อีเมล', false, true),
+                      buildUnderlineTextField(emailShopkeeperController,
+                          'อีเมล', 'อีเมล', false, true),
                       const SizedBox(height: 380),
                       Center(
                         child: SizedBox(
@@ -490,18 +518,10 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                         fontSize: 24,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'กรอกข้อมูลให้ครบถ้วนเพื่อให้ลูกค้าติดต่อได้',
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                    const SizedBox(height: 24),
-                    buildUnderlineTextField(shopNameController, 'ชื่อร้าน',
-                        'ชื่อร้าน', false, false),
                     const SizedBox(height: 16),
                     Text(
-                      'การใช้รูปภาพช่วยดึงดูดลูกค้าได้ โดยรูปหน้าปกจะแสดงที่ด้านบนเมนูร้าน รูปประจำร้านสร้างเอกลักษณ์ และใบทะเบียนพาณิชย์เป็นหลักฐานว่าร้านเปิดอย่างถูกต้องตามกฎหมาย',
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      'ใส่รูปภาพของร้านค้า สินค้าของคุณ เพื่อให้ลูกค้ารับรู้ร้านค้าของคุณ และ ทะเบียนพาณิชย์ไว้สำหรับยืนยันว่าร้านค้าของคุณเป็นร้านค้าที่ถูกต้อง ',
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 24),
                     CustomImageUploadButton(
@@ -512,7 +532,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                     const SizedBox(height: 16),
                     CustomImageUploadButton(
                         label: 'ใบทะเบียนพาณิชย์', onPressed: () {}),
-                    const SizedBox(height: 77),
+                    const SizedBox(height: 166),
                     Center(
                       child: SizedBox(
                         width: 230,
@@ -568,94 +588,95 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                         Row(
                           children: [
                             Container(
-                              width: 160,
+                              width: 150,
                               child: buildUnderlineTextField(
                                   nameShopkeeperController,
-                                  'ชื่อ ของผู้ดูแล',
-                                  'ชื่อร้าน',
+                                  'ชื่อ',
+                                  'ใส่ชื่อจริงของผู้ดูแลร้าน',
                                   false,
                                   false),
                             ),
-                            const SizedBox(height: 20),
+                            SizedBox(width: 20),
                             Container(
                               width: 160,
                               child: buildUnderlineTextField(
-                                  nameShopkeeperController,
-                                  'ชื่อ ของผู้ดูแล',
-                                  'ชื่อร้าน',
+                                  surnameShopkeeperController,
+                                  'นามสกุล ',
+                                  'ใส่นามสกุลของผู้ดูแล',
                                   false,
                                   false),
                             ),
                           ],
                         ),
                         const SizedBox(height: 16),
-                        buildUnderlineTextField(surnameShopkeeperController,
-                            'นามสกุล ของผู้ดูแล ', 'นามสกุล', false, false),
-                        const SizedBox(height: 16),
                         buildUnderlineTextField(nationalityShopkeeperController,
                             'เชื้อชาติ', 'เชื้อชาติ', false, false),
                         const SizedBox(height: 8),
                         buildUnderlineTextField(
-                            placeController,
+                            placeShopkeeperController,
                             'ที่อยู่อาศัย (โดยละเอียด)',
                             'กรอกเลขที่บ้านพร้อมชื่อถนน หรืออสถานที่ใกล้เคียง',
                             false,
                             false),
                         const SizedBox(height: 16),
-                        SelectOption(
-                          label: "จังหวัด",
-                          options: provinceToDistricts.keys.toList(),
-                          selectedValue: selectedProvince,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedProvince = newValue!;
-                              selectedDistrict =
-                                  provinceToDistricts[selectedProvince]!.first;
-                              selectedSubDistrict =
-                                  districtToSubDistricts[selectedDistrict]!
-                                      .first;
-                            });
-                          },
-                        ),
+                        if (selectedProvince != null)
+                          SelectOption(
+                            label: "จังหวัด",
+                            options: provinceToDistricts.keys.toList(),
+                            selectedValue: selectedProvince ?? '',
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedProvince = newValue!;
+                                selectedDistrict =
+                                    provinceToDistricts[selectedProvince]!
+                                        .first;
+                                selectedSubDistrict =
+                                    districtToSubDistricts[selectedDistrict]!
+                                        .first;
+                              });
+                            },
+                          ),
                         const SizedBox(height: 16),
-                        SelectOption(
-                          label: "อำเภอ / เขต",
-                          options: provinceToDistricts[selectedProvince]!,
-                          selectedValue: selectedDistrict,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedDistrict = newValue!;
-                              selectedSubDistrict =
-                                  districtToSubDistricts[selectedDistrict]!
-                                      .first;
-                            });
-                          },
-                        ),
+                        if (selectedProvince != null)
+                          SelectOption(
+                            label: "อำเภอ / เขต",
+                            options: provinceToDistricts[selectedProvince]!,
+                            selectedValue: selectedDistrict ?? '',
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedDistrict = newValue!;
+                                selectedSubDistrict =
+                                    districtToSubDistricts[selectedDistrict]!
+                                        .first;
+                              });
+                            },
+                          ),
                         const SizedBox(height: 16),
-                        SelectOption(
-                          label: "ตำบล / แขวง",
-                          options: districtToSubDistricts[selectedDistrict]!,
-                          selectedValue: selectedSubDistrict,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedDistrict = newValue!;
-                              selectedSubDistrict =
-                                  districtToSubDistricts[selectedDistrict]!
-                                      .first;
-                            });
-                          },
-                        ),
+                        if (selectedProvince != null)
+                          SelectOption(
+                            label: "ตำบล / แขวง",
+                            options: districtToSubDistricts[selectedDistrict]!,
+                            selectedValue: selectedSubDistrict ?? '',
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedDistrict = newValue!;
+                                selectedSubDistrict =
+                                    districtToSubDistricts[selectedDistrict]!
+                                        .first;
+                              });
+                            },
+                          ),
                         const SizedBox(height: 16),
                         buildUnderlineTextField(postcodeShopkeeperController,
                             'รหัสไปรษณีย์', 'รหัสไปรษณีย์', false, false),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 68),
                         Center(
                           child: SizedBox(
                             width: 280,
                             child: ElevatedButton(
-                              onPressed: secondPageValidate ? nextPage : null,
+                              onPressed: thirdPageValidate ? nextPage : null,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: secondPageValidate
+                                backgroundColor: thirdPageValidate
                                     ? Colors.blue
                                     : const Color.fromARGB(135, 199, 199, 199),
                                 padding:
@@ -665,11 +686,11 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                                 ),
                               ),
                               child: Text(
-                                secondPageValidate
+                                thirdPageValidate
                                     ? 'ดำเนินการต่อ'
                                     : 'กรุณากรอกข้อมูลให้ครบ',
                                 style: TextStyle(
-                                    color: secondPageValidate
+                                    color: thirdPageValidate
                                         ? Colors.white
                                         : const Color.fromARGB(255, 60, 60, 60),
                                     fontSize: 16),
@@ -707,7 +728,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
       //   print(user.uid);
       //   print('hello world');
 
-      final url = Uri.parse("http://192.168.1.43:8080/api/register/Shopkeeper");
+      final url = Uri.parse("http://10.0.0.2:3000/api/register/Shopkeeper");
       final response = await http.post(
         url,
         headers: {
@@ -729,6 +750,43 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
     } on FirebaseAuthException catch (e) {
       _auth.handleFirebaseAuthError(e);
       print(e.message);
+      print('dotenv error');
+    }
+  }
+
+  void checkSendData() async {
+    // nextPage();
+    print('Test');
+    try {
+      final url = Uri.parse("http://10.0.2.2:3000/testcheck");
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode({
+          "temporaryUID": "test_regis_shop",
+          "name": nameShopkeeperController.text,
+          "surname": surnameShopkeeperController.text,
+          "place": placeShopkeeperController.text,
+          "nationality": nationalityShopkeeperController.text,
+          "email": emailShopkeeperController.text,
+          "tel": telShopkeeperController.text,
+          "shopLocation": {
+            "province": selectedProvince,
+            "district": selectedDistrict,
+            "subdistrict": selectedSubDistrict,
+            "postcode": postcodeController.text,
+          }
+        }),
+      );
+      print('Test');
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      // }
+    } catch (e) {
+      print(e);
       print('dotenv error');
     }
   }

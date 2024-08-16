@@ -153,10 +153,8 @@ class _SignInState extends State<SignIn> {
     try {
       User? user = await _auth.signInWithEmailAndPassword(email, password);
       if (user != null) {
-        // SharedPreferences prefs = await SharedPreferences
-        //     .getInstance(); //สร้างตัวแปรสำหรับ sharedpreference
         print("This Email is registered");
-        final url = Uri.parse("http://192.168.1.43:8080/api/signIn");
+        final url = Uri.parse("http://10.0.2.2:3000/api/signIn");
         final response = await http.post(
           url,
           headers: {
