@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/user/service/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
+
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -39,6 +39,7 @@ class _SignInState extends State<SignIn> {
       resizeToAvoidBottomInset: false,
       body: Center(
         child: Padding(
+
             padding: const EdgeInsets.all(24.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -142,6 +143,7 @@ class _SignInState extends State<SignIn> {
                     ]))
               ],
             )),
+
       ),
     );
   }
@@ -152,6 +154,7 @@ class _SignInState extends State<SignIn> {
 
     try {
       User? user = await _auth.signInWithEmailAndPassword(email, password);
+
       if (user != null) {
         print("This Email is registered");
         final url = Uri.parse("http://10.0.2.2:3000/api/signIn");
@@ -207,6 +210,7 @@ class _SignInState extends State<SignIn> {
         } else {
           print('Request failed with status: ${response.statusCode}');
         }
+
       }
     } on FirebaseAuthException catch (e) {
       _auth.handleFirebaseAuthError(e);

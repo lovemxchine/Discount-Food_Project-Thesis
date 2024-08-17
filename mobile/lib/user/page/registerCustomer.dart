@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -121,6 +121,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
                       children: [
                         const SizedBox(
                           height: 20,
+
                         ),
                         const Text('ตั้งค่าอีเมล์และรหัสผ่าน',
                             style: TextStyle(fontSize: 24)),

@@ -29,21 +29,25 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: GoogleFonts.mitr().fontFamily,
-          brightness: Brightness.light,
-          primaryColor: Colors.blue,
-        ),
-        routes: {
-          '/': (context) => SignIn(),
-          '/signIn': (context) => SignIn(),
-          '/registerRole': (context) => RegisterRole(),
-          '/registerRole/customer': (context) => RegisterCustomer(),
-          '/registerRole/shopkeeper': (context) => RegisterShopkeeper(),
-          // '/manager': (context) => const ManagerScreen(),
-          // '/employee': (context) => const EmployeeScreen(),
-        });
+    return 
+    MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              fontFamily: GoogleFonts.mitr().fontFamily,
+              brightness: Brightness.light,
+              primaryColor: Colors.blue,
+            ),
+            routes: {
+              '/': (context) => SignIn(),
+              '/signIn': (context) => SignIn(),
+              '/registerRole': (context) => RegisterRole(),
+              '/registerRole/customer': (context) => RegisterCustomer(),
+              '/registerRole/shopkeeper': (context) =>  RegisterShopkeeper(),
+              // '/manager': (context) => const ManagerScreen(),
+              // '/employee': (context) => const EmployeeScreen(),
+
+            }
+            );
+
   }
 }
