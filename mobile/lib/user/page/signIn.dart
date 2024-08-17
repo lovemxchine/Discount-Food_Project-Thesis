@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/user/service/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'guest.dart';
+
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -37,126 +39,111 @@ class _SignInState extends State<SignIn> {
       resizeToAvoidBottomInset: false,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: emailController,
-                onSubmitted: (String value) {
-                  setState(() {
-                    email = emailController.text;
-                  });
-                },
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  prefixIcon: Icon(Icons.person, color: Color(0xFFFF6838)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFFF6838),
-                      width: 2.0,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFFF6838),
-                      width: 2.0,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: passwordController,
-                onSubmitted: (String value) {
-                  setState(() {
-                    password = passwordController.text;
-                  });
-                },
-                obscureText: true,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.lock, color: Color(0xFFFF6838)),
-                  hintText: 'Password',
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFFF6838),
-                      width: 2.0,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFFF6838),
-                      width: 2.0,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 30),
-              Align(
-                alignment: Alignment.centerRight,
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Sign In as Guest ',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFFFF6838),
-                    ),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GuestScreen(),
-                          ),
-                        );
-                      },
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  _signIn();
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFFF6838),
-                  minimumSize: Size(600, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                ),
-                child: const Text(
-                  'Submit',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-              ),
-              const SizedBox(height: 35),
-              RichText(
-                text: TextSpan(
-                  text: 'Don\'t have an account? ',
-                  style: const TextStyle(color: Colors.black, fontSize: 16),
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'Sign Up',
-                      style: const TextStyle(
-                        color: Color(0xFFFF6838),
-                        fontSize: 16,
+
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: emailController,
+                  onSubmitted: (String value) {
+                    setState(() {
+                      email = emailController.text;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    prefixIcon: Icon(Icons.person, color: Color(0xFFFF6838)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: const BorderSide(
+                            color: Color(0xFFFF6838), width: 2.0)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFFF6838), // Custom border color
+                        width: 2.0, // Custom border width
                       ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.pushNamed(context, '/registerRole');
-                        },
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  controller: passwordController,
+                  onSubmitted: (String value) {
+                    setState(() {
+                      password = passwordController.text;
+                    });
+                  },
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.lock, color: Color(0xFFFF6838)),
+                    hintText: 'Password',
+                    // labelText: 'Password',
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: const BorderSide(
+                            color: Color(0xFFFF6838), width: 2.0)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFFF6838), // Custom border color
+                        width: 2.0, // Custom border width
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: RichText(
+                    text: const TextSpan(
+                      text: 'Sign In as Guest ',
+                      style: TextStyle(fontSize: 16, color: Color(0xFFFF6838)),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _signIn();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFFF6838), // Button color
+                    minimumSize: Size(600, 50),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(15.0), // Rounded corners
+                    ),
+                  ),
+                  child: const Text('Submit',
+                      style: TextStyle(fontSize: 16, color: Colors.white)),
+                ),
+                const SizedBox(height: 35),
+                RichText(
+                    text: TextSpan(
+                        text: 'Don\'t have an account ? ',
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 16),
+                        children: <TextSpan>[
+                      TextSpan(
+                          text: 'Sign Up',
+                          style: const TextStyle(
+                              color: Color(0xFFFF6838), fontSize: 16),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushNamed(context, '/registerRole');
+                            })
+                    ]))
+              ],
+            )),
+
       ),
     );
   }
@@ -169,8 +156,61 @@ class _SignInState extends State<SignIn> {
       User? user = await _auth.signInWithEmailAndPassword(email, password);
 
       if (user != null) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        print("Login is successfully signed");
+        print("This Email is registered");
+        final url = Uri.parse("http://10.0.2.2:3000/api/signIn");
+        final response = await http.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode({
+            'checkUID': user.uid,
+          }),
+        );
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        if (response.statusCode == 200) {
+          final responseData = jsonDecode(response.body);
+          if (responseData['userStatus'] == 'success') {
+            switch (responseData['role']) {
+              case 'customer':
+                Navigator.pushNamed(context, '/registerRole/customer');
+                break;
+              case 'shopkeeper':
+                Navigator.pushNamed(context, '/registerRole/shopkeeper');
+                break;
+              default:
+                break;
+            }
+            print('regis');
+          } else if (responseData['userStatus'] == 'registerShop') {
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      title: const Text(
+                        'รอการอนุมัติ',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      content:
+                          const Text('อยู่ในขั้นตอนรอการอนุมัติจากผู้ดูแลระบบ'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            // Navigator.pushNamed(context, '/registerRole/shopkeeper');
+                            Navigator.pop(context);
+                          },
+                          child: const Text('ยืนยัน'),
+                        ),
+                      ],
+                    ));
+          }
+        } else {
+          print('Request failed with status: ${response.statusCode}');
+        }
+
       }
     } on FirebaseAuthException catch (e) {
       _auth.handleFirebaseAuthError(e);
