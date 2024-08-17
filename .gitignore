@@ -1,3 +1,4 @@
 # dependencies
 /server/serviceAccountKey.json
 /node_module
+.env
