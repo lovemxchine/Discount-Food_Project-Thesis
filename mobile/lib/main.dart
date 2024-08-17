@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/firebase_options.dart';
+import 'package:mobile/user/page/guest.dart';
 import 'package:mobile/user/page/registerCustomer.dart';
 import 'package:mobile/user/page/registerShopkeeper.dart';
 import 'package:mobile/user/page/signIn.dart';
@@ -29,25 +30,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return 
-    MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              fontFamily: GoogleFonts.mitr().fontFamily,
-              brightness: Brightness.light,
-              primaryColor: Colors.blue,
-            ),
-            routes: {
-              '/': (context) => SignIn(),
-              '/signIn': (context) => SignIn(),
-              '/registerRole': (context) => RegisterRole(),
-              '/registerRole/customer': (context) => RegisterCustomer(),
-              '/registerRole/shopkeeper': (context) =>  RegisterShopkeeper(),
-              // '/manager': (context) => const ManagerScreen(),
-              // '/employee': (context) => const EmployeeScreen(),
-
-            }
-            );
-
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: GoogleFonts.mitr().fontFamily,
+          brightness: Brightness.light,
+          primaryColor: Colors.blue,
+        ),
+        routes: {
+          '/': (context) => SignIn(),
+          '/signIn': (context) => SignIn(),
+          '/registerRole': (context) => RegisterRole(),
+          '/registerRole/customer': (context) => RegisterCustomer(),
+          '/registerRole/shopkeeper': (context) => RegisterShopkeeper(),
+          '/Guest': (context) => GuestScreen(),
+          // '/employee': (context) => const EmployeeScreen(),
+        });
   }
 }

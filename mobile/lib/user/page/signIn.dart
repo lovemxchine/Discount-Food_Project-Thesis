@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/user/service/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart' as http;
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -39,7 +40,6 @@ class _SignInState extends State<SignIn> {
       resizeToAvoidBottomInset: false,
       body: Center(
         child: Padding(
-
             padding: const EdgeInsets.all(24.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -101,10 +101,25 @@ class _SignInState extends State<SignIn> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: RichText(
-                    text: const TextSpan(
-                      text: 'Sign In as Guest ',
-                      style: TextStyle(fontSize: 16, color: Color(0xFFFF6838)),
-                    ),
+                    text: TextSpan(
+                        text: 'Sign In as ',
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xFFFF6838),
+                            fontFamily: GoogleFonts.mitr().fontFamily),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Guest',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: GoogleFonts.mitr().fontFamily,
+                                  color: Color(0xFFFF6838),
+                                  fontSize: 16),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushNamed(context, '/Guest');
+                                })
+                        ]),
                   ),
                 ),
                 const SizedBox(
@@ -122,20 +137,27 @@ class _SignInState extends State<SignIn> {
                           BorderRadius.circular(15.0), // Rounded corners
                     ),
                   ),
-                  child: const Text('Submit',
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
+                  child: Text('Submit',
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontFamily: GoogleFonts.mitr().fontFamily)),
                 ),
                 const SizedBox(height: 35),
                 RichText(
                     text: TextSpan(
                         text: 'Don\'t have an account ? ',
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 16),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontFamily: GoogleFonts.mitr().fontFamily),
                         children: <TextSpan>[
                       TextSpan(
                           text: 'Sign Up',
-                          style: const TextStyle(
-                              color: Color(0xFFFF6838), fontSize: 16),
+                          style: TextStyle(
+                              color: Color(0xFFFF6838),
+                              fontSize: 16,
+                              fontFamily: GoogleFonts.mitr().fontFamily),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               Navigator.pushNamed(context, '/registerRole');
@@ -143,7 +165,6 @@ class _SignInState extends State<SignIn> {
                     ]))
               ],
             )),
-
       ),
     );
   }
@@ -163,7 +184,7 @@ class _SignInState extends State<SignIn> {
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: jsonEncode({
+          body: ({
             'checkUID': user.uid,
           }),
         );
@@ -190,9 +211,11 @@ class _SignInState extends State<SignIn> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-                      title: const Text(
+                      title: Text(
                         'รอการอนุมัติ',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: GoogleFonts.mitr().fontFamily),
                       ),
                       content:
                           const Text('อยู่ในขั้นตอนรอการอนุมัติจากผู้ดูแลระบบ'),
@@ -210,7 +233,6 @@ class _SignInState extends State<SignIn> {
         } else {
           print('Request failed with status: ${response.statusCode}');
         }
-
       }
     } on FirebaseAuthException catch (e) {
       _auth.handleFirebaseAuthError(e);
