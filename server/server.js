@@ -110,7 +110,7 @@ app.post("/testcheck", async (req, res) => {
   try {
     await db
       .collection("in_register_shop")
-      .doc("/" + data.temporaryUID + "/")
+      .doc("/" + data.temporaryUIDnp + "/")
       .create({
         uid: data.temporaryUID,
         name: data.name,

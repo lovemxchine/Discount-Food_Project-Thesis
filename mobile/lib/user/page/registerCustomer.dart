@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +28,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
   bool thirdPageValidate = false;
   bool fourthPageValidate = false;
   int currentPage = 0;
+  int globalValueStatus = 0;
   final PageController _pageController = PageController();
 
   @override
@@ -215,7 +219,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
                         child: SizedBox(
                           width: 230,
                           child: ElevatedButton(
-                            onPressed: secondPageValidate ? alert1 : null,
+                            onPressed: secondPageValidate ? _signUp : null,
                             style: ElevatedButton.styleFrom(
                               shadowColor: Colors.transparent,
                               backgroundColor: secondPageValidate
@@ -261,6 +265,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
 
     try {
       User? user = await _auth.signUpWithEmailAndPassword(email, password);
+
       if (user != null) {
         print('Sign up success');
         print(user);
@@ -273,7 +278,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: ({
+          body: jsonEncode({
             "uid": user.uid, // value.uid
             "email": email,
             "name": name,
@@ -282,67 +287,31 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
             "birthday": birthday,
           }),
         );
-
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                  ),
-                  title: Center(
-                    child: Text(
-                      response.statusCode == 200
-                          ? 'สมัครสมาชิกสำเร็จ'
-                          : 'ล้มเหลว',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: GoogleFonts.mitr().fontFamily,
-                          color: const Color.fromARGB(255, 56, 56, 56)),
-                    ),
-                  ),
-                  content: Text(
-                    'สมัครสมาชิกสำเร็จ สามารถใช้งานแอพพลิเคชั่นได้',
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontFamily: GoogleFonts.mitr().fontFamily,
-                        color: const Color.fromARGB(255, 56, 56, 56)),
-                  ),
-                  actions: <Widget>[
-                    Center(
-                      child: TextButton(
-                        onPressed: () {
-                          // Navigator.pushNamed(context, '/registerRole/shopkeeper');
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          'ยืนยัน',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: GoogleFonts.mitr().fontFamily,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ));
+        globalValueStatus = response.statusCode;
+        alert1(globalValueStatus, '');
+      } else {
+        alert1(
+          globalValueStatus,
+          ' เนื่องจากอีเมลมีผู้ใช้งานแล้วหรือรหัสผ่านสั้นเกินไป',
+        );
       }
     } on FirebaseAuthException catch (e) {
-      _auth.handleFirebaseAuthError(e);
-      print(e.message);
-      // print('dotenv error');
+      String errorMessage;
+      if (e.code == 'email-already-in-use') {
+        errorMessage =
+            'The email address is already in use by another account.';
+      } else {
+        errorMessage = 'An error occurred: ${e.message}';
+      }
+      print("Firebase Auth Error: $errorMessage");
+    } catch (e) {
+      // Handle other exceptions
+      String errorMessage = 'An unexpected error occurred: $e';
+      print("Unexpected Error: $errorMessage");
     }
   }
 
-  // Future<bool> _checkIfEmailExists(String email) async {
-  //   final result = await _firestore
-  //       .collection('users')
-  //       .where('email', isEqualTo: email)
-  //       .get();
-  //   return result.docs.isNotEmpty;
-  // }
-  void alert1() {
+  void alert1(int response, String text) async {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -351,7 +320,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
               ),
               title: Center(
                 child: Text(
-                  'สมัครสมาชิกสำเร็จ',
+                  response == 200 ? 'สมัครสมาชิกสำเร็จ' : 'ล้มเหลว',
                   style: TextStyle(
                       fontSize: 18,
                       fontFamily: GoogleFonts.mitr().fontFamily,
@@ -371,16 +340,16 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
                     ),
                     TextSpan(text: '  '),
                     TextSpan(
-                      text: 'สำเร็จ',
+                      text: response == 200 ? 'สำเร็จ' : "ไม่สำเร็จ",
                       style: TextStyle(
-                        color: Colors.green,
+                        color: response == 200 ? Colors.green : Colors.red,
                         fontFamily: GoogleFonts.mitr().fontFamily,
                         fontSize: 16,
                       ),
                     ),
-                    TextSpan(text: '  '),
+                    TextSpan(text: response == 200 ? '  ' : null),
                     TextSpan(
-                      text: 'เรียบร้อย  ',
+                      text: response == 200 ? 'เรียบร้อย  ' : '${text}',
                       style: TextStyle(
                         color: Colors.grey,
                         fontFamily: GoogleFonts.mitr().fontFamily,
@@ -395,7 +364,9 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
                   child: TextButton(
                     onPressed: () {
                       // Navigator.pushNamed(context, '/registerRole/shopkeeper');
-                      Navigator.pop(context);
+                      response == 200
+                          ? Navigator.pushNamed(context, '/signIn')
+                          : Navigator.pop(context);
                     },
                     child: Text(
                       'ยืนยัน',

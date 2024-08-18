@@ -413,8 +413,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                             SizedBox(
                               width: 280,
                               child: ElevatedButton(
-                                onPressed:
-                                    secondPageValidate ? checkSendData : null,
+                                onPressed: secondPageValidate ? nextPage : null,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: secondPageValidate
                                       ? Colors.blue
@@ -428,7 +427,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                                 ),
                                 child: Text(
                                   secondPageValidate
-                                      ? 'ดำเนินการต่อ1'
+                                      ? 'ดำเนินการต่อ'
                                       : 'กรุณากรอกข้อมูลให้ครบ',
                                   style: TextStyle(
                                       color: secondPageValidate
@@ -471,8 +470,8 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                       buildUnderlineTextField(telShopkeeperController,
                           'เบอร์โทรศัพท์', 'เบอร์โทรศัพท์', false, false),
                       const SizedBox(height: 16),
-                      buildUnderlineTextField(emailShopkeeperController,
-                          'อีเมล', 'อีเมล', false, true),
+                      buildUnderlineTextField(
+                          emailController, 'อีเมล', 'อีเมล', false, true),
                       const SizedBox(height: 380),
                       Center(
                         child: SizedBox(
@@ -674,9 +673,9 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                           child: SizedBox(
                             width: 280,
                             child: ElevatedButton(
-                              onPressed: thirdPageValidate ? nextPage : null,
+                              onPressed: fourthPageValidate ? _signUp : null,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: thirdPageValidate
+                                backgroundColor: fourthPageValidate
                                     ? Colors.blue
                                     : const Color.fromARGB(135, 199, 199, 199),
                                 padding:
@@ -686,11 +685,11 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                                 ),
                               ),
                               child: Text(
-                                thirdPageValidate
+                                fourthPageValidate
                                     ? 'ดำเนินการต่อ'
                                     : 'กรุณากรอกข้อมูลให้ครบ',
                                 style: TextStyle(
-                                    color: thirdPageValidate
+                                    color: fourthPageValidate
                                         ? Colors.white
                                         : const Color.fromARGB(255, 60, 60, 60),
                                     fontSize: 16),
@@ -728,7 +727,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
       //   print(user.uid);
       //   print('hello world');
 
-      final url = Uri.parse("http://10.0.0.2:3000/api/register/Shopkeeper");
+      final url = Uri.parse("http://10.0.2.2:3000/api/register/Shopkeeper");
       final response = await http.post(
         url,
         headers: {

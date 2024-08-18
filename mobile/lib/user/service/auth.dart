@@ -1,6 +1,5 @@
 import 'dart:io';
 
-
 // Remove unused package: package_info
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -21,6 +20,7 @@ class FirebaseAuthService {
       );
       return credential.user; // Return the created user
     } on FirebaseAuthException catch (e) {
+      print('งงเงย');
       handleFirebaseAuthError(e);
       return null;
     } catch (e) {
@@ -49,25 +49,28 @@ class FirebaseAuthService {
     }
   }
 
-  void handleFirebaseAuthError(FirebaseAuthException e) {
+  String handleFirebaseAuthError(FirebaseAuthException e) {
     switch (e.code) {
       case "weak-password":
-        print("The password is too weak.");
-        break;
+        print('งงเงย');
+        return ("รหัสผ่านง่ายเกินไปกรุณาใช้ตัว 6 ตัวขึ้นไป");
+      // break;
       case "email-already-in-use":
-        print("The email address is already in use by another user.");
-        break;
+        print('งงเงยว้พ');
+
+        return ("อีเมล์นี้มีผู้ใช้งานแล้ว");
+      // break;
       case "invalid-email":
-        print("The email address is invalid.");
-        break;
+        return ("รูปแบบอีเมล์ไม่ถูกต้อง");
+      // break;
       case "user-not-found":
-        print("The user account does not exist.");
-        break;
+        return ("The user account does not exist.");
+      // break;
       case "wrong-password":
-        print("The password is incorrect.");
-        break;
+        return ("รหัสผ่านไม่ถูกต้อง");
+      // break;
       default:
-        print("An unknown error occurred: ${e.code}");
+        return ("An unknown error occurred: ${e.code}");
     }
   }
 }
