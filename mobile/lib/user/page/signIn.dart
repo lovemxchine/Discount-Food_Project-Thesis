@@ -205,6 +205,7 @@ class _SignInState extends State<SignIn> {
             }
             print('regis');
           } else if (responseData['userStatus'] == 'registerShop') {
+            await _auth.signOut();
             showDialog(
                 context: context,
                 builder: (context) => AlertDialog(

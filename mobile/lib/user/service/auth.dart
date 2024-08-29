@@ -73,4 +73,12 @@ class FirebaseAuthService {
         return ("An unknown error occurred: ${e.code}");
     }
   }
+
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+    } catch (e) {
+      print("An error occurred while signing out: $e");
+    }
+  }
 }

@@ -288,7 +288,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
           }),
         );
         globalValueStatus = response.statusCode;
-        alert1(globalValueStatus, '');
+        alert1(200, '');
       } else {
         alert1(
           globalValueStatus,
