@@ -196,6 +196,7 @@ class GuestScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  
                 ],
               ),
             ),
