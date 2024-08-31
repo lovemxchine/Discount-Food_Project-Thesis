@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/user/page/registerCustomer.dart';
+import 'package:mobile/user/page/signIn.dart';
 
 class GuestScreen extends StatelessWidget {
   @override
@@ -196,7 +198,46 @@ class GuestScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey, 
+                            foregroundColor: Color.fromRGBO(255, 104, 56, 1), 
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => RegisterCustomer()),
+                            );
+                          },
+                          child: Text('ลงทะเบียน'),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromRGBO(255, 104, 56, 1), 
+                            foregroundColor: Colors.white, 
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SignIn()),
+                            );
+                          },
+                          child: Text('เข้าสู่ระบบ'),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
