@@ -287,7 +287,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
             "birthday": birthday,
           }),
         );
-        globalValueStatus = response.statusCode;
+        // globalValueStatus = response.statusCode;
         print(jsonDecode(response.body));
         alert1(200, '');
       } else {
