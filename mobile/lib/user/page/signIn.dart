@@ -178,13 +178,13 @@ class _SignInState extends State<SignIn> {
 
       if (user != null) {
         print("This Email is registered");
-        final url = Uri.parse("http://10.0.2.2:3000/api/signIn");
+        final url = Uri.parse("http://10.0.2.2:3000/signIn");
         final response = await http.post(
           url,
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: ({
+          body: jsonEncode({
             'checkUID': user.uid,
           }),
         );
@@ -195,10 +195,10 @@ class _SignInState extends State<SignIn> {
           if (responseData['userStatus'] == 'success') {
             switch (responseData['role']) {
               case 'customer':
-                Navigator.pushNamed(context, '/registerRole/customer');
+                Navigator.pushNamed(context, '/Guest');
                 break;
               case 'shopkeeper':
-                Navigator.pushNamed(context, '/registerRole/shopkeeper');
+                Navigator.pushNamed(context, '/Guest');
                 break;
               default:
                 break;

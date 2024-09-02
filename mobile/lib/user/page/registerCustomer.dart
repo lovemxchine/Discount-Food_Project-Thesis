@@ -272,7 +272,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
         print(user.uid);
         print('hello world');
 
-        final url = Uri.parse("http://10.0.2.2:3000/api/register/customer");
+        final url = Uri.parse("http://10.0.2.2:3000/register/customer");
         final response = await http.post(
           url,
           headers: {
@@ -281,13 +281,14 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
           body: jsonEncode({
             "uid": user.uid, // value.uid
             "email": email,
-            "name": name,
-            "surname": surname,
+            "fname": name,
+            "lname": surname,
             "tel": tel,
             "birthday": birthday,
           }),
         );
-        globalValueStatus = response.statusCode;
+        // globalValueStatus = response.statusCode;
+        print(jsonDecode(response.body));
         alert1(200, '');
       } else {
         alert1(
