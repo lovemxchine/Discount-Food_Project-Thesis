@@ -10,7 +10,7 @@ admin.initializeApp({
 const port = 3000;
 const app = express();
 const db = admin.firestore();
-console.log(db);
+// console.log(db);
 
 // Routes
 const registerRoute = require("./routes/register")(db);
@@ -33,9 +33,11 @@ app.post("/signIn", async (req, res) => {
   if (user.exists) {
     const data = user.data();
     // console.log(role === "customer");
-    return res
-      .status(200)
-      .send({ userStatus: "success", role: data.role, data: data });
+    return res.status(200).send({
+      userStatus: "success",
+      role: data.role,
+      data: [user.data(), req.body.checkUID],
+    });
   }
 
   return res.status(404).send({ status: "not_found", data: null });

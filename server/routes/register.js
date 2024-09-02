@@ -14,8 +14,8 @@ module.exports = (db) => {
         .doc("/" + req.body.uid + "/")
         .create({
           uid: req.body.uid,
-          fname: req.body.name,
-          lname: req.body.surname,
+          fname: req.body.fname,
+          lname: req.body.lname,
           email: req.body.email,
           birthday: birthdayDate,
           tel: req.body.tel,
@@ -25,6 +25,7 @@ module.exports = (db) => {
       return res.status(200).send({ status: "success", message: "data saved" });
     } catch (error) {
       console.log(error.message);
+      console.log("error");
       return res.status(500).send({ status: "failed" });
     }
   });

@@ -25,6 +25,7 @@ class _SignInState extends State<SignIn> {
   @override
   void initState() {
     super.initState();
+    _signOutUser();
   }
 
   @override
@@ -188,6 +189,7 @@ class _SignInState extends State<SignIn> {
             'checkUID': user.uid,
           }),
         );
+        print('User UID: ${user.uid}');
         print('Response status: ${response.statusCode}');
         print('Response body: ${response.body}');
         if (response.statusCode == 200) {
@@ -201,6 +203,7 @@ class _SignInState extends State<SignIn> {
                 Navigator.pushNamed(context, '/Guest');
                 break;
               default:
+                await _auth.signOut();
                 break;
             }
             print('regis');
@@ -238,6 +241,15 @@ class _SignInState extends State<SignIn> {
     } on FirebaseAuthException catch (e) {
       _auth.handleFirebaseAuthError(e);
       print(e.message);
+    }
+  }
+
+  void _signOutUser() async {
+    try {
+      await _auth.signOut();
+      print("User signed out successfully");
+    } catch (e) {
+      print("Error signing out: $e");
     }
   }
 }
