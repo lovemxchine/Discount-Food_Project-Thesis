@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
           '/registerRole': (context) => RegisterRole(),
           '/registerRole/customer': (context) => RegisterCustomer(),
           '/registerRole/shopkeeper': (context) => RegisterShopkeeper(),
-          '/Guest': (context) => GuestScreen(),
+          '/guest': (context) => GuestScreen(),
           '/shop/mainScreen': (context) => ShopMainScreen(),
           // '/employee': (context) => const EmployeeScreen(),
         });

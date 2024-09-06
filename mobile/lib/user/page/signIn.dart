@@ -197,7 +197,7 @@ class _SignInState extends State<SignIn> {
           if (responseData['userStatus'] == 'success') {
             switch (responseData['role']) {
               case 'customer':
-                Navigator.pushNamed(context, '/Guest');
+                Navigator.pushNamed(context, '/guest');
                 break;
               case 'shopkeeper':
                 Navigator.pushNamed(context, '/shop/mainScreen');

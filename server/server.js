@@ -14,13 +14,17 @@ const db = admin.firestore();
 
 // Routes
 const registerRoute = require("./routes/register")(db);
+const shopRoute = require("./routes/shop/shop")(db);
+const customerRoute = require("./routes/customer")(db);
 
 app.use(express.json(), cors({ origin: true }));
 app.use("/register", registerRoute);
+app.use("/customer", customerRoute);
+app.use("/shop", customerRoute);
 
 app.post("/signIn", async (req, res) => {
   const registerShop = await db
-    .collection("register_shop")
+    .collection("in_register_shop")
     .doc(req.body.checkUID)
     .get();
   if (registerShop.exists) {

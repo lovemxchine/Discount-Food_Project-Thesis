@@ -1,7 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class ShopMainScreen extends StatelessWidget {
   @override
+  Future<void> _fetchData() async {
+    // Uri url = "http://10.0.2.2:3000/" as Uri;
+    final url = Uri.parse("http://10.0.2.2:3000/shop/mainScreen");
+    var response = await http.get(url);
+    var decodedData = json.decode(response.body);
+    print(decodedData);
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF3864FF),
@@ -126,72 +137,71 @@ class ShopMainScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           const SizedBox(height: 16),
-                          for (int i = 0; i < 6; i++)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 16),
-                              child: Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: [
-                                    const BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 10,
-                                      offset: Offset(0, 4),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 16),
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  const BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      image: const DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/image.png'),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
                                     ),
-                                  ],
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        image: const DecorationImage(
-                                          image: AssetImage(
-                                              'assets/images/image.png'),
-                                          fit: BoxFit.cover,
+                                  ),
+                                  const SizedBox(width: 20),
+                                  const Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Tops market - เซ็นทรัลเวสเกต',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black),
                                         ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          'ระยะห่าง 1.5km',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.black),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(width: 20),
-                                    const Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Tops market - เซ็นทรัลเวสเกต',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Text(
-                                            'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Text(
-                                            'ระยะห่าง 1.5km',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
+                          ),
                         ],
                       ),
                     ),
