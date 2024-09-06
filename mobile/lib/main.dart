@@ -12,6 +12,7 @@ import 'package:mobile/user/page/registerCustomer.dart';
 import 'package:mobile/user/page/registerShopkeeper.dart';
 import 'package:mobile/user/page/signIn.dart';
 import 'package:mobile/user/page/registerRole.dart';
+import 'package:mobile/user/shop/shopMainScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
@@ -45,10 +46,9 @@ class _MyAppState extends State<MyApp> {
           '/registerRole': (context) => RegisterRole(),
           '/registerRole/customer': (context) => RegisterCustomer(),
           '/registerRole/shopkeeper': (context) => RegisterShopkeeper(),
-          '/Guest': (context) => GuestScreen(),
-          '/Allshop': (context) => AllShopNearby(),
-          
-
+          '/allshop': (context) => AllShopNearby(),
+          '/guest': (context) => GuestScreen(),
+          '/shop/mainScreen': (context) => ShopMainScreen(),
           // '/employee': (context) => const EmployeeScreen(),
         });
   }
