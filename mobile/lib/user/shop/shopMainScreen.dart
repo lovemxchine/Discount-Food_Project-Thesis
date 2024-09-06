@@ -11,7 +11,7 @@ class ShopMainScreen extends StatefulWidget {
 }
 
 class _ShopMainScreenState extends State<ShopMainScreen> {
-  List arrData = [];
+  List listProducts = [];
 
   @override
   void initState() {
@@ -26,16 +26,16 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
 
   Future<void> _fetchData() async {
     // Uri url = "http://10.0.2.2:3000/" as Uri;
-    final url = Uri.parse("http://10.0.2.2:3000/shop/mainScreen/${getUID()}");
+    String? uid = await getUID();
+    final url = Uri.parse("http://10.0.2.2:3000/shop/mainScreen/${uid}");
     var response = await http.get(
       url,
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
     );
-    List decodedData = json.decode(response.body)['data'];
+    final responseData = jsonDecode(response.body);
+    listProducts = responseData['data'];
     // List arrData = decodedData['data'];
-    print(decodedData.length);
+    print(listProducts.length);
+    print(listProducts);
     print("hi");
   }
 
@@ -136,27 +136,26 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        for (int i = 0; i < arrData.length; i++)
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'ร้านค้ากำลังลดราคา',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'ร้านค้ากำลังลดราคา',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
                               ),
-                              Text(
-                                'ดูทั้งหมด',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.grey,
-                                ),
+                            ),
+                            Text(
+                              'ดูทั้งหมด',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -173,8 +172,8 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  const BoxShadow(
+                                boxShadow: const [
+                                  BoxShadow(
                                     color: Colors.black26,
                                     blurRadius: 10,
                                     offset: Offset(0, 4),
