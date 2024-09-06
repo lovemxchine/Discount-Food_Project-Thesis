@@ -197,10 +197,10 @@ class _SignInState extends State<SignIn> {
           if (responseData['userStatus'] == 'success') {
             switch (responseData['role']) {
               case 'customer':
-                Navigator.pushNamed(context, '/Guest');
+                Navigator.pushNamed(context, '/Allshop');
                 break;
               case 'shopkeeper':
-                Navigator.pushNamed(context, '/Guest');
+                Navigator.pushNamed(context, '/Allshop');
                 break;
               default:
                 await _auth.signOut();
