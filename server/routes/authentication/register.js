@@ -1,6 +1,6 @@
-const express = require("express");
+// const express = require("express");
 
-module.exports = (db) => {
+module.exports = (db, express) => {
   const router = express.Router();
 
   router.post("/customer", async (req, res) => {

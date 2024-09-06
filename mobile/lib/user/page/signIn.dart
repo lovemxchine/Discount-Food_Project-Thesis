@@ -22,6 +22,17 @@ class _SignInState extends State<SignIn> {
   String email = '';
   String password = '';
 
+  Future<void> storeUID(String uid, String role) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_uid', uid);
+    await prefs.setString('user_role', role);
+  }
+
+  // Future<String?> getUID() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   return prefs.getString('uid');
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -179,7 +190,7 @@ class _SignInState extends State<SignIn> {
 
       if (user != null) {
         print("This Email is registered");
-        final url = Uri.parse("http://10.0.2.2:3000/signIn");
+        final url = Uri.parse("http://10.0.2.2:3000/authentication/signIn");
         final response = await http.post(
           url,
           headers: {
@@ -195,6 +206,7 @@ class _SignInState extends State<SignIn> {
         if (response.statusCode == 200) {
           final responseData = jsonDecode(response.body);
           if (responseData['userStatus'] == 'success') {
+            await storeUID(user.uid, responseData['role']);
             switch (responseData['role']) {
               case 'customer':
 

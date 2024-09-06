@@ -2,17 +2,44 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class ShopMainScreen extends StatelessWidget {
+class ShopMainScreen extends StatefulWidget {
+  const ShopMainScreen({super.key});
+
+  State<ShopMainScreen> createState() => _ShopMainScreenState();
+}
+
+class _ShopMainScreenState extends State<ShopMainScreen> {
+  List arrData = [];
+
   @override
-  Future<void> _fetchData() async {
-    // Uri url = "http://10.0.2.2:3000/" as Uri;
-    final url = Uri.parse("http://10.0.2.2:3000/shop/mainScreen");
-    var response = await http.get(url);
-    var decodedData = json.decode(response.body);
-    print(decodedData);
+  void initState() {
+    super.initState();
+    _fetchData();
   }
 
+  Future<String?> getUID() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_uid');
+  }
+
+  Future<void> _fetchData() async {
+    // Uri url = "http://10.0.2.2:3000/" as Uri;
+    final url = Uri.parse("http://10.0.2.2:3000/shop/mainScreen/${getUID()}");
+    var response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    List decodedData = json.decode(response.body)['data'];
+    // List arrData = decodedData['data'];
+    print(decodedData.length);
+    print("hi");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF3864FF),
@@ -109,26 +136,27 @@ class ShopMainScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'ร้านค้ากำลังลดราคา',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey,
+                        for (int i = 0; i < arrData.length; i++)
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'ร้านค้ากำลังลดราคา',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'ดูทั้งหมด',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
+                              Text(
+                                'ดูทั้งหมด',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                       ],
                     ),
                   ),
