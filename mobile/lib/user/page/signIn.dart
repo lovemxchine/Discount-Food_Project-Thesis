@@ -118,7 +118,7 @@ class _SignInState extends State<SignIn> {
                                   fontSize: 16),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.pushNamed(context, '/Guest');
+                                  Navigator.pushNamed(context, '/guest');
                                 })
                         ]),
                   ),
