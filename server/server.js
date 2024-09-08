@@ -3,6 +3,7 @@ const cors = require("cors");
 const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
 const multer = require("multer");
+const { getStorage } = require("firebase/storage");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -12,15 +13,13 @@ admin.initializeApp({
 const port = 3000;
 const app = express();
 const db = admin.firestore();
-const bucket = admin.storage().bucket();
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const bucket = admin.storage().bucket(); // Using bucket from Firebase Admin SDK
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Routes
 const registerRoute = require("./routes/authentication/register")(db, express);
 const signInRoute = require("./routes/authentication/signIn")(db, express);
-const shopRoute = require("./routes/shop")(db, express);
+const shopRoute = require("./routes/shop")(db, express, bucket, upload);
 const customerRoute = require("./routes/customer")(db, express);
 
 app.use(express.json());
@@ -39,12 +38,12 @@ app.use("/shop", shopRoute);
   app.use("/gemini", geminiRoute(express));
 })();
 
-app.post("/upload", upload.single("image"), (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("No file uploaded.");
-  }
-  console.log(uploadSingleImage(req, res, bucket));
-});
+// app.post("/upload", upload.single("image"), (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).send("No file uploaded.");
+//   }
+// console.log(uploadSingleImage(req, res, bucket));
+// });
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -16,6 +16,7 @@ class ShopMainScreen extends StatefulWidget {
 class _ShopMainScreenState extends State<ShopMainScreen> {
   List listProducts = [];
   bool isLoading = true;
+  int length = 0;
   MediaType mediaType = MediaType('application', 'json');
   @override
   void initState() {
@@ -42,9 +43,10 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
     while (responseData['data'].length < 3) {
       setState(() {
         listProducts.add(null);
-        isLoading = false;
       });
     }
+    length = 3;
+    isLoading = false;
 
     // List arrData = decodedData['data'];
     print(listProducts.length);
@@ -178,7 +180,7 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                               )
                             : Column(
                                 children: [
-                                  for (int i = 0; i < listProducts.length; i++)
+                                  for (int i = 0; i < length; i++)
                                     if (listProducts[i] != null)
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
@@ -191,6 +193,7 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                                                 arguments: listProducts[i]);
                                           },
                                           child: Container(
+                                            height: 110,
                                             padding: const EdgeInsets.all(16),
                                             decoration: BoxDecoration(
                                               color: Colors.white,
@@ -209,19 +212,20 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  width: 60,
-                                                  height: 60,
+                                                  width: 80,
+                                                  height: 80,
                                                   decoration: BoxDecoration(
                                                     color: Colors.grey,
-                                                    image:
-                                                        const DecorationImage(
-                                                      image: AssetImage(
-                                                          'assets/images/image.png'),
+                                                    image: DecorationImage(
+                                                      image: Image.network(
+                                                              listProducts[i]
+                                                                  ['imageUrl'])
+                                                          .image,
                                                       fit: BoxFit.cover,
                                                     ),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            8),
+                                                            5),
                                                   ),
                                                 ),
                                                 const SizedBox(width: 20),

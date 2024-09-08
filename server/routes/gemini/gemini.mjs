@@ -29,7 +29,7 @@ export async function analyzeImage(imageBuffer) {
 2. ราคาเดิม (ถ้ามี)
 3. ราคาใหม่
 4. วันที่หมดอายุ (ถ้ามี) if
-Buddhist era change to BC YYYY/MM/DD
+**Important ! Buddhist Era change to BC  DD/MM/YYYY**
 
 กรุณาตอบในรูปแบบ JSON ดังนี้:
 {

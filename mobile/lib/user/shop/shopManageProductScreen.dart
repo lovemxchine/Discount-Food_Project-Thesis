@@ -42,9 +42,9 @@ class ManageProductScreenState extends State<ManageProductScreen> {
     while (responseData['data'].length < 3) {
       setState(() {
         listProducts.add(null);
-        isLoading = false;
       });
     }
+    isLoading = false;
 
     // List arrData = decodedData['data'];
     print(listProducts.length);
@@ -207,7 +207,7 @@ class ManageProductScreenState extends State<ManageProductScreen> {
                                           onTap: () {
                                             // print(listProducts[i]['discountAt']);
                                             Navigator.pushNamed(
-                                                context, '/shop/productDetails',
+                                                context, '/test/image',
                                                 arguments: listProducts[i]);
                                           },
                                           child: Container(
@@ -230,19 +230,20 @@ class ManageProductScreenState extends State<ManageProductScreen> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Container(
-                                                  width: 60,
-                                                  height: 60,
+                                                  width: 80,
+                                                  height: 80,
                                                   decoration: BoxDecoration(
                                                     color: Colors.grey,
-                                                    image:
-                                                        const DecorationImage(
-                                                      image: AssetImage(
-                                                          'assets/images/image.png'),
+                                                    image: DecorationImage(
+                                                      image: Image.network(
+                                                              listProducts[i]
+                                                                  ['imageUrl'])
+                                                          .image,
                                                       fit: BoxFit.cover,
                                                     ),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            8),
+                                                            5),
                                                   ),
                                                 ),
                                                 const SizedBox(width: 20),

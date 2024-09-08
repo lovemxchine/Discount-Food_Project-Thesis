@@ -42,34 +42,31 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
 
     try {
-      final url = Uri.parse("http://10.0.2.2:3000/shop/product/addProduct");
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'image':
-              _image != null ? base64Encode(_image!.readAsBytesSync()) : '',
-          'uid': uid,
-          'product_name': nameController.text,
-          'original_price': originalPrice.text,
-          'sale_price': salePrice.text,
-          'stock': stock.text,
-          'expired_date': expiredDate.text,
-        }),
-      );
-      if (response.statusCode == 200) {
-        print('Image uploaded successfully');
-        print(jsonDecode(response.body));
-        var resData = jsonDecode(response.body);
-        print(resData);
-      } else {
-        print(response.statusCode);
-        print(response.body);
+      final url = Uri.parse("$pathAPI/shop/product/addProduct");
+      var request = http.MultipartRequest('POST', url);
+      request.headers['Content-Type'] = 'application/json; charset=UTF-8';
+      request.fields['uid'] = uid;
+      request.fields['product_name'] = nameController.text;
+      request.fields['original_price'] = originalPrice.text;
+      request.fields['sale_price'] = salePrice.text;
+      request.fields['stock'] = stock.text;
+      request.fields['expired_date'] = expiredDate.text;
+
+      if (_image != null) {
+        request.files
+            .add(await http.MultipartFile.fromPath('image', _image!.path));
       }
-    } on Exception catch (e) {
-      print(e);
+
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        print('Product added successfully');
+      } else {
+        print('Failed to add product with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error adding product: $e');
     }
   }
 
