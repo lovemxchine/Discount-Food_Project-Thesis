@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/user/customer/allshopNear.dart';
-import 'allshopNear.dart'; 
+import 'package:mobile/user/customer/favoritePage.dart';
+import 'package:mobile/user/customer/homePage.dart';
+import 'package:mobile/user/customer/settingsPage.dart';
 
 class MailBoxPage extends StatelessWidget {
   @override
@@ -16,21 +18,21 @@ class MailBoxPage extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 40.0), 
+                  padding: EdgeInsets.only(top: 40.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(width: 16), 
+                      SizedBox(width: 16),
                       Container(
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
                           color: Colors.grey,
+                          shape: BoxShape.circle,
                           image: DecorationImage(
-                            image: AssetImage('assets/งง.jpg'), 
+                            image: AssetImage('assets/your_image.png'),
                             fit: BoxFit.cover,
                           ),
-                          borderRadius: BorderRadius.circular(8),
                         ),
                       ),
                       SizedBox(width: 10),
@@ -38,19 +40,21 @@ class MailBoxPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Guest',
+                            'ชาญณรงค์ ชาญเฌอ',
                             style: TextStyle(fontSize: 18, color: Colors.white),
                           ),
                           SizedBox(height: 5),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 4),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 4),
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 224, 217, 217),
+                              color: Colors.white.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              'ผู้เข้าชม',
-                              style: TextStyle(fontSize: 13, color: Colors.white),
+                              'ผู้ใช้งานทั่วไป',
+                              style:
+                                  TextStyle(fontSize: 13, color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -63,10 +67,10 @@ class MailBoxPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 120, 
+            top: 120,
             left: 0,
             right: 0,
-            bottom: 0, 
+            bottom: 0,
             child: Container(
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 224, 217, 217),
@@ -94,99 +98,126 @@ class MailBoxPage extends StatelessWidget {
                       child: Text(
                         'ประวัติการสั่งซื้อ',
                         style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.blue,
+                          fontSize: 12,
+                          color: Colors.grey,
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 10), 
+                  SizedBox(height: 10),
                   Expanded(
-                    child: ListView.builder(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: 2, 
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Container(
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                          //bottomLeft: Radius.circular(12),
+                          //bottomRight: Radius.circular(12),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      margin: EdgeInsets.symmetric(horizontal: 10), // ลดขอบซ้ายขวา
+                      child: ListView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        itemCount: 2,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Container(
+                                  padding: EdgeInsets.all(16),
                                   decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    image: DecorationImage(
-                                      image: AssetImage('assets/your_image.png'), 
-                                      fit: BoxFit.cover,
-                                    ),
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                ),
-                                SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  child: Row(
                                     children: [
-                                      Text(
-                                        'ข้อความจากทางร้านค้า',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                      Container(
+                                        width: 60,
+                                        height: 60,
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey,
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                'assets/tops_market.png'),
+                                            fit: BoxFit.cover,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
                                       ),
-                                      Text(
-                                        'Top Market - เซ็นทรัลเวสเกต',
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            index == 0
-                                                ? 'คืนสินค้า'
-                                                : 'ยกเลิกสินค้า',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: index == 0
-                                                  ? Colors.green
-                                                  : Colors.red,
+                                      SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'ข้อความจากทางร้านค้า',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            'รายละเอียดสินค้า ->',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.grey,
+                                            Text(
+                                              'Top Market - เซ็นทรัลเวสเกต',
+                                              style: TextStyle(fontSize: 14),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 5),
-                                      Text(
-                                        'วันที่ ${index + 18}/7/2567 เวลา 21:00 น.',
-                                        style: TextStyle(fontSize: 12),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  index == 0
+                                                      ? 'รับสินค้าแล้ว'
+                                                      : 'ยกเลิกสินค้า',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: index == 0
+                                                        ? Colors.green
+                                                        : Colors.red,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  'รายละเอียดสินค้า',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 5),
+                                            Text(
+                                              'วันที่ ${index == 0 ? '18' : '22'}/7/2567 เวลา ${index == 0 ? '21:00' : '21:45'} น.',
+                                              style: TextStyle(fontSize: 12),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -196,40 +227,35 @@ class MailBoxPage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.black,
+        selectedItemColor: Colors.red,
         unselectedItemColor: Colors.black,
-        currentIndex: 3, 
+        currentIndex: 3,
         onTap: (index) {
-          // Navigation logic
+          if (index == 3) return;
+
           switch (index) {
             case 0:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => AllShopNearby()), 
+                MaterialPageRoute(builder: (context) => AllShopNearby()),
               );
               break;
             case 1:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => FavoritePage()), 
+                MaterialPageRoute(builder: (context) => FavoritePage()),
               );
               break;
             case 2:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage()), 
-              );
-              break;
-            case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => MailBoxPage()), 
+                MaterialPageRoute(builder: (context) => Homepage()),
               );
               break;
             case 4:
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => SettingsPage()), 
+                MaterialPageRoute(builder: (context) => SettingsPage()),
               );
               break;
           }
@@ -248,7 +274,7 @@ class MailBoxPage extends StatelessWidget {
             label: 'หน้าหลัก',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.receipt),
+            icon: Icon(Icons.featured_play_list_outlined),
             label: 'การดำเนินการ',
           ),
           BottomNavigationBarItem(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/user/customer/allshopNear.dart';
 import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailBox.dart';
-import 'package:mobile/user/customer/favoritePage.dart';
 import 'package:mobile/user/customer/settingsPage.dart';
 
-class AllShopNearby extends StatelessWidget {
+class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,97 +74,85 @@ class AllShopNearby extends StatelessWidget {
                   topRight: Radius.circular(30),
                 ),
               ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Text(
-                      'ร้านค้าที่กำลังลดราคาในระยะใกล้',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Text(
+                        'รายการร้านค้าโปรดทั้งหมด',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 16),
-                          for (int i = 0; i < 6; i++)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 12, horizontal: 16),
-                              child: Container(
-                                height: 110,
-                                padding: EdgeInsets.all(16),
+                    SizedBox(height: 16),
+                    for (int i = 0; i < 6; i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 16),
+                        child: Container(
+                          height: 110,
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 10,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 60,
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 10,
-                                      offset: Offset(0, 4),
-                                    ),
-                                  ],
+                                  color: Colors.grey,
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/your_image.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Row(
+                              ),
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      width: 60,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/shop_image.png'),
-                                          fit: BoxFit.cover,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
+                                    Text(
+                                      'ชื่อร้านค้า',
+                                      style: TextStyle(
+                                          fontSize: 16, color: Colors.black),
                                     ),
-                                    SizedBox(width: 20),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'ชื่อร้านค้า',
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Text(
-                                            'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black),
-                                          ),
-                                          SizedBox(height: 5),
-                                          Text(
-                                            'ระยะห่าง 1.5km',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black),
-                                          ),
-                                        ],
-                                      ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black),
                                     ),
-                                    Icon(Icons.favorite_border,
-                                        color: Colors.red),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      'ระยะห่าง 1.5km',
+                                      style: TextStyle(
+                                          fontSize: 14, color: Colors.black),
+                                    ),
                                   ],
                                 ),
                               ),
-                            ),
-                        ],
+                              Icon(Icons.favorite, color: Colors.red),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -173,9 +161,9 @@ class AllShopNearby extends StatelessWidget {
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.red,
         unselectedItemColor: Colors.black,
-        currentIndex: 0,
+        currentIndex: 1,
         onTap: (index) {
-          if (index == 0) return;
+          if (index == 1) return;
           switch (index) {
             case 0:
               Navigator.pushReplacement(

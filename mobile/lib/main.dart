@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/firebase_options.dart';
 import 'package:mobile/user/customer/allshopNear.dart';
+import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailBox.dart';
 import 'package:mobile/user/page/guest.dart';
 import 'package:mobile/user/page/registerCustomer.dart';
@@ -46,9 +47,10 @@ class _MyAppState extends State<MyApp> {
           '/registerRole': (context) => RegisterRole(),
           '/registerRole/customer': (context) => RegisterCustomer(),
           '/registerRole/shopkeeper': (context) => RegisterShopkeeper(),
-          '/allshop': (context) => AllShopNearby(),
+          '/home': (context) => Homepage(),
           '/guest': (context) => GuestScreen(),
           '/shop/mainScreen': (context) => ShopMainScreen(),
+          
           // '/employee': (context) => const EmployeeScreen(),
         });
   }

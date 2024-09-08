@@ -210,10 +210,10 @@ class _SignInState extends State<SignIn> {
             switch (responseData['role']) {
               case 'customer':
 
-                Navigator.pushNamed(context, '/Allshop');
+                Navigator.pushNamed(context, '/home');
                 break;
               case 'shopkeeper':
-                Navigator.pushNamed(context, '/Allshop');
+                Navigator.pushNamed(context, '/home');
 
                 Navigator.pushNamed(context, '/guest');
                 break;

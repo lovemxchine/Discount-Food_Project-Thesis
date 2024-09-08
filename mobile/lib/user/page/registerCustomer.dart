@@ -272,7 +272,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
         print(user.uid);
         print('hello world');
 
-        final url = Uri.parse("http://10.0.2.2:3000/register/customer");
+        final url = Uri.parse("http://10.0.2.2:3000/authentication/register/customer");
         final response = await http.post(
           url,
           headers: {
