@@ -7,13 +7,13 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ShopMainScreen extends StatefulWidget {
-  const ShopMainScreen({super.key});
+class ManageProductScreen extends StatefulWidget {
+  const ManageProductScreen({super.key});
 
-  State<ShopMainScreen> createState() => _ShopMainScreenState();
+  State<ManageProductScreen> createState() => ManageProductScreenState();
 }
 
-class _ShopMainScreenState extends State<ShopMainScreen> {
+class ManageProductScreenState extends State<ManageProductScreen> {
   List listProducts = [];
   bool isLoading = true;
   MediaType mediaType = MediaType('application', 'json');
@@ -138,34 +138,16 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16)
                           .copyWith(top: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'ร้านค้ากำลังลดราคา',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, '/shop/manageProduct');
-                                },
-                                child: const Text(
-                                  'ดูทั้งหมด',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ],
+                          Text(
+                            'สินค้าที่กำลังลดราคา',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -173,11 +155,49 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                     Expanded(
                       child: SingleChildScrollView(
                         child: isLoading
-                            ? const Center(
-                                child: CircularProgressIndicator(),
+                            ? const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(child: CircularProgressIndicator())
+                                ],
                               )
                             : Column(
                                 children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 16),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, '/shop/addProduct');
+                                      },
+                                      child: Container(
+                                        height: 110,
+                                        padding: const EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Colors.black26,
+                                              blurRadius: 1,
+                                              offset: Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        child: const Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Spacer(),
+                                            Icon(Icons.add),
+                                            Spacer()
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   for (int i = 0; i < listProducts.length; i++)
                                     if (listProducts[i] != null)
                                       Padding(
@@ -187,10 +207,11 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                                           onTap: () {
                                             // print(listProducts[i]['discountAt']);
                                             Navigator.pushNamed(
-                                                context, '/test/image',
+                                                context, '/shop/productDetails',
                                                 arguments: listProducts[i]);
                                           },
                                           child: Container(
+                                            height: 110,
                                             padding: const EdgeInsets.all(16),
                                             decoration: BoxDecoration(
                                               color: Colors.white,

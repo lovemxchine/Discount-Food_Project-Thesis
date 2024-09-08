@@ -2,7 +2,7 @@
 module.exports = (db, express) => {
   const router = express.Router();
 
-  router.post("/signIn", async (req, res) => {
+  router.post("/signIn", async (req, res, bucket) => {
     const registerShop = await db
       .collection("in_register_shop")
       .doc(req.body.checkUID)
