@@ -21,22 +21,6 @@ class ManageProductScreenState extends State<ManageProductScreen> {
   void initState() {
     super.initState();
     _fetchData();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ModalRoute.of(context)?.addScopedWillPopCallback(() async {
-        _fetchData();
-        return true;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    // Unsubscribe from route changes
-    ModalRoute.of(context)?.removeScopedWillPopCallback(() async {
-      _fetchData();
-      return true;
-    });
-    super.dispose();
   }
 
   Future<String?> getUID() async {
