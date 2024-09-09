@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:intl/intl.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,14 +17,29 @@ class ShopMainScreen extends StatefulWidget {
 }
 
 class _ShopMainScreenState extends State<ShopMainScreen> {
-  List listProducts = [];
+  List<dynamic> listProducts = [];
   bool isLoading = true;
-  int length = 0;
   MediaType mediaType = MediaType('application', 'json');
   @override
   void initState() {
     super.initState();
     _fetchData();
+  }
+
+  String formatDiscountDate(Map<String, dynamic> timestamp) {
+    int seconds = timestamp['_seconds'];
+    int nanoseconds = timestamp['_nanoseconds'];
+
+    // Convert seconds to DateTime
+    DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(seconds * 1000);
+
+    // Add nanoseconds
+    dateTime = dateTime.add(Duration(microseconds: nanoseconds ~/ 1000));
+
+    // Format the DateTime object into a desired format
+    String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
+
+    return formattedDate;
   }
 
   Future<String?> getUID() async {
@@ -39,13 +57,9 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
     final responseData = jsonDecode(response.body);
     setState(() {
       listProducts = responseData['data'];
+      listProducts.add(null);
     });
-    while (responseData['data'].length < 3) {
-      setState(() {
-        listProducts.add(null);
-      });
-    }
-    length = 3;
+
     isLoading = false;
 
     // List arrData = decodedData['data'];
@@ -140,38 +154,21 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16)
                           .copyWith(top: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'ร้านค้ากำลังลดราคา',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, '/shop/manageProduct');
-                                },
-                                child: const Text(
-                                  'ดูทั้งหมด',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ],
+                          Text(
+                            'สินค้าที่กำลังลดราคา',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
                     ),
+                    SizedBox(height: 10),
                     Expanded(
                       child: SingleChildScrollView(
                         child: isLoading
@@ -180,21 +177,56 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                               )
                             : Column(
                                 children: [
-                                  for (int i = 0; i < length; i++)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 20),
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, '/shop/addProduct');
+                                      },
+                                      child: Container(
+                                        height: 90,
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Colors.black26,
+                                              blurRadius: 1,
+                                              offset: Offset(0, 4),
+                                            ),
+                                          ],
+                                        ),
+                                        child: const Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Spacer(),
+                                            Icon(Icons.add),
+                                            Spacer()
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  for (int i = 0; i < listProducts.length; i++)
                                     if (listProducts[i] != null)
                                       Padding(
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 8, horizontal: 16),
+                                            vertical: 8, horizontal: 20),
                                         child: InkWell(
                                           onTap: () {
                                             // print(listProducts[i]['discountAt']);
-                                            Navigator.pushNamed(
-                                                context, '/test/image',
-                                                arguments: listProducts[i]);
+                                            // Navigator.pushNamed(
+                                            //     context, '/test/image',
+                                            //     arguments: listProducts[i]);
                                           },
                                           child: Container(
-                                            height: 110,
-                                            padding: const EdgeInsets.all(16),
+                                            height: 90,
+                                            padding: const EdgeInsets.all(12),
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
@@ -235,27 +267,86 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            listProducts[i]
+                                                                ['productName'],
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .black),
+                                                          ),
+                                                          Spacer(),
+                                                          RichText(
+                                                            text: TextSpan(
+                                                              text: 'สถานะ : ',
+                                                              style: TextStyle(
+                                                                  fontFamily: GoogleFonts
+                                                                          .mitr()
+                                                                      .fontFamily,
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .black),
+                                                              children: [
+                                                                TextSpan(
+                                                                  text: listProducts[
+                                                                              i]
+                                                                          [
+                                                                          'showStatus']
+                                                                      ? 'กำลังขาย'
+                                                                      : 'ไม่ได้ขาย',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: listProducts[i]
+                                                                            [
+                                                                            'showStatus']
+                                                                        ? Colors
+                                                                            .green
+                                                                        : Colors
+                                                                            .red,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 20),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            'ราคาเดิม ${listProducts[i]['originalPrice']} บาท',
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .black),
+                                                          ),
+                                                          Spacer(),
+                                                          Text(
+                                                            'ราคาขาย ${listProducts[i]['salePrice']} บาท',
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .black),
+                                                          ),
+                                                          SizedBox(width: 20),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 5),
                                                       Text(
-                                                        listProducts[i]
-                                                            ['productName'],
+                                                        'วันที่เริ่มขาย : ${formatDiscountDate(listProducts[i]['discountAt'])}',
                                                         style: const TextStyle(
-                                                            fontSize: 16,
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      const Text(
-                                                        'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                      const SizedBox(height: 5),
-                                                      const Text(
-                                                        'ระยะห่าง 1.5km',
-                                                        style: TextStyle(
-                                                            fontSize: 14,
+                                                            fontSize: 12,
                                                             color:
                                                                 Colors.black),
                                                       ),
@@ -267,6 +358,16 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                                           ),
                                         ),
                                       ),
+                                  if (listProducts[listProducts.length - 1] ==
+                                      null)
+                                    Container(
+                                      height: 75,
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: Colors.transparent,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    )
                                 ],
                               ),
                       ),

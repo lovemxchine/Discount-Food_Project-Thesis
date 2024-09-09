@@ -48,6 +48,8 @@ module.exports = (db, express, bucket, upload) => {
             stock: parseInt(data.stock),
             expiredDate: formattedDate,
             imageUrl: imageUrl,
+            discountAt: Date.now(),
+            showStatus: false,
             // discount: data.discount,
             // discountAt: data.discountAt,
           });
