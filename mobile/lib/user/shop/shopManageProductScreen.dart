@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:mime/mime.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ManageProductScreen extends StatefulWidget {
@@ -13,14 +12,31 @@ class ManageProductScreen extends StatefulWidget {
   State<ManageProductScreen> createState() => ManageProductScreenState();
 }
 
+// TODO: fixed reload realtime data
 class ManageProductScreenState extends State<ManageProductScreen> {
-  List listProducts = [];
+  List<dynamic> listProducts = [];
   bool isLoading = true;
   MediaType mediaType = MediaType('application', 'json');
   @override
   void initState() {
     super.initState();
     _fetchData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ModalRoute.of(context)?.addScopedWillPopCallback(() async {
+        _fetchData();
+        return true;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // Unsubscribe from route changes
+    ModalRoute.of(context)?.removeScopedWillPopCallback(() async {
+      _fetchData();
+      return true;
+    });
+    super.dispose();
   }
 
   Future<String?> getUID() async {

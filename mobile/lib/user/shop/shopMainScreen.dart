@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
-import 'package:mime/mime.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ShopMainScreen extends StatefulWidget {
@@ -172,7 +172,6 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                         ],
                       ),
                     ),
-
                     Expanded(
                       child: SingleChildScrollView(
                         child: isLoading
@@ -180,7 +179,6 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                                 child: CircularProgressIndicator(),
                               )
                             : Column(
-
                                 children: [
                                   for (int i = 0; i < length; i++)
                                     if (listProducts[i] != null)

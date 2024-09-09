@@ -2,20 +2,16 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/components/bottomNav.dart';
+import 'package:mobile/components/bottomNavShop.dart';
 import 'package:mobile/firebase_options.dart';
-import 'package:mobile/user/customer/allshopNear.dart';
-import 'package:mobile/user/customer/favoritePage.dart';
 import 'package:mobile/user/customer/homePage.dart';
-import 'package:mobile/user/customer/mailBox.dart';
 import 'package:mobile/user/page/guest.dart';
 import 'package:mobile/user/page/registerCustomer.dart';
 import 'package:mobile/user/page/registerShopkeeper.dart';
 import 'package:mobile/user/page/signIn.dart';
 import 'package:mobile/user/page/registerRole.dart';
-import 'package:mobile/user/page/testimage.dart';
 import 'package:mobile/user/shop/shopAddProductScreen.dart';
 import 'package:mobile/user/shop/shopMainScreen.dart';
 import 'package:mobile/user/shop/shopManageProductScreen.dart';
@@ -55,14 +51,12 @@ class _MyAppState extends State<MyApp> {
           '/registerRole/shopkeeper': (context) => RegisterShopkeeper(),
           '/home': (context) => Homepage(),
           '/guest': (context) => GuestScreen(),
+          '/shop': (context) => BottomNavShop(),
           '/shop/mainScreen': (context) => ShopMainScreen(),
           '/shop/manageProduct': (context) => ManageProductScreen(),
           '/shop/productDetails': (context) => ProductDetailScreen(),
           '/shop/addProduct': (context) => AddProductScreen(),
-
           '/customer': (context) => BottomNavCustomer(),
-
-
         });
   }
 }

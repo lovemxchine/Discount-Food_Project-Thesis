@@ -213,7 +213,7 @@ class _SignInState extends State<SignIn> {
                 Navigator.pushNamed(context, '/customer');
                 break;
               case 'shopkeeper':
-                Navigator.pushNamed(context, '/customer');
+                Navigator.pushNamed(context, '/shop');
                 break;
               default:
                 await _auth.signOut();
