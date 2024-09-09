@@ -75,6 +75,42 @@ Widget buildDateField(TextEditingController controller, BuildContext context) {
   );
 }
 
+Widget customDateField(
+    TextEditingController controller, BuildContext context, String label) {
+  String labelText = label;
+  return TextField(
+    readOnly: true,
+    controller: controller,
+    decoration: InputDecoration(
+      // filled: true,
+      labelText: labelText,
+      labelStyle: TextStyle(color: Colors.black),
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      contentPadding: EdgeInsets.only(top: 5),
+      focusedBorder: UnderlineInputBorder(
+        borderSide: BorderSide(color: Colors.black),
+      ),
+      hintText: "DD/MM/YYYY",
+      hintStyle: TextStyle(color: Colors.grey),
+      suffixIcon: Icon(
+        Icons.calendar_today,
+      ),
+    ),
+    onTap: () async {
+      DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime(2100),
+      );
+      if (pickedDate != null) {
+        controller.text =
+            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+      }
+    },
+  );
+}
+
 class SelectOption extends StatelessWidget {
   final String label;
   final List<String> options;
