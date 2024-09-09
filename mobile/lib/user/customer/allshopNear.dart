@@ -104,9 +104,9 @@ class _AllShopNearbyState extends State<AllShopNearby> {
                             for (int i = 0; i < 6; i++)
                               Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 16),
+                                    vertical: 8, horizontal: 20),
                                 child: Container(
-                                  height: 110,
+                                  height: 90,
                                   padding: const EdgeInsets.all(16),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -144,21 +144,21 @@ class _AllShopNearbyState extends State<AllShopNearby> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'ชื่อร้านค้า',
+                                              '',
                                               style: TextStyle(
                                                   fontSize: 16,
                                                   color: Colors.black),
                                             ),
                                             SizedBox(height: 5),
                                             Text(
-                                              'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
+                                              '',
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Colors.black),
                                             ),
                                             SizedBox(height: 5),
                                             Text(
-                                              'ระยะห่าง 1.5km',
+                                              '',
                                               style: TextStyle(
                                                   fontSize: 14,
                                                   color: Colors.black),
