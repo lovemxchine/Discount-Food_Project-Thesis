@@ -141,7 +141,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'ชื่อร้านค้า', // ใส่รายละเอียดที่ 1
+                                                'ชื่อร้านค้า', 
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,

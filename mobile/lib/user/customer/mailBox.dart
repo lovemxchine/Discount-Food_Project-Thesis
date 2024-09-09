@@ -14,7 +14,7 @@ class _MailBoxPageState extends State<MailBoxPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false, // ถ้ากดปุ่ม back จะไม่ทำอะไร
+      onWillPop: () async => false,
 
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(255, 104, 56, 1),
@@ -135,7 +135,7 @@ class _MailBoxPageState extends State<MailBoxPage> {
                           ],
                         ),
                         margin: const EdgeInsets.symmetric(
-                            horizontal: 10), // ลดขอบซ้ายขวา
+                            horizontal: 10), 
                         child: ListView.builder(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           itemCount: 2,
