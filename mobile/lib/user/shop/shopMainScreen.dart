@@ -172,6 +172,7 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                         ],
                       ),
                     ),
+
                     Expanded(
                       child: SingleChildScrollView(
                         child: isLoading
@@ -179,6 +180,7 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                                 child: CircularProgressIndicator(),
                               )
                             : Column(
+
                                 children: [
                                   for (int i = 0; i < length; i++)
                                     if (listProducts[i] != null)

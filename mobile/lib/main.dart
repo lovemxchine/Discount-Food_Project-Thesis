@@ -4,7 +4,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/components/bottomNav.dart';
 import 'package:mobile/firebase_options.dart';
+import 'package:mobile/user/customer/allshopNear.dart';
+import 'package:mobile/user/customer/favoritePage.dart';
+import 'package:mobile/user/customer/homePage.dart';
+import 'package:mobile/user/customer/mailBox.dart';
 import 'package:mobile/user/page/guest.dart';
 import 'package:mobile/user/page/registerCustomer.dart';
 import 'package:mobile/user/page/registerShopkeeper.dart';
@@ -48,13 +53,16 @@ class _MyAppState extends State<MyApp> {
           '/registerRole': (context) => RegisterRole(),
           '/registerRole/customer': (context) => RegisterCustomer(),
           '/registerRole/shopkeeper': (context) => RegisterShopkeeper(),
+          '/home': (context) => Homepage(),
           '/guest': (context) => GuestScreen(),
           '/shop/mainScreen': (context) => ShopMainScreen(),
           '/shop/manageProduct': (context) => ManageProductScreen(),
           '/shop/productDetails': (context) => ProductDetailScreen(),
           '/shop/addProduct': (context) => AddProductScreen(),
-          // '/test/image': (context) => ImageUploadScreen(),
-          // '/employee': (context) => const EmployeeScreen(),
+
+          '/customer': (context) => BottomNavCustomer(),
+
+
         });
   }
 }

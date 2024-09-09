@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/components/bottomNav.dart';
 import 'package:mobile/user/service/auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -129,7 +130,7 @@ class _SignInState extends State<SignIn> {
                                   fontSize: 16),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  Navigator.pushNamed(context, '/Guest');
+                                  Navigator.pushNamed(context, '/guest');
                                 })
                         ]),
                   ),
@@ -209,10 +210,10 @@ class _SignInState extends State<SignIn> {
             await storeUID(user.uid, responseData['role']);
             switch (responseData['role']) {
               case 'customer':
-                Navigator.pushNamed(context, '/guest');
+                Navigator.pushNamed(context, '/customer');
                 break;
               case 'shopkeeper':
-                Navigator.pushNamed(context, '/shop/mainScreen');
+                Navigator.pushNamed(context, '/customer');
                 break;
               default:
                 await _auth.signOut();
