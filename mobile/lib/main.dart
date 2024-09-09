@@ -4,8 +4,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/components/bottomNav.dart';
 import 'package:mobile/firebase_options.dart';
 import 'package:mobile/user/customer/allshopNear.dart';
+import 'package:mobile/user/customer/favoritePage.dart';
 import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailBox.dart';
 import 'package:mobile/user/page/guest.dart';
@@ -50,7 +52,8 @@ class _MyAppState extends State<MyApp> {
           '/home': (context) => Homepage(),
           '/guest': (context) => GuestScreen(),
           '/shop/mainScreen': (context) => ShopMainScreen(),
-          
+          '/customer': (context) => BottomNavCustomer(),
+
           // '/employee': (context) => const EmployeeScreen(),
         });
   }
