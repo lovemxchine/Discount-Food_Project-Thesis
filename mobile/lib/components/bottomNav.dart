@@ -11,12 +11,12 @@ class BottomNavCustomer extends StatefulWidget {
 }
 
 class _BottomNavCustomerState extends State<BottomNavCustomer> {
-  int _currentIndex = 0;
+  int _currentIndex = 2;
 
   final List<Widget> _pages = [
-    Homepage(),
-    FavoritePage(),
     AllShopNearby(),
+    FavoritePage(),
+    Homepage(),
     MailBoxPage(),
     SettingsPage(),
   ];
@@ -55,6 +55,9 @@ class _BottomNavCustomerState extends State<BottomNavCustomer> {
                     elevation: 0,
                     currentIndex: _currentIndex,
                     onTap: (index) {
+                      if (index == 4) {
+                        Navigator.pushNamed(context, '/signIn');
+                      }
                       setState(() {
                         _currentIndex = index;
                       });
@@ -62,11 +65,11 @@ class _BottomNavCustomerState extends State<BottomNavCustomer> {
                     type: BottomNavigationBarType.fixed,
                     items: const [
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.home), label: 'Home'),
+                          icon: Icon(Icons.store), label: 'Nearby Shops'),
                       BottomNavigationBarItem(
                           icon: Icon(Icons.favorite), label: 'Favorite'),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.store), label: 'Nearby Shops'),
+                          icon: Icon(Icons.home), label: 'Home'),
                       BottomNavigationBarItem(
                           icon: Icon(Icons.mail), label: 'Mailbox'),
                       BottomNavigationBarItem(
