@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/components/bottomNav.dart';
 import 'package:mobile/user/customer/allshopNear.dart';
 import 'package:mobile/user/customer/homePage.dart';
@@ -124,70 +125,78 @@ class _HomepageState extends State<Homepage> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 8, horizontal: 20),
-                                child: Container(
-                                  height: 90,
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black26,
-                                        blurRadius: 10,
-                                        offset: Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 60,
-                                        height: 60,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          image: const DecorationImage(
-                                            image: AssetImage(
-                                                'assets/your_image.png'),
-                                            fit: BoxFit.cover,
+                                child: InkWell(
+                                  onTap: () {
+                                    // เผื่อกดดูสินค้า
+                                  },
+                                  child: Container(
+                                    height: 90,
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Colors.black26,
+                                          blurRadius: 1,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey,
+                                            image: const DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/your_image.png'),
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
                                         ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                      const Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              '',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black),
-                                            ),
-                                            SizedBox(height: 5),
-                                            Text(
-                                              '',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black),
-                                            ),
-                                            SizedBox(height: 5),
-                                            Text(
-                                              '',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black),
-                                            ),
-                                          ],
+                                        const SizedBox(width: 20),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'ชื่อร้านค้า', 
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Text(
+                                                'เวลาเปิด-ปิด', 
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Text(
+                                                'ระยะห่าง', 
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      const Icon(Icons.favorite_border,
-                                          color: Colors.red),
-                                    ],
+                                        const Icon(Icons.favorite_border,
+                                            color: Colors.red),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
