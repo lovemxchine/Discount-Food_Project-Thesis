@@ -1,25 +1,48 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:intl/intl.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailScreen extends StatefulWidget {
+  final productData;
+
+  ProductDetailScreen({Key? key, required this.productData}) : super(key: key);
+
+  @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final PageController _pageController = PageController();
-  final List listProducts = [];
   final bool isLoading = true;
   final MediaType mediaType = MediaType('application', 'json');
-
-  ProductDetailScreen({super.key});
-
+  late int currentQuantity;
   Future<String?> getUID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('user_uid');
   }
 
+  String formatExpiredDate(String dateStr) {
+    DateTime dateTime = DateTime.parse(dateStr);
+    return DateFormat('dd-MM-yyyy').format(dateTime);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      currentQuantity = widget.productData['stock'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 224, 217, 217),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 224, 217, 217),
@@ -30,14 +53,167 @@ class ProductDetailScreen extends StatelessWidget {
           },
         ),
       ),
-      body: Stack(
+      body: Row(
         children: [
-          Positioned(
-            top: 120,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                width: double.infinity,
+                height: 540,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        height: 250,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: Image.network(widget.productData['imageUrl'])
+                                .image,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Text(
+                        widget.productData['productName'],
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Spacer(),
+                          Text(
+                            'ลดเหลือ : ${widget.productData['salePrice']} บาท',
+                            style: TextStyle(
+                              //bold
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ),
+                          ),
+                          Spacer(),
+                          Text(
+                            'ราคาเดิม : ${widget.productData['originalPrice']} บาท',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              decoration: TextDecoration.lineThrough,
+                            ),
+                          ),
+                          Spacer(),
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Spacer(),
+                          Text(
+                            'วันที่หมดอายุ : ${formatExpiredDate(widget.productData['expiredDate'])} ', //${formatDiscountDate(productData['expiredDate'])}
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          SizedBox(width: 85),
+                          Spacer(),
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 39,
+                            width: 39,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  currentQuantity--;
+                                });
+                                print("Button tapped!");
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      5), // Rounded corners
+                                ),
+                                backgroundColor: Colors.red, // Background color
+                                padding: EdgeInsets.all(8),
+                              ),
+                              child: Icon(Icons.remove, color: Colors.white),
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            child: Text(
+                              'จำนวน :  ${currentQuantity} ชิ้น',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.grey,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Container(
+                            height: 39,
+                            width: 39,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  currentQuantity++;
+                                });
+                                print("Button tapped!");
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      5), // Rounded corners
+                                ),
+                                backgroundColor:
+                                    Colors.green, // Background color
+                                padding: EdgeInsets.all(8),
+                              ),
+                              child: Icon(Icons.add, color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 15),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              )),
+                          onPressed: () {},
+                          child: Container(
+                              child: Text(
+                            'อัพเดตข้อมูลสินค้า',
+                            style: TextStyle(color: Colors.white),
+                          ))),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),

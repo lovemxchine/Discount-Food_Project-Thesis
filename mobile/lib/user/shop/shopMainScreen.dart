@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile/user/shop/shopProductDetailScreen.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -158,7 +159,7 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'สินค้าที่กำลังลดราคา',
+                            'สินค้าทั้งหมด',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -219,10 +220,15 @@ class _ShopMainScreenState extends State<ShopMainScreen> {
                                             vertical: 8, horizontal: 20),
                                         child: InkWell(
                                           onTap: () {
-                                            // print(listProducts[i]['discountAt']);
-                                            // Navigator.pushNamed(
-                                            //     context, '/test/image',
-                                            //     arguments: listProducts[i]);
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ProductDetailScreen(
+                                                  productData: listProducts[i],
+                                                ),
+                                              ),
+                                            );
                                           },
                                           child: Container(
                                             height: 90,

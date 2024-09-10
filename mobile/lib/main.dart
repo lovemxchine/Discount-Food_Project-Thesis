@@ -54,7 +54,7 @@ class _MyAppState extends State<MyApp> {
           '/shop': (context) => BottomNavShop(),
           '/shop/mainScreen': (context) => ShopMainScreen(),
           '/shop/manageProduct': (context) => ManageProductScreen(),
-          '/shop/productDetails': (context) => ProductDetailScreen(),
+          // '/shop/productDetails': (context) => ProductDetailScreen(),
           '/shop/addProduct': (context) => AddProductScreen(),
           '/customer': (context) => BottomNavCustomer(),
         });
