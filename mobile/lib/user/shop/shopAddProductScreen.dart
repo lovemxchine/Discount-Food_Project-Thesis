@@ -42,10 +42,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
 
     try {
-      final url = Uri.parse("$pathAPI/shop/product/addProduct");
+      final url = Uri.parse("$pathAPI/shop/$uid/product/addProduct");
       var request = http.MultipartRequest('POST', url);
       request.headers['Content-Type'] = 'application/json; charset=UTF-8';
-      request.fields['uid'] = uid;
       request.fields['product_name'] = nameController.text;
       request.fields['original_price'] = originalPrice.text;
       request.fields['sale_price'] = salePrice.text;
@@ -333,7 +332,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                             stock, 'จำนวนสินค้า', 'จำนวนสินค้า', false, false),
                       ),
                       const SizedBox(height: 10),
-                      customDateField(expiredDate, context, 'วันหมดอายุ'),
+                      customDateField(expiredDate, context, 'วันหมดอายุ', 18),
                       const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
