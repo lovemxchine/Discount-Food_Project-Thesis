@@ -54,7 +54,7 @@ module.exports = (db, express, bucket, upload) => {
             expiredDate: formattedDate,
             imageUrl: imageUrl,
             discountAt: Timestamp.now(),
-            showStatus: false,
+            showStatus: true,
 
             // discountAt: data.discountAt,
           });
@@ -111,6 +111,7 @@ module.exports = (db, express, bucket, upload) => {
             expiredDate: formattedDate,
             stock: data.updateStock,
             showStatus: data.showStatus,
+            discountAt: Timestamp.now(),
           });
       }
       // Update Stock

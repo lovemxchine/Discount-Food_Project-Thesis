@@ -61,7 +61,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
       if (response.statusCode == 200) {
         print('Product added successfully');
-        Navigator.pop(context, true);
+        Navigator.pushNamed(context, '/shop');
       } else {
         print('Failed to add product with status: ${response.statusCode}');
       }

@@ -4,6 +4,7 @@ const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
 const multer = require("multer");
 const { getStorage } = require("firebase/storage");
+const cron = require("node-cron");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -38,12 +39,47 @@ app.use("/shop", shopRoute);
   app.use("/gemini", geminiRoute(express));
 })();
 
-// app.post("/upload", upload.single("image"), (req, res) => {
-//   if (!req.file) {
-//     return res.status(400).send("No file uploaded.");
-//   }
-// console.log(uploadSingleImage(req, res, bucket));
-// });
+// Cron job to update showStatus
+cron.schedule("0 0 * * *", async () => {
+  console.log("Running daily check for showStatus...");
+
+  try {
+    // Retrieve all documents in the 'shop' collection
+    const shopsSnapshot = await db.collection("shop").get();
+    const currentTime = admin.firestore.Timestamp.now();
+
+    for (const shopDoc of shopsSnapshot.docs) {
+      const shopData = shopDoc.data();
+      const shopId = shopDoc.id;
+
+      const productsSnapshot = await db
+        .collection("shop")
+        .doc(shopId)
+        .collection("products")
+        .get();
+
+      for (const productDoc of productsSnapshot.docs) {
+        const productData = productDoc.data();
+        const productTimestamp = productData.discountAt;
+
+        if (productTimestamp) {
+          const daysDifference =
+            currentTime.toDate() - productTimestamp.toDate();
+          const daysPassed = daysDifference / (1000 * 60 * 60 * 24);
+
+          if (daysPassed > 2) {
+            await productDoc.ref.update({ showStatus: false });
+            console.log(
+              `Updated showStatus to false for product ID: ${productDoc.id} in shop ID: ${shopId}`
+            );
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error updating showStatus: ", error);
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
