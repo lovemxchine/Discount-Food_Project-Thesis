@@ -59,6 +59,14 @@ class _SignInState extends State<SignIn> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Text('เข้าสู่ระบบ',
+                      style: TextStyle(
+                          fontSize: 24,
+                          color: Color(0xFFFF6838),
+                          fontFamily: GoogleFonts.mitr().fontFamily)),
+                  const SizedBox(
+                    height: 30,
+                  ),
                   TextField(
                     controller: emailController,
                     onSubmitted: (String value) {
@@ -117,14 +125,14 @@ class _SignInState extends State<SignIn> {
                     alignment: Alignment.centerRight,
                     child: RichText(
                       text: TextSpan(
-                          text: 'Sign In as ',
+                          text: 'เข้าสู่ระบบเป็น ',
                           style: TextStyle(
                               fontSize: 16,
                               color: Color(0xFFFF6838),
                               fontFamily: GoogleFonts.mitr().fontFamily),
                           children: <TextSpan>[
                             TextSpan(
-                                text: 'Guest',
+                                text: 'ผู้ชม',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontFamily: GoogleFonts.mitr().fontFamily,
@@ -152,7 +160,7 @@ class _SignInState extends State<SignIn> {
                             BorderRadius.circular(15.0), // Rounded corners
                       ),
                     ),
-                    child: Text('Submit',
+                    child: Text('เข้าสู่ระบบ',
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,
@@ -161,14 +169,14 @@ class _SignInState extends State<SignIn> {
                   const SizedBox(height: 35),
                   RichText(
                       text: TextSpan(
-                          text: 'Don\'t have an account ? ',
+                          text: 'ยังไม่มีบัญชีผู้ใช้ ? ',
                           style: TextStyle(
                               color: Colors.black,
                               fontSize: 16,
                               fontFamily: GoogleFonts.mitr().fontFamily),
                           children: <TextSpan>[
                         TextSpan(
-                            text: 'Sign Up',
+                            text: 'สมัครผู้ใช้',
                             style: TextStyle(
                                 color: Color(0xFFFF6838),
                                 fontSize: 16,
