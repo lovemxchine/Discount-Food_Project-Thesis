@@ -226,13 +226,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color.fromARGB(255, 224, 217, 217),
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 224, 217, 217),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              Navigator.pop(context); // Navigate back to the previous screen
-            },
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: AppBar(
+            backgroundColor: const Color.fromARGB(255, 224, 217, 217),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () {
+                Navigator.pop(context); // Navigate back to the previous screen
+              },
+            ),
           ),
         ),
         body: Padding(
