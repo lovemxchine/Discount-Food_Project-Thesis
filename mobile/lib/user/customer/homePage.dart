@@ -127,7 +127,8 @@ class _HomepageState extends State<Homepage> {
                                     vertical: 8, horizontal: 20),
                                 child: InkWell(
                                   onTap: () {
-                                    // เผื่อกดดูสินค้า
+                                    Navigator.pushNamed(
+                                            context, '/customer/productInshop');
                                   },
                                   child: Container(
                                     height: 90,
