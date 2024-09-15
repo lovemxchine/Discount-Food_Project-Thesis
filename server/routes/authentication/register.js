@@ -41,17 +41,38 @@ module.exports = (db, express) => {
           uid: data.temporaryUID,
           name: data.name,
           surname: data.surname,
-          shopLocation: {
+          nationality: data.nationality,
+          email: data.email,
+          tel: data.tel,
+          role: "shopkeeper",
+
+          // shop img url
+          imgUrl: {
+            shopCoverImg: data.imgUrl.shopCoverImg,
+            shopImg: data.imgUrl.shopImg,
+            certificateImg: data.imgUrl.certificateImg,
+          },
+          // shop location from user input
+          shopLocation_th: {
             province: data.shopLocation.province,
             district: data.shopLocation.district,
             subdistrict: data.shopLocation.subdistrict,
             postcode: data.shopLocation.postcode,
           },
-          nationality: data.nationality,
-          place: data.place,
-          email: data.email,
-          tel: data.tel,
-          role: "shopkeeper",
+          // shop location from google map api
+          googleLocation: {
+            lat: data.googleLocation.lat,
+            lng: data.googleLocation.lng,
+            formatted_address: data.googleLocation.formatted_address,
+            place_name: data.googleLocation.place_name,
+          },
+          // shopkeeper location from user input
+          shopkeeperLocation: {
+            province: data.shopkeeperLocation.province,
+            district: data.shopkeeperLocation.district,
+            subdistrict: data.shopkeeperLocation.subdistrict,
+            postcode: data.shopkeeperLocation.postcode,
+          },
         });
 
       return res.status(200).send({ status: "success", message: "data saved" });

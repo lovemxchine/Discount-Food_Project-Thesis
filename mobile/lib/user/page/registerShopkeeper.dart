@@ -45,15 +45,22 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
   final TextEditingController telShopkeeperController = TextEditingController();
   final TextEditingController emailShopkeeperController =
       TextEditingController();
+  // shop place
+  String? selectedProvince;
+  String? selectedDistrict;
+  String? selectedSubDistrict;
+  // user place
+  String? selectedUserProvince;
+  String? selectedUserDistrict;
+  String? selectedUserSubDistrict;
 
   bool firstPageValidate = false;
   bool secondPageValidate = false;
   bool thirdPageValidate = false;
   bool fourthPageValidate = false;
-  String? selectedProvince = 'กรุงเทพมหานคร';
-  String? selectedDistrict = '';
-  String? selectedSubDistrict = '';
+
   int currentPage = 0;
+  bool pinMap = false;
 
   final PageController _pageController = PageController();
 
@@ -92,8 +99,20 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
     postcodeShopkeeperController.addListener(checkFields);
     if (provinceToDistricts.isNotEmpty) {
       selectedProvince = provinceToDistricts.keys.first;
-      selectedDistrict = provinceToDistricts[selectedProvince]!.first;
-      selectedSubDistrict = districtToSubDistricts[selectedDistrict]!.first;
+      if (provinceToDistricts[selectedProvince]!.isNotEmpty) {
+        selectedDistrict = provinceToDistricts[selectedProvince]!.first;
+        if (districtToSubDistricts[selectedDistrict]!.isNotEmpty) {
+          selectedSubDistrict = districtToSubDistricts[selectedDistrict]!.first;
+        }
+      }
+      selectedUserProvince = provinceToDistricts.keys.first;
+      if (provinceToDistricts[selectedUserProvince]!.isNotEmpty) {
+        selectedUserDistrict = provinceToDistricts[selectedUserProvince]!.first;
+        if (districtToSubDistricts[selectedUserDistrict]!.isNotEmpty) {
+          selectedUserSubDistrict =
+              districtToSubDistricts[selectedUserDistrict]!.first;
+        }
+      }
     }
     _pageController.addListener(() {
       setState(() {
@@ -308,7 +327,15 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                             false,
                             false),
                         const SizedBox(height: 16),
-                        const Text('ที่อยู่ร้าน'),
+                        Row(
+                          children: [
+                            const Text('ที่อยู่ร้าน'),
+                            Spacer(),
+                            Text(pinMap ? 'ปักหมุดแล้ว' : 'ยังไม่ปักหมุด',
+                                style: TextStyle(
+                                    color: pinMap ? Colors.green : Colors.red)),
+                          ],
+                        ),
                         const SizedBox(height: 8),
                         SizedBox(
                           height: 60,
@@ -356,23 +383,21 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                             false,
                             false),
                         const SizedBox(height: 16),
-                        if (selectedProvince != null)
-                          SelectOption(
-                            label: "จังหวัด",
-                            options: provinceToDistricts.keys.toList(),
-                            selectedValue: selectedProvince ?? '',
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedProvince = newValue!;
-                                selectedDistrict =
-                                    provinceToDistricts[selectedProvince]!
-                                        .first;
-                                selectedSubDistrict =
-                                    districtToSubDistricts[selectedDistrict]!
-                                        .first;
-                              });
-                            },
-                          ),
+                        SelectOption(
+                          label: "จังหวัด",
+                          options: provinceToDistricts.keys.toList(),
+                          selectedValue: selectedProvince ?? '',
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedProvince = newValue!;
+                              selectedDistrict =
+                                  provinceToDistricts[selectedProvince]!.first;
+                              selectedSubDistrict =
+                                  districtToSubDistricts[selectedDistrict]!
+                                      .first;
+                            });
+                          },
+                        ),
                         const SizedBox(height: 16),
                         if (selectedProvince != null)
                           SelectOption(
@@ -396,10 +421,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                             selectedValue: selectedSubDistrict ?? '',
                             onChanged: (String? newValue) {
                               setState(() {
-                                selectedDistrict = newValue!;
-                                selectedSubDistrict =
-                                    districtToSubDistricts[selectedDistrict]!
-                                        .first;
+                                selectedSubDistrict = newValue!;
                               });
                             },
                           ),
@@ -618,34 +640,34 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                             false,
                             false),
                         const SizedBox(height: 16),
-                        if (selectedProvince != null)
-                          SelectOption(
-                            label: "จังหวัด",
-                            options: provinceToDistricts.keys.toList(),
-                            selectedValue: selectedProvince ?? '',
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                selectedProvince = newValue!;
-                                selectedDistrict =
-                                    provinceToDistricts[selectedProvince]!
-                                        .first;
-                                selectedSubDistrict =
-                                    districtToSubDistricts[selectedDistrict]!
-                                        .first;
-                              });
-                            },
-                          ),
+                        SelectOption(
+                          label: "จังหวัด",
+                          options: provinceToDistricts.keys.toList(),
+                          selectedValue: selectedUserProvince ?? '',
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedUserProvince = newValue!;
+                              selectedUserDistrict =
+                                  provinceToDistricts[selectedUserProvince]!
+                                      .first;
+                              selectedUserSubDistrict =
+                                  districtToSubDistricts[selectedUserDistrict]!
+                                      .first;
+                            });
+                          },
+                        ),
                         const SizedBox(height: 16),
                         if (selectedProvince != null)
                           SelectOption(
                             label: "อำเภอ / เขต",
-                            options: provinceToDistricts[selectedProvince]!,
-                            selectedValue: selectedDistrict ?? '',
+                            options: provinceToDistricts[selectedUserProvince]!,
+                            selectedValue: selectedUserDistrict ?? '',
                             onChanged: (String? newValue) {
                               setState(() {
-                                selectedDistrict = newValue!;
-                                selectedSubDistrict =
-                                    districtToSubDistricts[selectedDistrict]!
+                                selectedUserDistrict = newValue!;
+                                selectedUserSubDistrict =
+                                    districtToSubDistricts[
+                                            selectedUserDistrict]!
                                         .first;
                               });
                             },
@@ -654,14 +676,12 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                         if (selectedProvince != null)
                           SelectOption(
                             label: "ตำบล / แขวง",
-                            options: districtToSubDistricts[selectedDistrict]!,
-                            selectedValue: selectedSubDistrict ?? '',
+                            options:
+                                districtToSubDistricts[selectedUserDistrict]!,
+                            selectedValue: selectedUserSubDistrict ?? '',
                             onChanged: (String? newValue) {
                               setState(() {
-                                selectedDistrict = newValue!;
-                                selectedSubDistrict =
-                                    districtToSubDistricts[selectedDistrict]!
-                                        .first;
+                                selectedUserSubDistrict = newValue!;
                               });
                             },
                           ),
