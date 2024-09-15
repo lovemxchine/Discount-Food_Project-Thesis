@@ -6,27 +6,24 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile/components/textFieldComponent.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProductDetailScreen extends StatefulWidget {
+class ProductUpdateScreen extends StatefulWidget {
   final productData;
-  ProductDetailScreen({Key? key, required this.productData}) : super(key: key);
+
+  ProductUpdateScreen({Key? key, required this.productData}) : super(key: key);
 
   @override
-  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+  State<ProductUpdateScreen> createState() => _ProductUpdateScreenState();
 }
 
-class _ProductDetailScreenState extends State<ProductDetailScreen> {
+class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
   final PageController _pageController = PageController();
-  final TextEditingController dateController = TextEditingController();
   final bool isLoading = true;
   final MediaType mediaType = MediaType('application', 'json');
   late int currentQuantity;
-  List<bool> isSelected = [false, false];
   var pathAPI = "http://10.0.2.2:3000";
-  bool showStatus = true;
 
   Future<String?> getUID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -35,26 +32,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   String formatExpiredDate(String dateStr) {
     DateTime dateTime = DateTime.parse(dateStr);
-    return DateFormat('dd/MM/yyyy').format(dateTime);
+    return DateFormat('dd-MM-yyyy').format(dateTime);
   }
 
-  Future<void> deleteProd() async {
-    // Uri url = "http://10.0.2.2:3000/" as Uri;
-    String? uid = await getUID();
-    String prodID = widget.productData['productId'];
-    final url = Uri.parse("$pathAPI/shop/$uid/product/$prodID");
-    var response = await http.delete(url,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({"imageUrl": widget.productData['imageUrl']}));
-    final responseData = jsonDecode(response.body);
-    print(responseData);
-  }
-
-  Future<void> updateProd(bool status) async {
+  Future<void> updateProd() async {
     try {
-      bool updateStatus = status;
       String? uid = await getUID();
       String prodID = widget.productData['productId'];
       print(uid);
@@ -65,18 +47,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: jsonEncode({
-            "expired_date": dateController.text,
-            "updateStock": currentQuantity,
-            "showStatus": updateStatus,
-            "allow": true
-          }));
+          body: jsonEncode({"updateStock": currentQuantity, "allow": false}));
+      print(currentQuantity);
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Product updated successfully')),
+          SnackBar(content: Text('อัพเดตสต็อกสินค้าสำเร็จ')),
         );
-        // wait 3 sec and navigate to shop screen
-        // await Future.delayed(Duration(seconds: 1));
         Navigator.pushNamed(context, '/shop');
       } else {
         throw Exception('Failed to update product');
@@ -96,9 +72,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     setState(() {
       currentQuantity = widget.productData['stock'];
     });
-    dateController.text = formatExpiredDate(widget.productData['expiredDate']);
-    showStatus = widget.productData['showStatus'];
-    isSelected = [showStatus, !showStatus];
   }
 
   @override
@@ -116,68 +89,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Navigator.pop(context); // Navigate back to the previous screen
             },
           ),
-          actions: [
-            ElevatedButton.icon(
-              onPressed:
-                  // () {
-                  //   deleteProd(); // Navigate back to the previous screen
-                  // },
-                  () => showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  title: const Text('ยืนยันการลบสินค้า'),
-                  content: const Text('ยืนยันการลบสินค้านี้ใช่หรือไม่ ?'),
-                  actions: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text(
-                            'ยกเลิก',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () => {
-                            deleteProd(),
-                            Navigator.pushNamed(context, '/shop')
-                          },
-                          child: const Text('ยืนยัน',
-                              style: TextStyle(color: Colors.red)),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              icon: const Icon(Icons.delete, color: Colors.red),
-              label: const Text(
-                'ลบสินค้า',
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 16,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.red,
-                backgroundColor: Colors.white, // Text and icon color
-                side: BorderSide(
-                  color: Colors.red,
-                ), // Border color
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(20), // Adjust the radius as needed
-                ), // BorderRadius
-              ),
-            ),
-            SizedBox(
-              width: 20,
-            )
-          ],
         ),
         body: Row(
           children: [
@@ -186,7 +97,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Container(
                   width: double.infinity,
-                  height: 600,
+                  height: 540,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(10),
@@ -213,46 +124,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ),
                         ),
                         SizedBox(height: 15),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Spacer(),
-                            Text(
-                              widget.productData['productName'],
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Spacer(),
-                            ToggleButtons(
-                              isSelected: isSelected,
-                              onPressed: (int index) {
-                                setState(() {
-                                  for (int i = 0; i < isSelected.length; i++) {
-                                    isSelected[i] = i == index;
-                                  }
-                                  showStatus = index ==
-                                      0; // Update showStatus based on the selected index
-                                  print(
-                                      "showStatus updated to: $showStatus"); // D
-                                });
-                              },
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: Text('กำลังขาย',
-                                      style: TextStyle(color: Colors.green)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: Text('ไม่ได้ขาย',
-                                      style: TextStyle(color: Colors.red)),
-                                ),
-                              ],
-                            ),
-                            Spacer(),
-                          ],
+                        Text(
+                          widget.productData['productName'],
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(height: 15),
                         Row(
@@ -278,12 +155,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             Spacer(),
                           ],
                         ),
-                        Container(
-                          width: 290,
-                          child: customDateField(
-                              dateController, context, 'วันหมดอายุ', 22),
+                        SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Spacer(),
+                            Text(
+                              'วันที่หมดอายุ : ${formatExpiredDate(widget.productData['expiredDate'])} ', //${formatDiscountDate(productData['expiredDate'])}
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            SizedBox(width: 85),
+                            Spacer(),
+                          ],
                         ),
-                        SizedBox(height: 30),
+                        SizedBox(height: 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -292,11 +177,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               width: 39,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  if (currentQuantity > 0) {
-                                    setState(() {
-                                      currentQuantity--;
-                                    });
-                                  }
+                                  setState(() {
+                                    currentQuantity--;
+                                  });
                                   print("Button tapped!");
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -352,7 +235,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 30),
+                        SizedBox(height: 15),
                         ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
@@ -360,7 +243,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                 )),
                             onPressed: () {
-                              updateProd(showStatus);
+                              updateProd();
                             },
                             child: Container(
                                 child: Text(

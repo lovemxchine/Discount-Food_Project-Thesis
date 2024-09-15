@@ -39,6 +39,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -57,7 +58,7 @@ class _MyAppState extends State<MyApp> {
           '/shop': (context) => BottomNavShop(),
           '/shop/mainScreen': (context) => ShopMainScreen(),
           '/shop/manageProduct': (context) => ManageProductScreen(),
-          '/shop/productDetails': (context) => ProductDetailScreen(),
+          // '/shop/productDetails': (context) => ProductDetailScreen(),
           '/shop/addProduct': (context) => AddProductScreen(),
           '/customer': (context) => BottomNavCustomer(),
           '/customer/productInshop': (context) => ProductInShop(),
@@ -65,5 +66,6 @@ class _MyAppState extends State<MyApp> {
           '/customer/mailboxDetail': (context) => MailBoxDetailPage(),
           
         });
+
   }
 }
