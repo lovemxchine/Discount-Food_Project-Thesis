@@ -32,7 +32,7 @@ class _FavoritePageState extends State<FavoritePage> {
                       color: Colors.grey,
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: AssetImage('assets/your_image.png'),
+                        image: AssetImage('assets/images/alt.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -94,7 +94,7 @@ class _FavoritePageState extends State<FavoritePage> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            for (int i = 0; i < 7; i++) 
+                            for (int i = 0; i < 7; i++)
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 8, horizontal: 20),
@@ -127,7 +127,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                             color: Colors.grey,
                                             image: const DecorationImage(
                                               image: AssetImage(
-                                                  'assets/your_image.png'),
+                                                  'assets/images/alt.png'),
                                               fit: BoxFit.cover,
                                             ),
                                             borderRadius:
@@ -135,30 +135,30 @@ class _FavoritePageState extends State<FavoritePage> {
                                           ),
                                         ),
                                         const SizedBox(width: 20),
-                                        Expanded(
+                                        const Expanded(
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'ชื่อร้านค้า', 
-                                                style: const TextStyle(
+                                                'ชื่อร้านค้า',
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
                                                 ),
                                               ),
-                                              const SizedBox(height: 5),
+                                              SizedBox(height: 5),
                                               Text(
-                                                'ระยะเวลาเปิด - ปิด (10:00 - 22:00)', 
-                                                style: const TextStyle(
+                                                'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
                                                 ),
                                               ),
-                                              const SizedBox(height: 5),
+                                              SizedBox(height: 5),
                                               Text(
-                                                'ระยะห่าง 1.5km', 
-                                                style: const TextStyle(
+                                                'ระยะห่าง 1.5km',
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
                                                 ),

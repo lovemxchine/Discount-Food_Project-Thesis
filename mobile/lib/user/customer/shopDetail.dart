@@ -1,24 +1,10 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile/user/customer/productInshop.dart';
 
-void main() {
-  runApp(Shopdetail());
-}
-
 class Shopdetail extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Store Details',
-      home: StoreDetailsPage(),
-    );
-  }
-}
+  const Shopdetail({super.key});
 
-class StoreDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

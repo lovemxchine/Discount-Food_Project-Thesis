@@ -20,8 +20,9 @@ class _ProductInShopState extends State<ProductInShop> {
           Container(
             width: double.infinity,
             height: 200,
+            height: 200,
             child: Image.asset(
-              'assets/image.png',
+              'assets/images/alt.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -78,6 +79,7 @@ class _ProductInShopState extends State<ProductInShop> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
+                                        builder: (context) => Shopdetail()),
                                         builder: (context) => Shopdetail()),
                                   );
                                 },
@@ -162,7 +164,7 @@ class ProductCard extends StatelessWidget {
         children: [
           Expanded(
             child: Image.asset(
-              'assets.png',
+              'assets/images/alt.png',
               fit: BoxFit.cover,
             ),
           ),
@@ -223,10 +225,4 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: ProductInShop(),
-  ));
 }

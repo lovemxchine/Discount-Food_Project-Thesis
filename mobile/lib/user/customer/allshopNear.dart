@@ -36,7 +36,7 @@ class _AllShopNearbyState extends State<AllShopNearby> {
                       color: Colors.grey,
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: AssetImage('assets/your_image.png'),
+                        image: AssetImage('assets/images/alt.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -130,7 +130,7 @@ class _AllShopNearbyState extends State<AllShopNearby> {
                                             color: Colors.grey,
                                             image: const DecorationImage(
                                               image: AssetImage(
-                                                  'assets/your_image.png'),
+                                                  'assets/images/alt.png'),
                                               fit: BoxFit.cover,
                                             ),
                                             borderRadius:
@@ -138,30 +138,30 @@ class _AllShopNearbyState extends State<AllShopNearby> {
                                           ),
                                         ),
                                         const SizedBox(width: 20),
-                                        Expanded(
+                                        const Expanded(
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'ชื่อร้านค้า', 
-                                                style: const TextStyle(
+                                                'ชื่อร้านค้า',
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
                                                 ),
                                               ),
-                                              const SizedBox(height: 5),
+                                              SizedBox(height: 5),
                                               Text(
-                                                'ระยะเวลาเปิด - ปิด', 
-                                                style: const TextStyle(
+                                                'ระยะเวลาเปิด - ปิด',
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
                                                 ),
                                               ),
-                                              const SizedBox(height: 5),
+                                              SizedBox(height: 5),
                                               Text(
-                                                'ระยะห่าง', 
-                                                style: const TextStyle(
+                                                'ระยะห่าง',
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
                                                 ),
