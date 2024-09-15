@@ -391,7 +391,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 15),
               InkWell(
                 onTap: () {
                   addProduct();
