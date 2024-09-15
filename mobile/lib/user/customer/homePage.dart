@@ -37,7 +37,7 @@ class _HomepageState extends State<Homepage> {
                       color: Colors.grey,
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: AssetImage('assets/your_image.png'),
+                        image: AssetImage('assets/images/alt.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -128,7 +128,7 @@ class _HomepageState extends State<Homepage> {
                                 child: InkWell(
                                   onTap: () {
                                     Navigator.pushNamed(
-                                            context, '/customer/productInshop');
+                                        context, '/customer/productInshop');
                                   },
                                   child: Container(
                                     height: 90,
@@ -155,7 +155,7 @@ class _HomepageState extends State<Homepage> {
                                             color: Colors.grey,
                                             image: const DecorationImage(
                                               image: AssetImage(
-                                                  'assets/your_image.png'),
+                                                  'assets/images/alt.png'),
                                               fit: BoxFit.cover,
                                             ),
                                             borderRadius:
@@ -163,30 +163,30 @@ class _HomepageState extends State<Homepage> {
                                           ),
                                         ),
                                         const SizedBox(width: 20),
-                                        Expanded(
+                                        const Expanded(
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'ชื่อร้านค้า', 
-                                                style: const TextStyle(
+                                                'ชื่อร้านค้า',
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
                                                 ),
                                               ),
-                                              const SizedBox(height: 5),
+                                              SizedBox(height: 5),
                                               Text(
-                                                'เวลาเปิด-ปิด', 
-                                                style: const TextStyle(
+                                                'เวลาเปิด-ปิด',
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
                                                 ),
                                               ),
-                                              const SizedBox(height: 5),
+                                              SizedBox(height: 5),
                                               Text(
-                                                'ระยะห่าง', 
-                                                style: const TextStyle(
+                                                'ระยะห่าง',
+                                                style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
                                                 ),

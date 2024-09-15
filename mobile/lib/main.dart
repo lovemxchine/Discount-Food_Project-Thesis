@@ -39,7 +39,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -63,9 +62,7 @@ class _MyAppState extends State<MyApp> {
           '/customer': (context) => BottomNavCustomer(),
           '/customer/productInshop': (context) => ProductInShop(),
           '/customer/shopDetail': (context) => Shopdetail(),
-          '/customer/mailboxDetail': (context) => MailBoxDetailPage(),
-          
+          // '/customer/mailboxDetail': (context) => MailBoxDetailPage(),
         });
-
   }
 }
