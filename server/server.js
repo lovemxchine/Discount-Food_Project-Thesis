@@ -26,6 +26,8 @@ const customerRoute = require("./routes/customer")(db, express);
 app.use(express.json());
 app.use(cors({ origin: true }));
 
+// TODO : add middleware to each endpoint/route for authentication (role)
+
 app.use("/authentication", signInRoute);
 app.use("/authentication", registerRoute);
 app.use("/customer", customerRoute);
