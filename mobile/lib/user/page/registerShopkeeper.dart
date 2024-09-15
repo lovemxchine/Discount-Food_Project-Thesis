@@ -595,9 +595,9 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                                   false,
                                   false),
                             ),
-                            SizedBox(width: 20),
+                            SizedBox(width: 10),
                             Container(
-                              width: 160,
+                              width: 150,
                               child: buildUnderlineTextField(
                                   surnameShopkeeperController,
                                   'นามสกุล ',
