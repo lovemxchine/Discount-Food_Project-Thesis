@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/components/bottomNav.dart';
+import 'package:mobile/user/customer/allshopNear.dart';
+import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailBox.dart';
-
+import 'package:mobile/user/customer/favoritePage.dart';
+import 'package:mobile/user/customer/settingsPage.dart';
 class MailBoxDetailPage extends StatefulWidget {
   @override
   State<MailBoxDetailPage> createState() => _MailBoxDetailPageState();

@@ -15,7 +15,7 @@ class _MailBoxPageState extends State<MailBoxPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false, // ป้องกันการย้อนกลับ
+      onWillPop: () async => false, 
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(255, 104, 56, 1),
         body: Stack(
@@ -242,7 +242,6 @@ class _MailBoxPageState extends State<MailBoxPage> {
   }
 }
 
-// Create a new page for details
 class DetailPage extends StatelessWidget {
   final int index;
 

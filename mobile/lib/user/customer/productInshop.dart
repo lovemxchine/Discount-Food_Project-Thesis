@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/user/customer/shopDetail.dart';
-import 'package:mobile/user/shop/dontusethis.dart';
 
 class ProductInShop extends StatefulWidget {
   const ProductInShop({super.key});
@@ -20,7 +19,7 @@ class _ProductInShopState extends State<ProductInShop> {
         children: [
           Container(
             width: double.infinity,
-            height: double.infinity,
+            height: 200,
             child: Image.asset(
               'assets/image.png',
               fit: BoxFit.cover,
@@ -49,8 +48,8 @@ class _ProductInShopState extends State<ProductInShop> {
                             height: 100,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/your_image.png'), // ใช้ AssetImage
+                                image:
+                                    AssetImage('assets/images/your_image.png'),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -79,15 +78,15 @@ class _ProductInShopState extends State<ProductInShop> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            Shopdetail()), 
+                                        builder: (context) => Shopdetail()),
                                   );
                                 },
                                 child: Text(
                                   'รายละเอียดร้านค้า',
                                   style: TextStyle(
-                                    color: Colors.blue,
+                                    color: Colors.black,
                                     fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),
@@ -205,12 +204,16 @@ class ProductCard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 4),
-                Text(
-                  'รายละเอียดสินค้า',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 12,
-                    decoration: TextDecoration.underline,
+                Center(
+                  child: Text(
+                    'รายละเอียดสินค้า',
+                    textAlign:
+                        TextAlign.center, 
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
