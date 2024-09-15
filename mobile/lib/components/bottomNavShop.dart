@@ -5,6 +5,8 @@ import 'package:mobile/user/customer/allshopNear.dart';
 
 import 'package:mobile/user/shop/shopDiscountProductScreen.dart';
 import 'package:mobile/user/shop/shopMainScreen.dart';
+import 'package:mobile/user/customer/mailboxDetail.dart';
+
 
 class BottomNavShop extends StatefulWidget {
   @override

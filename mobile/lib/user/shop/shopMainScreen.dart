@@ -7,7 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile/user/shop/shopProductDetailScreen.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
