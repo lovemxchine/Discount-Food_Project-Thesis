@@ -1,20 +1,29 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile/components/bottomNav.dart';
+import 'package:mobile/components/bottomNavShop.dart';
 import 'package:mobile/firebase_options.dart';
+import 'package:mobile/user/customer/homePage.dart';
+import 'package:mobile/user/page/guest.dart';
 import 'package:mobile/user/page/registerCustomer.dart';
 import 'package:mobile/user/page/registerShopkeeper.dart';
 import 'package:mobile/user/page/signIn.dart';
 import 'package:mobile/user/page/registerRole.dart';
+import 'package:mobile/user/shop/shopAddProductScreen.dart';
+import 'package:mobile/user/shop/shopMainScreen.dart';
+import 'package:mobile/user/shop/shopManageProductScreen.dart';
+import 'package:mobile/user/shop/shopProductDetailScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future  main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   SharedPreferences prefs = await SharedPreferences.getInstance();
-
   runApp(const MyApp());
 }
 
@@ -23,27 +32,33 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
+
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return 
-    MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              fontFamily: GoogleFonts.mitr().fontFamily,
-              brightness: Brightness.light,
-              primaryColor: Colors.blue,
-            ),
-            routes: {
-              '/': (context) => SignIn(),
-              '/signIn': (context) => SignIn(),
-              '/registerRole': (context) => RegisterRole(),
-              '/registerRole/customer': (context) => RegisterCustomer(),
-              '/registerRole/shopkeeper': (context) =>  RegisterShopkeeper(),
-              '/manager': (context) => const ManagerScreen(),
-              // '/employee': (context) => const EmployeeScreen(),
-            }
-            );
-      
+
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: GoogleFonts.mitr().fontFamily,
+          brightness: Brightness.light,
+          primaryColor: Colors.blue,
+        ),
+        routes: {
+          '/': (context) => SignIn(),
+          '/signIn': (context) => SignIn(),
+          '/registerRole': (context) => RegisterRole(),
+          '/registerRole/customer': (context) => RegisterCustomer(),
+          '/registerRole/shopkeeper': (context) => RegisterShopkeeper(),
+          '/home': (context) => Homepage(),
+          '/guest': (context) => GuestScreen(),
+          '/shop': (context) => BottomNavShop(),
+          '/shop/mainScreen': (context) => ShopMainScreen(),
+          '/shop/manageProduct': (context) => ManageProductScreen(),
+          // '/shop/productDetails': (context) => ProductDetailScreen(),
+          '/shop/addProduct': (context) => AddProductScreen(),
+          '/customer': (context) => BottomNavCustomer(),
+        });
+
   }
 }

@@ -2,33 +2,128 @@ const express = require("express");
 const cors = require("cors");
 const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
+const multer = require("multer");
+const { getStorage } = require("firebase/storage");
+const cron = require("node-cron");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
+  storageBucket: "gs://discount-project-6dfc5.appspot.com",
 });
 
+const port = 3000;
 const app = express();
 const db = admin.firestore();
+const bucket = admin.storage().bucket(); // Using bucket from Firebase Admin SDK
+const upload = multer({ storage: multer.memoryStorage() });
 
+// Routes
+const registerRoute = require("./routes/authentication/register")(db, express);
+const signInRoute = require("./routes/authentication/signIn")(db, express);
+const shopRoute = require("./routes/shop")(db, express, bucket, upload);
+const customerRoute = require("./routes/customer")(db, express);
 
-const port = 8080;
-app.listen(port, () => {
-  console.log("Server is running on port " + port);
+app.use(express.json());
+app.use(cors({ origin: true }));
+
+// TODO : add middleware to each endpoint/route for authentication (role)
+
+app.use("/authentication", signInRoute);
+app.use("/authentication", registerRoute);
+app.use("/customer", customerRoute);
+app.use("/shop", shopRoute);
+
+// Dynamically import the gemini route
+(async () => {
+  const { default: geminiRoute } = await import(
+    "./routes/gemini/geminiEndpoint.mjs"
+  );
+  app.use("/gemini", geminiRoute(express));
+})();
+
+// Cron job to update showStatus
+cron.schedule("0 0 * * *", async () => {
+  console.log("Running daily check for showStatus...");
+
+  try {
+    // Retrieve all documents in the 'shop' collection
+    const shopsSnapshot = await db.collection("shop").get();
+    const currentTime = admin.firestore.Timestamp.now();
+
+    for (const shopDoc of shopsSnapshot.docs) {
+      const shopData = shopDoc.data();
+      const shopId = shopDoc.id;
+
+      const productsSnapshot = await db
+        .collection("shop")
+        .doc(shopId)
+        .collection("products")
+        .get();
+
+      for (const productDoc of productsSnapshot.docs) {
+        const productData = productDoc.data();
+        const productTimestamp = productData.discountAt;
+
+        if (productTimestamp) {
+          const daysDifference =
+            currentTime.toDate() - productTimestamp.toDate();
+          const daysPassed = daysDifference / (1000 * 60 * 60 * 24);
+
+          if (daysPassed > 2) {
+            await productDoc.ref.update({ showStatus: false });
+            console.log(
+              `Updated showStatus to false for product ID: ${productDoc.id} in shop ID: ${shopId}`
+            );
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error updating showStatus: ", error);
+  }
 });
 
-app.get('/api/customer/', (req,res)=>{
-  return res.status(200).send({status: "okay"})
-})
+cron.schedule("55 16 * * *", async () => {
+  console.log("เช็คสินค้าที่มีส่วนลดเกิน 2 วันแล้ว");
 
-app.get('/api/shopkeeper/', (req,res)=>{
-  return res.status(200).send({status: "okay"})
-})
+  try {
+    // Retrieve all documents in the 'shop' collection
+    const shopsSnapshot = await db.collection("shop").get();
+    const currentTime = admin.firestore.Timestamp.now();
 
+    for (const shopDoc of shopsSnapshot.docs) {
+      const shopData = shopDoc.data();
+      const shopId = shopDoc.id;
 
+      const productsSnapshot = await db
+        .collection("shop")
+        .doc(shopId)
+        .collection("products")
+        .get();
 
+      for (const productDoc of productsSnapshot.docs) {
+        const productData = productDoc.data();
+        const productTimestamp = productData.discountAt;
 
+        if (productTimestamp) {
+          const daysDifference =
+            currentTime.toDate() - productTimestamp.toDate();
+          const daysPassed = daysDifference / (1000 * 60 * 60 * 24);
 
-app.use(
-  express.json(),
-  cors({ credentials: true, origin: ["http://localhost:3000"] })
-);
+          if (daysPassed > 2) {
+            await productDoc.ref.update({ showStatus: false });
+            console.log(
+              `อัพเดต showStatus เป็น false รหัสสินค้า (productID): ${productDoc.id} รหัสร้านค้า (shopID): ${shopId}`
+            );
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error updating showStatus: ", error);
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
