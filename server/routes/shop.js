@@ -1,9 +1,12 @@
 const express = require("express");
 const uploadSingleImage = require("../controller/image_controller"); // Adjust the path as necessary
+const { Timestamp } = require("firebase-admin/firestore");
 
 module.exports = (db, express, bucket, upload) => {
   const router = express.Router();
-  router.get("/mainScreen/:uid", async (req, res) => {
+
+  // Get all products
+  router.get("/:uid/getAllProduct/", async (req, res) => {
     const shopUid = req.params.uid;
     const shop = await db
       .collection("shop")
@@ -24,11 +27,13 @@ module.exports = (db, express, bucket, upload) => {
     return res.status(200).send({ status: "success", data: shopList });
   });
 
+  // Add Product
   router.post(
-    "/product/addProduct",
+    "/:uid/product/addProduct",
     upload.single("image"),
     async (req, res) => {
       try {
+        const shopUid = req.params.uid;
         const imageUrl = await uploadSingleImage(req, bucket);
         // const shopUid = req.params.uid;
         const data = req.body;
@@ -36,10 +41,10 @@ module.exports = (db, express, bucket, upload) => {
         const formattedDate = new Date(`${year}-${month}-${day}`);
 
         console.log(data);
-        // uploadSingleImage(req, res, bucket);
-        await db
+
+        const doc = await db
           .collection("shop")
-          .doc(data.uid)
+          .doc(shopUid)
           .collection("products")
           .add({
             productName: data.product_name,
@@ -48,11 +53,12 @@ module.exports = (db, express, bucket, upload) => {
             stock: parseInt(data.stock),
             expiredDate: formattedDate,
             imageUrl: imageUrl,
-            discountAt: Date.now(),
-            showStatus: false,
-            // discount: data.discount,
+            discountAt: Timestamp.now(),
+            showStatus: true,
+
             // discountAt: data.discountAt,
           });
+        await doc.update({ productId: doc.id });
 
         return res.status(200).send({ status: "success", data: data });
       } catch (err) {
@@ -60,5 +66,73 @@ module.exports = (db, express, bucket, upload) => {
       }
     }
   );
+  // Delete Product
+  router.delete("/:uid/product/:prodId", async (req, res) => {
+    try {
+      const prodId = req.params.prodId;
+      const shopUid = req.params.uid;
+      const data = req.body;
+      // const decodedPath = decodeURIComponent(
+      //   data.imageUrl.split("/o/")[1].split("?")[0]
+      // );
+      // await bucket.file(decodedPath).delete();
+      console.log(prodId);
+      console.log(data);
+      await db
+        .collection("shop")
+        .doc(shopUid)
+        .collection("products")
+        .doc(prodId)
+        .delete();
+
+      return res.status(200).send({ status: "delete success", data: data });
+    } catch (err) {
+      console.log(err.message);
+    }
+  });
+
+  // Update Product
+  router.patch("/:uid/product/:prodId", async (req, res) => {
+    try {
+      const { uid, prodId } = req.params;
+      const data = req.body;
+      console.log(uid, prodId);
+      console.log(data);
+      // Update Status and Expired Date
+      if (data.allow) {
+        const [day, month, year] = data.expired_date.split("/");
+        const formattedDate = new Date(`${year}-${month}-${day}`);
+        await db
+          .collection("shop")
+          .doc(uid)
+          .collection("products")
+          .doc(prodId)
+          .update({
+            expiredDate: formattedDate,
+            stock: data.updateStock,
+            showStatus: data.showStatus,
+            discountAt: Timestamp.now(),
+          });
+      }
+      // Update Stock
+      if (data.allow === false) {
+        console.log("false");
+        console.log(data.updateStock);
+        await db
+          .collection("shop")
+          .doc(uid)
+          .collection("products")
+          .doc(prodId)
+          .update({
+            stock: data.updateStock,
+          });
+      }
+      return res.status(200).send({ status: "success", data: req.body });
+    } catch (err) {
+      console.log(err.message);
+      return res.status(400).send({ status: "error" });
+    }
+  });
+
   return router;
 };

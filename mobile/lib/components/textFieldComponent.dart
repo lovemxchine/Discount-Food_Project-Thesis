@@ -75,8 +75,8 @@ Widget buildDateField(TextEditingController controller, BuildContext context) {
   );
 }
 
-Widget customDateField(
-    TextEditingController controller, BuildContext context, String label) {
+Widget customDateField(TextEditingController controller, BuildContext context,
+    String label, int labelSize) {
   String labelText = label;
   return TextField(
     readOnly: true,
@@ -84,7 +84,8 @@ Widget customDateField(
     decoration: InputDecoration(
       // filled: true,
       labelText: labelText,
-      labelStyle: TextStyle(color: Colors.black),
+      labelStyle:
+          TextStyle(color: Colors.black, fontSize: labelSize.toDouble()),
       floatingLabelBehavior: FloatingLabelBehavior.always,
       contentPadding: EdgeInsets.only(top: 5),
       focusedBorder: UnderlineInputBorder(
@@ -148,24 +149,6 @@ class SelectOption extends StatelessWidget {
         );
       }).toList(),
       onChanged: onChanged,
-    );
-  }
-}
-
-class buildImageUploadButton extends StatelessWidget {
-  final String label;
-  final Function() onPressed;
-
-  buildImageUploadButton({
-    required this.label,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Text(label),
     );
   }
 }

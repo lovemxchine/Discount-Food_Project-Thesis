@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobile/user/customer/allshopNear.dart';
-import 'package:mobile/user/customer/homePage.dart';
-import 'package:mobile/user/customer/mailBox.dart';
-import 'package:mobile/user/customer/favoritePage.dart';
-import 'package:mobile/user/customer/settingsPage.dart';
+
+import 'package:mobile/user/shop/shopDiscountProductScreen.dart';
 import 'package:mobile/user/shop/shopMainScreen.dart';
 import 'package:mobile/user/customer/mailboxDetail.dart';
 
@@ -19,7 +17,7 @@ class _BottomNavShopState extends State<BottomNavShop> {
   int _currentIndex = 2;
 
   final List<Widget> _pages = [
-    Placeholder(),
+    DiscountProductScreen(),
     Placeholder(),
     ShopMainScreen(),
     Placeholder(),
@@ -70,15 +68,15 @@ class _BottomNavShopState extends State<BottomNavShop> {
                     type: BottomNavigationBarType.fixed,
                     items: const [
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.store), label: 'Nearby Shops'),
+                          icon: Icon(Icons.store), label: 'สินค้าลดราคา'),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.favorite), label: 'Favorite'),
+                          icon: Icon(Icons.favorite), label: 'รายการสั่ง'),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.home), label: 'Home'),
+                          icon: Icon(Icons.home), label: 'หน้าหลัก'),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.mail), label: 'Mailbox'),
+                          icon: Icon(Icons.mail), label: 'ดำเนินการ'),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.settings), label: 'Settings'),
+                          icon: Icon(Icons.settings), label: 'ตั้งค่า'),
                     ],
                   ),
                 ),
