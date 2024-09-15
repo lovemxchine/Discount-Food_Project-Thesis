@@ -240,7 +240,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           child: Column(
             children: [
               Container(
-                height: 620,
+                height: 600,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
@@ -333,7 +333,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ),
                       const SizedBox(height: 10),
                       customDateField(expiredDate, context, 'วันหมดอายุ', 18),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
