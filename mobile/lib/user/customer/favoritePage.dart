@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/components/bottomNav.dart';
-import 'package:mobile/user/customer/allshopNear.dart';
-import 'package:mobile/user/customer/homePage.dart';
-import 'package:mobile/user/customer/mailBox.dart';
-import 'package:mobile/user/customer/settingsPage.dart';
 
 class FavoritePage extends StatefulWidget {
   @override
@@ -82,87 +77,107 @@ class _FavoritePageState extends State<FavoritePage> {
                     topRight: Radius.circular(30),
                   ),
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: const Text(
-                          'รายการร้านค้าโปรดทั้งหมด',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      child: const Text(
+                        'รายการร้านค้าโปรดทั้งหมด',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      for (int i = 0; i < 6; i++)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 16),
-                          child: Container(
-                            height: 110,
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                const BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 10,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    image: const DecorationImage(
-                                      image:
-                                          AssetImage('assets/your_image.png'),
-                                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(height: 20),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            for (int i = 0; i < 7; i++) 
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 20),
+                                child: InkWell(
+                                  onTap: () {
+                                    // เผื่อกดดูสินค้า
+                                  },
+                                  child: Container(
+                                    height: 90,
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Colors.black26,
+                                          blurRadius: 1,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
                                     ),
-                                    borderRadius: BorderRadius.circular(8),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey,
+                                            image: const DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/your_image.png'),
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 20),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'ชื่อร้านค้า', 
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Text(
+                                                'ระยะเวลาเปิด - ปิด (10:00 - 22:00)', 
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 5),
+                                              Text(
+                                                'ระยะห่าง 1.5km', 
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const Icon(Icons.favorite,
+                                            color: Colors.red),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                                const SizedBox(width: 20),
-                                const Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'ชื่อร้านค้า',
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.black),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Text(
-                                        'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
-                                        style: TextStyle(
-                                            fontSize: 14, color: Colors.black),
-                                      ),
-                                      SizedBox(height: 5),
-                                      Text(
-                                        'ระยะห่าง 1.5km',
-                                        style: TextStyle(
-                                            fontSize: 14, color: Colors.black),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const Icon(Icons.favorite, color: Colors.red),
-                              ],
-                            ),
-                          ),
+                              ),
+                          ],
                         ),
-                    ],
-                  ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

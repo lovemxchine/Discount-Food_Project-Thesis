@@ -4,6 +4,7 @@ import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailBox.dart';
 import 'package:mobile/user/customer/favoritePage.dart';
 import 'package:mobile/user/customer/settingsPage.dart';
+import 'package:mobile/user/customer/mailboxDetail.dart';
 
 class BottomNavCustomer extends StatefulWidget {
   @override

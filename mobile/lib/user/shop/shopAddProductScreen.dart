@@ -61,7 +61,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
       if (response.statusCode == 200) {
         print('Product added successfully');
-        Navigator.pop(context, true);
+        Navigator.pushNamed(context, '/shop');
       } else {
         print('Failed to add product with status: ${response.statusCode}');
       }
@@ -226,13 +226,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color.fromARGB(255, 224, 217, 217),
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 224, 217, 217),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              Navigator.pop(context); // Navigate back to the previous screen
-            },
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: AppBar(
+            backgroundColor: const Color.fromARGB(255, 224, 217, 217),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () {
+                Navigator.pop(context); // Navigate back to the previous screen
+              },
+            ),
           ),
         ),
         body: Padding(
@@ -240,7 +243,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           child: Column(
             children: [
               Container(
-                height: 620,
+                height: 600,
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
@@ -333,7 +336,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ),
                       const SizedBox(height: 10),
                       customDateField(expiredDate, context, 'วันหมดอายุ', 18),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -388,7 +391,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 15),
               InkWell(
                 onTap: () {
                   addProduct();
