@@ -46,7 +46,7 @@ app.use("/shop", shopRoute);
 // console.log(uploadSingleImage(req, res, bucket));
 // });
 
-cron.schedule("55 16 * * *", async () => {
+cron.schedule("0 0 * * *", async () => {
   console.log("เช็คสินค้าที่มีส่วนลดเกิน 2 วันแล้ว");
 
   try {
