@@ -177,9 +177,11 @@ class _ProductUpdateScreenState extends State<ProductUpdateScreen> {
                               width: 39,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  setState(() {
-                                    currentQuantity--;
-                                  });
+                                  if (currentQuantity > 0) {
+                                    setState(() {
+                                      currentQuantity--;
+                                    });
+                                  }
                                   print("Button tapped!");
                                 },
                                 style: ElevatedButton.styleFrom(
