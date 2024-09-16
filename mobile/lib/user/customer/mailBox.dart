@@ -15,11 +15,7 @@ class _MailBoxPageState extends State<MailBoxPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-<<<<<<< HEAD
       onWillPop: () async => false, 
-=======
-      onWillPop: () async => true, // ป้องกันการย้อนกลับ
->>>>>>> 5806eabb0885b075f65f09f27f7ec7129cd99966
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(255, 104, 56, 1),
         body: Stack(

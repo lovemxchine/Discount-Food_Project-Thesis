@@ -20,7 +20,6 @@ class _ProductInShopState extends State<ProductInShop> {
           Container(
             width: double.infinity,
             height: 200,
-            height: 200,
             child: Image.asset(
               'assets/images/alt.png',
               fit: BoxFit.cover,
@@ -79,8 +78,8 @@ class _ProductInShopState extends State<ProductInShop> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Shopdetail()),
-                                        builder: (context) => Shopdetail()),
+                                      builder: (context) => Shopdetail(),
+                                    ),
                                   );
                                 },
                                 child: Text(
@@ -209,8 +208,7 @@ class ProductCard extends StatelessWidget {
                 Center(
                   child: Text(
                     'รายละเอียดสินค้า',
-                    textAlign:
-                        TextAlign.center, 
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
