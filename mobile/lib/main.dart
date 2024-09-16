@@ -8,6 +8,7 @@ import 'package:mobile/components/bottomNavShop.dart';
 import 'package:mobile/firebase_options.dart';
 import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailboxDetail.dart';
+import 'package:mobile/user/customer/productDetail.dart';
 import 'package:mobile/user/customer/productInshop.dart';
 import 'package:mobile/user/customer/shopDetail.dart';
 import 'package:mobile/user/page/guest.dart';
@@ -58,6 +59,7 @@ class _MyAppState extends State<MyApp> {
           '/shop/mainScreen': (context) => ShopMainScreen(),
           '/shop/manageProduct': (context) => ManageProductScreen(),
           // '/shop/productDetails': (context) => ProductDetailScreen(),
+           '/customer/productDetail': (context) => ProductDetail(),
           '/shop/addProduct': (context) => AddProductScreen(),
           '/customer': (context) => BottomNavCustomer(),
           '/customer/productInshop': (context) => ProductInShop(),

@@ -16,10 +16,7 @@ class Shopdetail extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProductInShop()),
-            );
+            Navigator.pop(context); // แทนที่ Navigator.push ด้วย Navigator.pop
           },
         ),
       ),

@@ -15,7 +15,7 @@ class _MailBoxDetailPageState extends State<MailBoxDetailPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: () async => true,
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(255, 104, 56, 1),
         body: Stack(
