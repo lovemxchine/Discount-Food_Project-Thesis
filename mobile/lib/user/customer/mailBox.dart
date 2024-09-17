@@ -3,6 +3,7 @@ import 'package:mobile/components/bottomNav.dart';
 import 'package:mobile/user/customer/allshopNear.dart';
 import 'package:mobile/user/customer/favoritePage.dart';
 import 'package:mobile/user/customer/homePage.dart';
+import 'package:mobile/user/customer/mailboxDetail.dart';
 import 'package:mobile/user/customer/settingsPage.dart';
 
 class MailBoxPage extends StatefulWidget {
@@ -14,8 +15,7 @@ class _MailBoxPageState extends State<MailBoxPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false, // ถ้ากดปุ่ม back จะไม่ทำอะไร
-
+      onWillPop: () async => true, // ป้องกันการย้อนกลับ
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(255, 104, 56, 1),
         body: Stack(
@@ -39,7 +39,7 @@ class _MailBoxPageState extends State<MailBoxPage> {
                             color: Colors.grey,
                             shape: BoxShape.circle,
                             image: DecorationImage(
-                              image: AssetImage('assets/your_image.png'),
+                              image: AssetImage('assets/images/alt.png'),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -122,8 +122,6 @@ class _MailBoxPageState extends State<MailBoxPage> {
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(12),
                             topRight: Radius.circular(12),
-                            //bottomLeft: Radius.circular(12),
-                            //bottomRight: Radius.circular(12),
                           ),
                           boxShadow: [
                             BoxShadow(
@@ -134,95 +132,106 @@ class _MailBoxPageState extends State<MailBoxPage> {
                             ),
                           ],
                         ),
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 10), // ลดขอบซ้ายขวา
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
                         child: ListView.builder(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           itemCount: 2,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          width: 60,
-                                          height: 60,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey,
-                                            image: const DecorationImage(
-                                              image: AssetImage(
-                                                  'assets/tops_market.png'),
-                                              fit: BoxFit.cover,
+                              child: InkWell(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return _buildMailBoxDetailPopup(
+                                          context, index);
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 60,
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              image: const DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/alt.png'),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
                                           ),
-                                        ),
-                                        const SizedBox(width: 16),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const Text(
-                                                'ข้อความจากทางร้านค้า',
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
+                                          const SizedBox(width: 16),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                const Text(
+                                                  'ข้อความจากทางร้านค้า',
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
                                                 ),
-                                              ),
-                                              const Text(
-                                                'Top Market - เซ็นทรัลเวสเกต',
-                                                style: TextStyle(fontSize: 14),
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    index == 0
-                                                        ? 'รับสินค้าแล้ว'
-                                                        : 'ยกเลิกสินค้า',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: index == 0
-                                                          ? Colors.green
-                                                          : Colors.red,
+                                                const Text(
+                                                  'Top Market - เซ็นทรัลเวสเกต',
+                                                  style:
+                                                      TextStyle(fontSize: 12),
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      index == 0
+                                                          ? 'รับสินค้าแล้ว'
+                                                          : 'ยกเลิกสินค้า',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: index == 0
+                                                            ? Colors.green
+                                                            : Colors.red,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  const Text(
-                                                    'รายละเอียดสินค้า',
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.grey,
+                                                    const Text(
+                                                      'รายละเอียดสินค้า',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.grey,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(height: 5),
-                                              Text(
-                                                'วันที่ ${index == 0 ? '18' : '22'}/7/2567 เวลา ${index == 0 ? '21:00' : '21:45'} น.',
-                                                style: const TextStyle(
-                                                    fontSize: 12),
-                                              ),
-                                            ],
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 5),
+                                                Text(
+                                                  'วันที่ ${index == 0 ? '18' : '22'}/7/2567 เวลา ${index == 0 ? '21:00' : '21:45'} น.',
+                                                  style: const TextStyle(
+                                                      fontSize: 12),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -241,4 +250,176 @@ class _MailBoxPageState extends State<MailBoxPage> {
       ),
     );
   }
+}
+
+// Create a new page for details
+class DetailPage extends StatelessWidget {
+  final int index;
+
+  DetailPage({required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(index == 0 ? 'รับสินค้าแล้ว' : 'ยกเลิกสินค้า'),
+      ),
+      body: Center(
+        child: Text('รายละเอียดสำหรับการดำเนินการ $index'),
+      ),
+    );
+  }
+}
+
+Widget _buildMailBoxDetailPopup(BuildContext context, int index) {
+  return Dialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+    ),
+    elevation: 0,
+    backgroundColor: Colors.transparent,
+    child: contentBox(context, index),
+  );
+}
+
+Widget contentBox(BuildContext context, int index) {
+  return Container(
+    height: 600,
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: Colors.grey[100],
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Align(
+          alignment: Alignment.centerRight,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: const Icon(Icons.close),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Text(
+                'รายละเอียดร้านค้า',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: const [
+                Text(
+                  'เบอร์ติดต่อ :',
+                  style: TextStyle(fontSize: 10),
+                ),
+                Text(
+                  '092-881-8000',
+                  style: TextStyle(fontSize: 10),
+                ),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        const Divider(
+          color: Colors.black,
+          thickness: 1,
+        ),
+        const SizedBox(height: 8),
+        Center(
+          child: Column(
+            children: const [
+              Text(
+                'วันที่ 18 / 7 / 2567',
+                style: TextStyle(fontSize: 12),
+              ),
+              Text(
+                'เวลาที่สั่งสินค้า : 21.00 น.',
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: ListView(
+            children: [
+              _buildProductItem(
+                'ข้าวคลุกกะปิ',
+                'หมดอายุวันที่ 25 / 7 / 2567',
+                'ราคา: 24.00 บาท',
+                'จำนวน: 2',
+              ),
+              _buildProductItem(
+                'ข้าวปลาซาบะ',
+                'หมดอายุวันที่ 25 / 7 / 2567',
+                'ราคา: 14.00 บาท',
+                'จำนวน: 1',
+              ),
+              _buildProductItem(
+                'ข้าวไก่ทอด',
+                'หมดอายุวันที่ 25 / 7 / 2567',
+                'ราคา: 30.00 บาท',
+                'จำนวน: 1',
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        Center(
+          child: Column(
+            children: const [
+              Text(
+                'ค่าจัดส่ง + ค่าดำเนินการ : 141.00 + 33.00 บาท',
+                style: TextStyle(fontSize: 12),
+              ),
+              Text(
+                'รวม : 174.00 บาท',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildProductItem(
+    String productName, String expiryDate, String price, String quantity) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          productName,
+          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+        ),
+        Text(expiryDate, style: const TextStyle(fontSize: 12)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(price, style: const TextStyle(fontSize: 12)),
+            Text(quantity, style: const TextStyle(fontSize: 12)),
+          ],
+        ),
+      ],
+    ),
+  );
 }

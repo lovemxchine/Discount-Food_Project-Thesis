@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/components/bottomNav.dart';
 import 'package:mobile/user/customer/allshopNear.dart';
 import 'package:mobile/user/customer/homePage.dart';
@@ -36,7 +37,7 @@ class _HomepageState extends State<Homepage> {
                       color: Colors.grey,
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: AssetImage('assets/your_image.png'),
+                        image: AssetImage('assets/images/alt.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -123,71 +124,80 @@ class _HomepageState extends State<Homepage> {
                             for (int i = 0; i < 6; i++)
                               Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 16),
-                                child: Container(
-                                  height: 110,
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black26,
-                                        blurRadius: 10,
-                                        offset: Offset(0, 4),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        width: 60,
-                                        height: 60,
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          image: const DecorationImage(
-                                            image: AssetImage(
-                                                'assets/your_image.png'),
-                                            fit: BoxFit.cover,
+                                    vertical: 8, horizontal: 20),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, '/customer/productInshop');
+                                  },
+                                  child: Container(
+                                    height: 90,
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Colors.black26,
+                                          blurRadius: 1,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width: 80,
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey,
+                                            image: const DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/alt.png'),
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(8),
                                         ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                      const Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Tops market - เซ็นทรัลเวสเกต',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.black),
-                                            ),
-                                            SizedBox(height: 5),
-                                            Text(
-                                              'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black),
-                                            ),
-                                            SizedBox(height: 5),
-                                            Text(
-                                              'ระยะห่าง 1.5km',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Colors.black),
-                                            ),
-                                          ],
+                                        const SizedBox(width: 20),
+                                        const Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'ชื่อร้านค้า',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              SizedBox(height: 5),
+                                              Text(
+                                                'เวลาเปิด-ปิด',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              SizedBox(height: 5),
+                                              Text(
+                                                'ระยะห่าง',
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      const Icon(Icons.favorite_border,
-                                          color: Colors.red),
-                                    ],
+                                        const Icon(Icons.favorite_border,
+                                            color: Colors.red),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

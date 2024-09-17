@@ -7,6 +7,9 @@ import 'package:mobile/components/bottomNav.dart';
 import 'package:mobile/components/bottomNavShop.dart';
 import 'package:mobile/firebase_options.dart';
 import 'package:mobile/user/customer/homePage.dart';
+import 'package:mobile/user/customer/mailboxDetail.dart';
+import 'package:mobile/user/customer/productInshop.dart';
+import 'package:mobile/user/customer/shopDetail.dart';
 import 'package:mobile/user/page/guest.dart';
 import 'package:mobile/user/page/registerCustomer.dart';
 import 'package:mobile/user/page/registerShopkeeper.dart';
@@ -36,7 +39,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -58,7 +60,9 @@ class _MyAppState extends State<MyApp> {
           // '/shop/productDetails': (context) => ProductDetailScreen(),
           '/shop/addProduct': (context) => AddProductScreen(),
           '/customer': (context) => BottomNavCustomer(),
+          '/customer/productInshop': (context) => ProductInShop(),
+          '/customer/shopDetail': (context) => Shopdetail(),
+          // '/customer/mailboxDetail': (context) => MailBoxDetailPage(),
         });
-
   }
 }

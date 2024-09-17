@@ -42,6 +42,7 @@ app.use("/shop", shopRoute);
 })();
 
 // Cron job to update showStatus
+<<<<<<< HEAD
 // cron.schedule("0 0 * * *", async () => {
 //   console.log("Running daily check for showStatus...");
 
@@ -82,6 +83,48 @@ app.use("/shop", shopRoute);
 //     console.error("Error updating showStatus: ", error);
 //   }
 // });
+=======
+cron.schedule("0 0 * * *", async () => {
+  console.log("เช็คสินค้าที่มีส่วนลดเกิน 2 วันแล้ว");
+
+  try {
+    // Retrieve all documents in the 'shop' collection
+    const shopsSnapshot = await db.collection("shop").get();
+    const currentTime = admin.firestore.Timestamp.now();
+
+    for (const shopDoc of shopsSnapshot.docs) {
+      const shopData = shopDoc.data();
+      const shopId = shopDoc.id;
+
+      const productsSnapshot = await db
+        .collection("shop")
+        .doc(shopId)
+        .collection("products")
+        .get();
+
+      for (const productDoc of productsSnapshot.docs) {
+        const productData = productDoc.data();
+        const productTimestamp = productData.discountAt;
+
+        if (productTimestamp) {
+          const daysDifference =
+            currentTime.toDate() - productTimestamp.toDate();
+          const daysPassed = daysDifference / (1000 * 60 * 60 * 24);
+
+          if (daysPassed > 2) {
+            await productDoc.ref.update({ showStatus: false });
+            console.log(
+              `อัพเดต showStatus เป็น false รหัสสินค้า (productID): ${productDoc.id} รหัสร้านค้า (shopID): ${shopId}`
+            );
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error updating showStatus: ", error);
+  }
+});
+>>>>>>> 23b50cd639d73402cd3998f97d58216b4e2f79a9
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
