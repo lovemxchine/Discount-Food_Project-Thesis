@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/components/bottomNav.dart';
 import 'package:mobile/components/bottomNavShop.dart';
 import 'package:mobile/firebase_options.dart';
+import 'package:mobile/user/customer/cartList.dart';
 import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailboxDetail.dart';
 import 'package:mobile/user/customer/productDetail.dart';
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
           '/customer': (context) => BottomNavCustomer(),
           '/customer/productInshop': (context) => ProductInShop(),
           '/customer/shopDetail': (context) => Shopdetail(),
+          '/customer/cartList': (context) => Cartlist(),
           // '/customer/mailboxDetail': (context) => MailBoxDetailPage(),
         });
   }

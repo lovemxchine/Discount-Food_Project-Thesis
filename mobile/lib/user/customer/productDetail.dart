@@ -80,7 +80,7 @@ class _ProductDetailState extends State<ProductDetail> {
                           'ลดเหลือ : 24 บาท',
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.red,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -111,11 +111,11 @@ class _ProductDetailState extends State<ProductDetail> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
                 ),
               ),
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [

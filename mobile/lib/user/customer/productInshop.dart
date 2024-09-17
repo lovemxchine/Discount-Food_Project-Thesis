@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/user/customer/cartList.dart';
 import 'package:mobile/user/customer/productDetail.dart';
-import 'package:mobile/user/customer/shopDetail.dart'; 
+import 'package:mobile/user/customer/shopDetail.dart';
 
 class ProductInShop extends StatefulWidget {
   const ProductInShop({super.key});
@@ -49,7 +50,8 @@ class _ProductInShopState extends State<ProductInShop> {
                             height: 100,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: AssetImage('assets/images/your_image.png'),
+                                image:
+                                    AssetImage('assets/images/your_image.png'),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -125,7 +127,10 @@ class _ProductInShopState extends State<ProductInShop> {
                         ),
                       ),
                       onPressed: () {
-                        // ฟังก์ชันเมื่อกดปุ่ม "ตะกร้าสินค้า"
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Cartlist()),
+                        );
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -158,7 +163,7 @@ class ProductCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProductDetail(), 
+            builder: (context) => ProductDetail(),
           ),
         );
       },
