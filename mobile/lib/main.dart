@@ -13,6 +13,7 @@ import 'package:mobile/user/customer/productDetail.dart';
 import 'package:mobile/user/customer/productInshop.dart';
 import 'package:mobile/user/customer/shopDetail.dart';
 import 'package:mobile/user/page/guest.dart';
+import 'package:mobile/user/page/guestProduct.dart';
 import 'package:mobile/user/page/registerCustomer.dart';
 import 'package:mobile/user/page/registerShopkeeper.dart';
 import 'package:mobile/user/page/signIn.dart';
@@ -56,6 +57,7 @@ class _MyAppState extends State<MyApp> {
           '/registerRole/shopkeeper': (context) => RegisterShopkeeper(),
           '/home': (context) => Homepage(),
           '/guest': (context) => GuestScreen(),
+          // '/guest/productInShop': (context) => GuestProductInShop(),
           '/shop': (context) => BottomNavShop(),
           '/shop/mainScreen': (context) => ShopMainScreen(),
           '/shop/manageProduct': (context) => ManageProductScreen(),

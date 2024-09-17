@@ -1,8 +1,7 @@
 const express = require("express");
 module.exports = (db, express) => {
   const router = express.Router();
-  router.get("/getShop/", async (req, res) => {});
-  // ไว้สำหรับร้านค้าที่กำลังขายสินค้าอยู่
+
   router.get("/availableShop/", async (req, res) => {
     try {
       const shopList = [];
@@ -38,6 +37,5 @@ module.exports = (db, express) => {
       return res.status(500).send({ status: "failed" });
     }
   });
-
   return router;
 };
