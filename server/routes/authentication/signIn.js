@@ -26,5 +26,6 @@ module.exports = (db, express) => {
 
     return res.status(404).send({ status: "not_found", data: null });
   });
+
   return router;
 };

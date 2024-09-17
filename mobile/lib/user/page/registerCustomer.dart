@@ -30,6 +30,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
   int currentPage = 0;
   int globalValueStatus = 0;
   final PageController _pageController = PageController();
+  bool signInAllow = true;
 
   @override
   void initState() {
@@ -219,7 +220,9 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
                         child: SizedBox(
                           width: 230,
                           child: ElevatedButton(
-                            onPressed: secondPageValidate ? _signUp : null,
+                            onPressed: secondPageValidate && signInAllow
+                                ? _signUp
+                                : null,
                             style: ElevatedButton.styleFrom(
                               shadowColor: Colors.transparent,
                               backgroundColor: secondPageValidate
@@ -231,7 +234,9 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
                               ),
                             ),
                             child: Text(
-                              'ยืนยันการสมัคร',
+                              secondPageValidate
+                                  ? 'ยืนยันการสมัคร'
+                                  : 'กรุณากรอกข้อมูลให้ครบ',
                               style: TextStyle(
                                   fontSize: 16,
                                   fontFamily: GoogleFonts.mitr().fontFamily,
@@ -260,7 +265,9 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
     String surname = surnameController.text;
     String tel = telController.text;
     String birthday = birthdayController.text;
-
+    setState(() {
+      signInAllow = false;
+    });
     print(birthday);
 
     try {
@@ -272,7 +279,7 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
         print(user.uid);
         print('hello world');
 
-        final url = Uri.parse("http://10.0.2.2:3000/authentication/register/customer");
+        final url = Uri.parse("http://10.0.2.2:3000/authentication/customer");
         final response = await http.post(
           url,
           headers: {
@@ -296,6 +303,9 @@ class _RegisterCustomerState extends State<RegisterCustomer> {
           ' เนื่องจากอีเมลมีผู้ใช้งานแล้วหรือรหัสผ่านสั้นเกินไป',
         );
       }
+      setState(() {
+        signInAllow = true;
+      });
     } on FirebaseAuthException catch (e) {
       String errorMessage;
       if (e.code == 'email-already-in-use') {

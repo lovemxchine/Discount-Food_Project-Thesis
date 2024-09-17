@@ -48,9 +48,9 @@ module.exports = (db, express) => {
 
           // shop img url
           imgUrl: {
-            shopCoverImg: data.imgUrl.shopCoverImg,
-            shopImg: data.imgUrl.shopImg,
-            certificateImg: data.imgUrl.certificateImg,
+            shopCoverUrl: data.imgUrl.shopCoverUrl,
+            shopUrl: data.imgUrl.shopImg,
+            certificateUrl: data.imgUrl.certificateUrl,
           },
           // shop location from user input
           shopLocation_th: {
