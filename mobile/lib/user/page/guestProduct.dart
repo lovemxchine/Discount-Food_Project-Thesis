@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:mobile/user/customer/shopDetail.dart';
-import 'package:mobile/user/shop/dontusethis.dart';
+
+import 'package:mobile/user/page/shopDetails.dart';
+
 import 'package:http/http.dart' as http;
 
 class GuestProductInShop extends StatefulWidget {
-  GuestProductInShop({super.key, required this.shopId});
-  String shopId;
+  GuestProductInShop({super.key, required this.shopData});
+  Map<String, dynamic> shopData;
   @override
   State<GuestProductInShop> createState() => _GuestProductInShopState();
 }
@@ -15,30 +16,34 @@ class GuestProductInShop extends StatefulWidget {
 class _GuestProductInShopState extends State<GuestProductInShop> {
   int cartCount = 12;
   bool _isLoading = false;
-
+  List listProducts = [];
   Future<void> _fetchData() async {
+    print(widget.shopData);
+  }
+
+  @override
+  initState() {
+    super.initState();
+    _fetchData();
+    fetchProduct();
+  }
+
+  Future<void> fetchProduct() async {
+    // Uri url = "http://10.0.2.2:3000/" as Uri;
+    final url = Uri.parse(
+        "http://10.0.2.2:3000/shop/${widget.shopData['uid']}/getAllProduct");
+    var response = await http.get(
+      url,
+    );
+    final responseData = jsonDecode(response.body);
     setState(() {
-      _isLoading = true;
+      listProducts = responseData['data'];
     });
-    final url = Uri.parse("http://10.0.2.2:3000/customer/availableShop");
 
-    try {
-      var response = await http.get(url);
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      print(responseData);
-
-      if (response.statusCode == 200) {
-        setState(() {
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
+    // List arrData = decodedData['data'];
+    print(listProducts.length);
+    print(listProducts);
+    print("hi");
   }
 
   @override
@@ -91,7 +96,7 @@ class _GuestProductInShopState extends State<GuestProductInShop> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Tops market - เซ็นทรัลเวสเกต',
+                                widget.shopData['name'],
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -99,8 +104,8 @@ class _GuestProductInShopState extends State<GuestProductInShop> {
                               ),
                               SizedBox(height: 4),
                               Text(
-                                'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
-                                style: TextStyle(fontSize: 16),
+                                'ระยะเวลาเปิด - ปิด (${widget.shopData['openAt']} - ${widget.shopData['closeAt']})',
+                                style: TextStyle(fontSize: 14),
                               ),
                               SizedBox(height: 16),
                               InkWell(
@@ -108,7 +113,10 @@ class _GuestProductInShopState extends State<GuestProductInShop> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Shopdetail()),
+                                      builder: (context) => ShopDetails(
+                                        shopData: widget.shopData,
+                                      ),
+                                    ),
                                   );
                                 },
                                 child: Text(
@@ -135,7 +143,7 @@ class _GuestProductInShopState extends State<GuestProductInShop> {
                         crossAxisSpacing: 16,
                         mainAxisSpacing: 16,
                       ),
-                      itemCount: 6,
+                      itemCount: listProducts.length,
                       itemBuilder: (context, index) {
                         return ProductCard();
                       },

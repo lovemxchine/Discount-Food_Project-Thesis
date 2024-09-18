@@ -195,7 +195,7 @@ class _GuestScreenState extends State<GuestScreen> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   GuestProductInShop(
-                                                shopId: item['uid'],
+                                                shopData: item,
                                               ),
                                             ),
                                           );
@@ -250,10 +250,7 @@ class _GuestScreenState extends State<GuestScreen> {
                                                     ),
                                                     SizedBox(height: 5),
                                                     Text(
-                                                      'เวลาเปิด - ปิด ' +
-                                                          item['openAt'] +
-                                                          ' - ' +
-                                                          item['closeAt'],
+                                                      'เวลาเปิด - ปิด ( ${item['openAt']} -  ${item['closeAt']} )',
                                                       style: TextStyle(
                                                         fontSize: 12,
                                                         color: Colors.black,
