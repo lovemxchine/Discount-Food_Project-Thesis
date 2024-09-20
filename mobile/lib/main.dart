@@ -9,6 +9,7 @@ import 'package:mobile/firebase_options.dart';
 import 'package:mobile/user/customer/cartList.dart';
 import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailboxDetail.dart';
+import 'package:mobile/user/customer/payMent.dart';
 import 'package:mobile/user/customer/productDetail.dart';
 import 'package:mobile/user/customer/productInshop.dart';
 import 'package:mobile/user/customer/shopDetail.dart';
@@ -68,6 +69,7 @@ class _MyAppState extends State<MyApp> {
           '/customer/productInshop': (context) => ProductInShop(),
           '/customer/shopDetail': (context) => Shopdetail(),
           '/customer/cartList': (context) => Cartlist(),
+          '/customer/payMent': (context) => Payment(),
           // '/customer/mailboxDetail': (context) => MailBoxDetailPage(),
         });
   }
