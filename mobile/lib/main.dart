@@ -7,6 +7,7 @@ import 'package:mobile/components/bottomNav.dart';
 import 'package:mobile/components/bottomNavShop.dart';
 import 'package:mobile/firebase_options.dart';
 import 'package:mobile/user/customer/cartList.dart';
+import 'package:mobile/user/customer/historyPage.dart';
 import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailboxDetail.dart';
 import 'package:mobile/user/customer/payMent.dart';
@@ -70,6 +71,7 @@ class _MyAppState extends State<MyApp> {
           '/customer/shopDetail': (context) => Shopdetail(),
           '/customer/cartList': (context) => Cartlist(),
           '/customer/payMent': (context) => Payment(),
+          '/customer/historyPage': (context) => Historypage(),
           // '/customer/mailboxDetail': (context) => MailBoxDetailPage(),
         });
   }

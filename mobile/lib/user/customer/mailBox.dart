@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/components/bottomNav.dart';
 import 'package:mobile/user/customer/allshopNear.dart';
 import 'package:mobile/user/customer/favoritePage.dart';
+import 'package:mobile/user/customer/historyPage.dart';
 import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailboxDetail.dart';
 import 'package:mobile/user/customer/settingsPage.dart';
@@ -15,7 +16,7 @@ class _MailBoxPageState extends State<MailBoxPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => false, 
+      onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: const Color.fromRGBO(255, 104, 56, 1),
         body: Stack(
@@ -101,15 +102,24 @@ class _MailBoxPageState extends State<MailBoxPage> {
                         ),
                       ),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(right: 16),
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: Text(
-                          'ประวัติการสั่งซื้อ',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Historypage()),
+                            );
+                          },
+                          child: Text(
+                            'ประวัติการสั่งซื้อ',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
                           ),
                         ),
                       ),
