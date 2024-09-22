@@ -32,32 +32,37 @@ module.exports = (db, express) => {
 
   router.post("/registerShop", async (req, res) => {
     const data = req.body;
-    console.log("test");
+    console.log(data);
     try {
       await db
         .collection("in_register_shop")
-        .doc("/" + data.temporaryUID + "/")
+        .doc("/" + data.uid + "/")
         .create({
-          uid: data.temporaryUID,
-          name: data.name,
-          surname: data.surname,
-          nationality: data.nationality,
-          email: data.email,
+          uid: data.uid,
+          shopName: data.shopName,
+          branch: data.branch || null,
           tel: data.tel,
-          role: "shopkeeper",
+          email: data.email,
+
+          shopkeeperData: {
+            name: data.shopkeeperData.name,
+            surname: data.shopkeeperData.surname,
+            nationality: data.shopkeeperData.nationality,
+            role: "shopkeeper",
+          },
 
           // shop img url
           imgUrl: {
-            shopCoverUrl: data.imgUrl.shopCoverUrl,
-            shopUrl: data.imgUrl.shopImg,
-            certificateUrl: data.imgUrl.certificateUrl,
+            shopCoverUrl: data.imgUrl.shopCoverUrl ?? null,
+            shopUrl: data.imgUrl.shopImg ?? null,
+            certificateUrl: data.imgUrl.certificateUrl ?? null,
           },
           // shop location from user input
           shopLocation_th: {
-            province: data.shopLocation.province,
-            district: data.shopLocation.district,
-            subdistrict: data.shopLocation.subdistrict,
-            postcode: data.shopLocation.postcode,
+            province: data.shopLocation_th.province,
+            district: data.shopLocation_th.district,
+            subdistrict: data.shopLocation_th.subdistrict,
+            postcode: data.shopLocation_th.postcode,
           },
           // shop location from google map api
           googleLocation: {

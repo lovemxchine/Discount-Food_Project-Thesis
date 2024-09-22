@@ -13,7 +13,7 @@ class _ShopDetailsState extends State<ShopDetails> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => true,
+      onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -23,10 +23,7 @@ class _ShopDetailsState extends State<ShopDetails> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ProductInShop()),
-              );
+              Navigator.pop(context);
             },
           ),
         ),
