@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,17 +36,15 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
       TextEditingController();
   final TextEditingController birthdayShopkeeperController =
       TextEditingController();
-  final TextEditingController provinceShopkeeperController =
-      TextEditingController();
-  final TextEditingController districtShopkeeperController =
-      TextEditingController();
-  final TextEditingController subdistrictShopkeeperController =
-      TextEditingController();
+
   final TextEditingController postcodeShopkeeperController =
       TextEditingController();
   final TextEditingController telShopkeeperController = TextEditingController();
-  final TextEditingController emailShopkeeperController =
-      TextEditingController();
+
+  File? ShopCoverImg;
+  File? ShopImg;
+  File? CertificateImg;
+
   // shop place
   String? selectedProvince;
   String? selectedDistrict;
@@ -61,7 +61,12 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
 
   int currentPage = 0;
   bool pinMap = false;
-
+  Map googleLocate = {
+    'lat': null,
+    'lng': null,
+    'formatted_address': null,
+    'place_name': null,
+  };
   final PageController _pageController = PageController();
 
   final Map<String, List<String>> provinceToDistricts = {
@@ -91,11 +96,20 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
     telController.addListener(checkFields);
     birthdayController.addListener(checkFields);
     nameShopkeeperController.addListener(checkFields);
+    nationalityShopkeeperController.addListener(checkFields);
     surnameShopkeeperController.addListener(checkFields);
     placeShopkeeperController.addListener(checkFields);
-    provinceShopkeeperController.addListener(checkFields);
-    districtShopkeeperController.addListener(checkFields);
-    subdistrictShopkeeperController.addListener(checkFields);
+    postcodeShopkeeperController.addListener(checkFields);
+    postcodeController.addListener(checkFields);
+    selectedProvince = provinceToDistricts.keys.first;
+    selectedDistrict = provinceToDistricts[selectedProvince]!.first;
+    selectedSubDistrict = districtToSubDistricts[selectedDistrict]!.first;
+
+    selectedUserProvince = provinceToDistricts.keys.first;
+    selectedUserDistrict = provinceToDistricts[selectedUserProvince]!.first;
+    selectedUserSubDistrict =
+        districtToSubDistricts[selectedUserDistrict]!.first;
+
     postcodeShopkeeperController.addListener(checkFields);
     if (provinceToDistricts.isNotEmpty) {
       selectedProvince = provinceToDistricts.keys.first;
@@ -132,10 +146,8 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
           telController.text.isNotEmpty && emailController.text.isNotEmpty;
       fourthPageValidate = nameShopkeeperController.text.isNotEmpty &&
           surnameShopkeeperController.text.isNotEmpty &&
+          nationalityShopkeeperController.text.isNotEmpty &&
           placeShopkeeperController.text.isNotEmpty &&
-          provinceShopkeeperController.text.isNotEmpty &&
-          districtShopkeeperController.text.isNotEmpty &&
-          subdistrictShopkeeperController.text.isNotEmpty &&
           postcodeShopkeeperController.text.isNotEmpty;
     });
   }
@@ -167,6 +179,85 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
       return Future.value(false);
     }
     return Future.value(true);
+  }
+
+  Future<void> _signUp() async {
+    String email = emailController.text;
+    String password = passwordController.text;
+    String name = shopNameController.text;
+    // String surname = surnameController.text;
+    String tel = telController.text;
+    String birthday = birthdayController.text;
+
+    print(birthday);
+
+    try {
+      User? user = await _auth.signUpWithEmailAndPassword(email, password);
+      if (user != null) {
+        print('Sign up success');
+        print(user);
+        print(user.uid);
+
+        final url =
+            Uri.parse("http://10.0.2.2:3000/authentication/registerShop");
+        final response = await http.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode({
+            "shopName": shopNameController.text,
+            "branch": branchController.text,
+            "uid": user.uid,
+            "role": "shopkeeper",
+            "tel": telShopkeeperController.text,
+            "email": emailController.text,
+
+            "shopkeeperData": {
+              "name": nameShopkeeperController.text,
+              "surname": surnameShopkeeperController.text,
+              "nationality": nationalityShopkeeperController.text,
+            },
+            // shop img url
+            "imgUrl": {
+              "shopCoverUrl": ShopCoverImg,
+              "shopUrl": ShopImg,
+              "certificateUrl": CertificateImg,
+            },
+            // shop location from user input
+            "shopLocation_th": {
+              "place": placeController.text,
+              "province": selectedProvince,
+              "district": selectedDistrict,
+              "subdistrict": selectedSubDistrict,
+              "postcode": postcodeController.text,
+            },
+            // shop location from google map api
+            "googleLocation": {
+              "lat": googleLocate['lat'],
+              "lng": googleLocate['lng'],
+              "formatted_address": googleLocate['formatted_address'],
+              "place_name": googleLocate['place_name'],
+            },
+            // shopkeeper location from user input
+            "shopkeeperLocation": {
+              "userPlace": placeShopkeeperController.text,
+              "province": selectedUserProvince,
+              "district": selectedUserDistrict,
+              "subdistrict": selectedUserSubDistrict,
+              "postcode": postcodeShopkeeperController.text,
+            }
+          }),
+        );
+
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+    } on FirebaseAuthException catch (e) {
+      _auth.handleFirebaseAuthError(e);
+      print(e.message);
+      print('dotenv error');
+    }
   }
 
   @override
@@ -727,86 +818,5 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
         ),
       ),
     );
-  }
-
-  Future<void> _signUp() async {
-    String email = emailController.text;
-    String password = passwordController.text;
-    String name = shopNameController.text;
-    // String surname = surnameController.text;
-    String tel = telController.text;
-    String birthday = birthdayController.text;
-
-    print(birthday);
-
-    try {
-      // User? user = await _auth.signUpWithEmailAndPassword(email, password);
-      // if (user != null) {
-      //   print('Sign up success');
-      //   print(user);
-      //   print(user.uid);
-      //   print('hello world');
-
-      final url = Uri.parse("http://10.0.2.2:3000/api/register/Shopkeeper");
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          "uid": "hahahaa", // value.uid
-          "email": email,
-          "name": name,
-          // "surname": surname,
-          "tel": tel,
-          "birthday": birthday,
-        }),
-      );
-
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      // }
-    } on FirebaseAuthException catch (e) {
-      _auth.handleFirebaseAuthError(e);
-      print(e.message);
-      print('dotenv error');
-    }
-  }
-
-  void checkSendData() async {
-    // nextPage();
-    print('Test');
-    try {
-      final url = Uri.parse("http://10.0.2.2:3000/testcheck");
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          "temporaryUID": "test_regis_shop",
-          "name": nameShopkeeperController.text,
-          "surname": surnameShopkeeperController.text,
-          "place": placeShopkeeperController.text,
-          "nationality": nationalityShopkeeperController.text,
-          "email": emailShopkeeperController.text,
-          "tel": telShopkeeperController.text,
-          "shopLocation": {
-            "province": selectedProvince,
-            "district": selectedDistrict,
-            "subdistrict": selectedSubDistrict,
-            "postcode": postcodeController.text,
-          }
-        }),
-      );
-      print('Test');
-
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      // }
-    } catch (e) {
-      print(e);
-      print('dotenv error');
-    }
   }
 }

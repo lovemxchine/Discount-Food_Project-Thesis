@@ -2,12 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile/components/bottomNav.dart';
-import 'package:mobile/user/customer/allshopNear.dart';
-import 'package:mobile/user/customer/homePage.dart';
-import 'package:mobile/user/customer/mailBox.dart';
-import 'package:mobile/user/customer/favoritePage.dart';
-import 'package:mobile/user/customer/settingsPage.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:mobile/user/page/guestProduct.dart';
 
@@ -195,7 +190,7 @@ class _GuestScreenState extends State<GuestScreen> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   GuestProductInShop(
-                                                shopId: item['uid'],
+                                                shopData: item,
                                               ),
                                             ),
                                           );
@@ -250,10 +245,7 @@ class _GuestScreenState extends State<GuestScreen> {
                                                     ),
                                                     SizedBox(height: 5),
                                                     Text(
-                                                      'เวลาเปิด - ปิด ' +
-                                                          item['openAt'] +
-                                                          ' - ' +
-                                                          item['closeAt'],
+                                                      'เวลาเปิด - ปิด ( ${item['openAt']} -  ${item['closeAt']} )',
                                                       style: TextStyle(
                                                         fontSize: 12,
                                                         color: Colors.black,
