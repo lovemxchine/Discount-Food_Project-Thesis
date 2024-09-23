@@ -13,7 +13,9 @@ import 'package:mobile/user/customer/mailboxDetail.dart';
 import 'package:mobile/user/customer/payMent.dart';
 import 'package:mobile/user/customer/productDetail.dart';
 import 'package:mobile/user/customer/productInshop.dart';
+import 'package:mobile/user/customer/reportShop.dart';
 import 'package:mobile/user/customer/shopDetail.dart';
+import 'package:mobile/user/customer/submitPayment.dart';
 import 'package:mobile/user/page/guest.dart';
 import 'package:mobile/user/page/guestProduct.dart';
 import 'package:mobile/user/page/registerCustomer.dart';
@@ -72,6 +74,8 @@ class _MyAppState extends State<MyApp> {
           '/customer/cartList': (context) => Cartlist(),
           '/customer/payMent': (context) => Payment(),
           '/customer/historyPage': (context) => Historypage(),
+          //'/customer/reportShop': (context) => Reportshop(),
+          //'/customer/submitPayment': (context) => Submitpayment(),
           // '/customer/mailboxDetail': (context) => MailBoxDetailPage(),
         });
   }
