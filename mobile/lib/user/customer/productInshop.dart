@@ -1,17 +1,53 @@
+import 'dart:convert';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:mobile/user/customer/cartList.dart';
 import 'package:mobile/user/customer/productDetail.dart';
 import 'package:mobile/user/customer/shopDetail.dart';
 
-class ProductInShop extends StatefulWidget {
-  const ProductInShop({super.key});
+String formatExpiredDate(String dateStr) {
+  DateTime dateTime = DateTime.parse(dateStr);
+  return DateFormat('dd/MM/yyyy').format(dateTime);
+}
 
+class ProductInShop extends StatefulWidget {
+  ProductInShop({super.key, required this.shopData});
+  Map<String, dynamic> shopData;
   @override
   State<ProductInShop> createState() => _ProductInShopState();
 }
 
 class _ProductInShopState extends State<ProductInShop> {
   int cartCount = 12;
+  bool _isLoading = false;
+  List listProducts = [];
+
+  @override
+  initState() {
+    super.initState();
+    _fetchData();
+    fetchProduct();
+  }
+
+  Future<void> _fetchData() async {
+    print(widget.shopData);
+  }
+
+  Future<void> fetchProduct() async {
+    final url = Uri.parse(
+        "http://10.0.2.2:3000/shop/${widget.shopData['uid']}/getAllProduct");
+    var response = await http.get(url);
+    final responseData = jsonDecode(response.body);
+    setState(() {
+      listProducts = responseData['data'];
+    });
+
+    print(listProducts.length);
+    print(listProducts);
+    print("hi");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +72,7 @@ class _ProductInShopState extends State<ProductInShop> {
               ),
               Expanded(
                 child: Container(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Color.fromARGB(255, 224, 217, 217),
                   ),
                   child: Column(
@@ -64,7 +100,7 @@ class _ProductInShopState extends State<ProductInShop> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Tops market - เซ็นทรัลเวสเกต',
+                                    widget.shopData['name'],
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -72,7 +108,7 @@ class _ProductInShopState extends State<ProductInShop> {
                                   ),
                                   SizedBox(height: 4),
                                   Text(
-                                    'ระยะเวลาเปิด - ปิด (10:00 - 22:00)',
+                                    'ระยะเวลาเปิด - ปิด (${widget.shopData['openAt']} - ${widget.shopData['closeAt']})',
                                     style: TextStyle(fontSize: 14),
                                   ),
                                   SizedBox(height: 20),
@@ -81,15 +117,16 @@ class _ProductInShopState extends State<ProductInShop> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => Shopdetail(),
+                                          builder: (context) => Shopdetail(
+                                            shopData: widget.shopData,
+                                          ),
                                         ),
                                       );
                                     },
                                     child: Text(
                                       'รายละเอียดร้านค้า',
                                       style: TextStyle(
-                                        color: const Color.fromARGB(
-                                            255, 95, 95, 95),
+                                        color: Color.fromARGB(255, 95, 95, 95),
                                         fontSize: 16,
                                       ),
                                     ),
@@ -110,9 +147,16 @@ class _ProductInShopState extends State<ProductInShop> {
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
                           ),
-                          itemCount: 6,
+                          itemCount: listProducts.length,
                           itemBuilder: (context, index) {
-                            return ProductCard();
+                            return ProductCard(
+                              productName: listProducts[index]['productName'],
+                              expirationDate:
+                                  listProducts[index]['expiredDate'],
+                              oldPrice: listProducts[index]['originalPrice'],
+                              newPrice: listProducts[index]['salePrice'],
+                              imageAsset: listProducts[index]['imageUrl'],
+                            );
                           },
                         ),
                       ),
@@ -177,86 +221,101 @@ class _ProductInShopState extends State<ProductInShop> {
 }
 
 class ProductCard extends StatelessWidget {
+  final String productName;
+  final String expirationDate;
+  final int oldPrice;
+  final int newPrice;
+  final String imageAsset;
+
+  ProductCard({
+    Key? key,
+    required this.productName,
+    required this.expirationDate,
+    required this.oldPrice,
+    required this.newPrice,
+    this.imageAsset = 'assets/images/alt.png',
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProductDetail(),
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+                child: Image.network(
+                  imageAsset,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset('assets/images/alt.png');
+                  },
+                ),
+              ),
+            ),
           ),
-        );
-      },
-      child: Card(
-        elevation: 3,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Image.asset(
-                'assets/images/alt.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'ชื่อสินค้า',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13,
-                    ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  productName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
                   ),
-                  //SizedBox(height: 4),
-                  //  Text(
-                  //   'หมดอายุวันที่ 25 / 7 / 2567',
-                  //   style: TextStyle(fontSize: 12, color: Colors.grey),
-                  // ),
-                  SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'ราคา บาท',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'ราคา บาท',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 4),
-
-                  Center(
-                    child: Text(
-                      'รายละเอียดสินค้า',
+                ),
+                SizedBox(height: 4),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'ราคาเดิม $oldPrice บาท',
                       style: TextStyle(
-                        color: const Color.fromARGB(255, 57, 57, 57),
-                        fontSize: 12,
+                        fontSize: 10,
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                    Text(
+                      'เหลือ $newPrice บาท',
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 4),
+                Center(
+                  child: Text(
+                    'รายละเอียดสินค้า',
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 57, 57, 57),
+                      fontSize: 12,
+                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

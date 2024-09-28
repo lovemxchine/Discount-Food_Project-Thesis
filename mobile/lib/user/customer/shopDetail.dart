@@ -4,7 +4,7 @@ import 'package:mobile/user/customer/productInshop.dart';
 import 'package:mobile/user/customer/reportShop.dart';
 
 class Shopdetail extends StatelessWidget {
-  const Shopdetail({super.key});
+  const Shopdetail({super.key, required Map<String, dynamic> shopData});
 
   @override
   Widget build(BuildContext context) {
