@@ -20,7 +20,7 @@ module.exports = (db, express) => {
           const productData = productDoc.data();
           // ไปเช็คทุกรสินค้าว่ามีขายไหม
 
-          if (productData.showStatus === true) {
+          if (productData.showStatus === true && productData.stock > 0) {
             productSell = true;
           }
         }

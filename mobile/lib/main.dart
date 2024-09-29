@@ -14,6 +14,7 @@ import 'package:mobile/user/page/guest.dart';
 import 'package:mobile/user/page/guestProduct.dart';
 import 'package:mobile/user/page/registerCustomer.dart';
 import 'package:mobile/user/page/registerShopkeeper.dart';
+import 'package:mobile/user/page/selectMap.dart';
 import 'package:mobile/user/page/signIn.dart';
 import 'package:mobile/user/page/registerRole.dart';
 import 'package:mobile/user/shop/shopAddProductScreen.dart';
@@ -53,6 +54,7 @@ class _MyAppState extends State<MyApp> {
           '/registerRole': (context) => RegisterRole(),
           '/registerRole/customer': (context) => RegisterCustomer(),
           '/registerRole/shopkeeper': (context) => RegisterShopkeeper(),
+          '/registerRole/shopkeeper/selectMap': (context) => SelectMapLocate(),
           '/home': (context) => Homepage(),
           '/guest': (context) => GuestScreen(),
           // '/guest/productInShop': (context) => GuestProductInShop(),

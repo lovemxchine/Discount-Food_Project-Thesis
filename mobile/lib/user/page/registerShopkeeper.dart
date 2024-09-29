@@ -7,9 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile/components/textFieldComponent.dart';
 import 'package:mobile/user/service/auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile/user/service/controller/googlemap.dart';
 
 class RegisterShopkeeper extends StatefulWidget {
   @override
@@ -17,6 +19,12 @@ class RegisterShopkeeper extends StatefulWidget {
 }
 
 class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
+  //Google map
+  late GoogleMapController _mapController;
+  LatLng _initialPosition = LatLng(13.7563, 100.5018); // Default to Bangkok
+  final TextEditingController _searchController = TextEditingController();
+  final GooglePlacesService _placesService = GooglePlacesService();
+  //
   final FirebaseAuthService _auth = FirebaseAuthService();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -433,7 +441,8 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () async {
-                              // Add your button press logic here
+                              Navigator.pushNamed(context,
+                                  '/registerRole/shopkeeper/selectMap');
                             },
                             style: ElevatedButton.styleFrom(
                               side: const BorderSide(color: Color(0xFFD1D1D1)),
