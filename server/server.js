@@ -19,7 +19,7 @@ const bucket = admin.storage().bucket(); // Using bucket from Firebase Admin SDK
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-}).array("images", 3); // Allow up to 3 images
+}); // Allow up to 3 images
 
 // Routes
 const registerRoute = require("./routes/authentication/register")(

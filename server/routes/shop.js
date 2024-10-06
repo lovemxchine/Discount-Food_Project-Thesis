@@ -27,40 +27,44 @@ module.exports = (db, express, bucket, upload) => {
   });
 
   // Add Product
-  router.post("/:uid/product/addProduct", upload, async (req, res) => {
-    try {
-      const shopUid = req.params.uid;
-      const imageUrl = await uploadSingleImage(req, bucket);
-      // const shopUid = req.params.uid;
-      const data = req.body;
-      const [day, month, year] = data.expired_date.split("/");
-      const formattedDate = new Date(`${year}-${month}-${day}`);
+  router.post(
+    "/:uid/product/addProduct",
+    upload.array("images", 1),
+    async (req, res) => {
+      try {
+        const shopUid = req.params.uid;
+        const imageUrl = await uploadSingleImage(req, bucket);
+        // const shopUid = req.params.uid;
+        const data = req.body;
+        const [day, month, year] = data.expired_date.split("/");
+        const formattedDate = new Date(`${year}-${month}-${day}`);
 
-      console.log(data);
+        console.log(data);
 
-      const doc = await db
-        .collection("shop")
-        .doc(shopUid)
-        .collection("products")
-        .add({
-          productName: data.product_name,
-          salePrice: parseInt(data.sale_price),
-          originalPrice: parseInt(data.original_price),
-          stock: parseInt(data.stock),
-          expiredDate: formattedDate,
-          imageUrl: imageUrl,
-          discountAt: Timestamp.now(),
-          showStatus: true,
+        const doc = await db
+          .collection("shop")
+          .doc(shopUid)
+          .collection("products")
+          .add({
+            productName: data.product_name,
+            salePrice: parseInt(data.sale_price),
+            originalPrice: parseInt(data.original_price),
+            stock: parseInt(data.stock),
+            expiredDate: formattedDate,
+            imageUrl: imageUrl,
+            discountAt: Timestamp.now(),
+            showStatus: true,
 
-          // discountAt: data.discountAt,
-        });
-      await doc.update({ productId: doc.id });
+            // discountAt: data.discountAt,
+          });
+        await doc.update({ productId: doc.id });
 
-      return res.status(200).send({ status: "success", data: data });
-    } catch (err) {
-      console.log(err.message);
+        return res.status(200).send({ status: "success", data: data });
+      } catch (err) {
+        console.log(err.message);
+      }
     }
-  });
+  );
   // Delete Product
   router.delete("/:uid/product/:prodId", async (req, res) => {
     try {

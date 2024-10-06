@@ -30,8 +30,8 @@ class _SelectMapLocateState extends State<SelectMapLocate> {
         final result = json.decode(response.body)['result'];
         setState(() {
           _placeDetails = {
-            'name': result['name'],
-            'address': result['formatted_address'],
+            'place_name': result['name'],
+            'formatted_address': result['formatted_address'],
             'lat': result['geometry']['location']['lat'],
             'lng': result['geometry']['location']['lng'],
           };
@@ -111,12 +111,12 @@ class _SelectMapLocateState extends State<SelectMapLocate> {
                       Text('Place Name:',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
-                      Text('${_placeDetails['name']}'),
+                      Text('${_placeDetails['place_name']}'),
                       SizedBox(height: 8),
                       Text('Address:',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold)),
-                      Text('${_placeDetails['address']}'),
+                      Text('${_placeDetails['formatted_address']}'),
                     ],
                   ),
                 ),

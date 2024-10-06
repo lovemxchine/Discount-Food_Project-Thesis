@@ -365,7 +365,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
         var request = http.MultipartRequest('POST', url);
 
         // Add the JSON fields to the request
-        request.fields['uid'] = '1';
+        request.fields['uid'] = user.uid;
         request.fields['role'] = "shopkeeper";
         request.fields['tel'] = telShopkeeperController.text ?? '';
         request.fields['email'] = emailController.text ?? '';

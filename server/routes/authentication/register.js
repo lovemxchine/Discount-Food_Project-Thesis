@@ -30,7 +30,7 @@ module.exports = (db, express, bucket, upload) => {
     }
   });
 
-  router.post("/registerShop", upload, async (req, res) => {
+  router.post("/registerShop", upload.array("images", 3), async (req, res) => {
     const data = req.body;
 
     console.log(data);

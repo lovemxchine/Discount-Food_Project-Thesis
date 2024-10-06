@@ -1,6 +1,9 @@
 const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 
 const uploadSingleImage = async (file, bucket) => {
+  if (!file) {
+    throw new Error("No file uploaded.");
+  }
   const fileName = `${Date.now()}_${file.originalname}`;
   const fileUpload = bucket.file(`images/${fileName}`);
 
