@@ -1,6 +1,6 @@
-// const express = require("express");
-
-module.exports = (db, express) => {
+// Adjust the path as necessary
+const { uploadMultipleImages } = require("../../controller/image_controller");
+module.exports = (db, express, bucket, upload) => {
   const router = express.Router();
 
   router.post("/customer", async (req, res) => {
@@ -30,10 +30,15 @@ module.exports = (db, express) => {
     }
   });
 
-  router.post("/registerShop", async (req, res) => {
+  router.post("/registerShop", upload, async (req, res) => {
     const data = req.body;
+
     console.log(data);
+    console.log(req.files);
     try {
+      const imageUrls = await uploadMultipleImages(req, bucket);
+      // console.log("Image URLs:", imageUrls);
+
       await db
         .collection("in_register_shop")
         .doc("/" + data.uid + "/")
@@ -53,9 +58,9 @@ module.exports = (db, express) => {
 
           // shop img url
           imgUrl: {
-            shopCoverUrl: data.imgUrl.shopCoverUrl ?? null,
-            shopUrl: data.imgUrl.shopImg ?? null,
-            certificateUrl: data.imgUrl.certificateUrl ?? null,
+            shopCoverUrl: imageUrls[0] ?? null,
+            shopUrl: imageUrls[1] ?? null,
+            certificateUrl: imageUrls[2] ?? null,
           },
           // shop location from user input
           shopLocation_th: {

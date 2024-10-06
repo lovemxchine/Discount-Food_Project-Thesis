@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile/components/textFieldComponent.dart';
+import 'package:mobile/user/page/selectMap.dart';
 import 'package:mobile/user/service/auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:mobile/user/service/controller/googlemap.dart';
@@ -20,12 +22,10 @@ class RegisterShopkeeper extends StatefulWidget {
 
 class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
   //Google map
-  late GoogleMapController _mapController;
-  LatLng _initialPosition = LatLng(13.7563, 100.5018); // Default to Bangkok
-  final TextEditingController _searchController = TextEditingController();
-  final GooglePlacesService _placesService = GooglePlacesService();
+
   //
   final FirebaseAuthService _auth = FirebaseAuthService();
+  final ImagePicker picker = ImagePicker();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController shopNameController = TextEditingController();
@@ -160,6 +160,162 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
     });
   }
 
+  void showPicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Photo Library'),
+                onTap: () {
+                  getImage();
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: () {
+                  openCamera(context);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future getImage() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+      setState(() {
+        if (pickedFile != null) {
+          ShopCoverImg = File(pickedFile.path);
+        }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> openCamera(BuildContext context) async {
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      // Handle the captured image
+      print('Image path: ${image.path}');
+    }
+  }
+
+  void showPicker2(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Photo Library'),
+                onTap: () {
+                  getImage2();
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: () {
+                  openCamera(context);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future getImage2() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+      setState(() {
+        if (pickedFile != null) {
+          ShopImg = File(pickedFile.path);
+        }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> openCamera2(BuildContext context) async {
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      // Handle the captured image
+      print('Image path: ${image.path}');
+    }
+  }
+
+  void showPicker3(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Photo Library'),
+                onTap: () {
+                  getImage3();
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: () {
+                  openCamera(context);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future getImage3() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+      setState(() {
+        if (pickedFile != null) {
+          CertificateImg = File(pickedFile.path);
+        }
+      });
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> openCamera3(BuildContext context) async {
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      // Handle the captured image
+      print('Image path: ${image.path}');
+    }
+  }
+
   @override
   void dispose() {
     emailController.dispose();
@@ -193,12 +349,9 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
     String email = emailController.text;
     String password = passwordController.text;
     String name = shopNameController.text;
-    // String surname = surnameController.text;
     String tel = telController.text;
     String birthday = birthdayController.text;
-
-    print(birthday);
-
+    // User? user;
     try {
       User? user = await _auth.signUpWithEmailAndPassword(email, password);
       if (user != null) {
@@ -206,65 +359,91 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
         print(user);
         print(user.uid);
 
+        // Create the request
         final url =
             Uri.parse("http://10.0.2.2:3000/authentication/registerShop");
-        final response = await http.post(
-          url,
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonEncode({
-            "shopName": shopNameController.text,
-            "branch": branchController.text,
-            "uid": user.uid,
-            "role": "shopkeeper",
-            "tel": telShopkeeperController.text,
-            "email": emailController.text,
+        var request = http.MultipartRequest('POST', url);
 
-            "shopkeeperData": {
-              "name": nameShopkeeperController.text,
-              "surname": surnameShopkeeperController.text,
-              "nationality": nationalityShopkeeperController.text,
-            },
-            // shop img url
-            "imgUrl": {
-              "shopCoverUrl": ShopCoverImg,
-              "shopUrl": ShopImg,
-              "certificateUrl": CertificateImg,
-            },
-            // shop location from user input
-            "shopLocation_th": {
-              "place": placeController.text,
-              "province": selectedProvince,
-              "district": selectedDistrict,
-              "subdistrict": selectedSubDistrict,
-              "postcode": postcodeController.text,
-            },
-            // shop location from google map api
-            "googleLocation": {
-              "lat": googleLocate['lat'],
-              "lng": googleLocate['lng'],
-              "formatted_address": googleLocate['formatted_address'],
-              "place_name": googleLocate['place_name'],
-            },
-            // shopkeeper location from user input
-            "shopkeeperLocation": {
-              "userPlace": placeShopkeeperController.text,
-              "province": selectedUserProvince,
-              "district": selectedUserDistrict,
-              "subdistrict": selectedUserSubDistrict,
-              "postcode": postcodeShopkeeperController.text,
-            }
-          }),
-        );
+        // Add the JSON fields to the request
+        request.fields['uid'] = '1';
+        request.fields['role'] = "shopkeeper";
+        request.fields['tel'] = telShopkeeperController.text ?? '';
+        request.fields['email'] = emailController.text ?? '';
+        request.fields['shopName'] = shopNameController.text ?? '';
+        request.fields['branch'] = branchController.text ?? '';
 
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        request.fields['shopkeeperData[name]'] =
+            nameShopkeeperController.text ?? '';
+        request.fields['shopkeeperData[surname]'] =
+            surnameShopkeeperController.text ?? '';
+        request.fields['shopkeeperData[nationality]'] =
+            nationalityShopkeeperController.text ?? '';
+
+        request.fields['shopLocation_th[place]'] = placeController.text ?? '';
+        request.fields['shopLocation_th[province]'] = selectedProvince ?? '';
+        request.fields['shopLocation_th[district]'] = selectedDistrict ?? '';
+        request.fields['shopLocation_th[subdistrict]'] =
+            selectedSubDistrict ?? '';
+        request.fields['shopLocation_th[postcode]'] =
+            postcodeController.text ?? '';
+
+        request.fields['googleLocation[lat]'] =
+            googleLocate['lat']?.toString() ?? '';
+        request.fields['googleLocation[lng]'] =
+            googleLocate['lng']?.toString() ?? '';
+        request.fields['googleLocation[formatted_address]'] =
+            googleLocate['formatted_address'] ?? '';
+        request.fields['googleLocation[place_name]'] =
+            googleLocate['place_name'] ?? '';
+
+        request.fields['shopkeeperLocation[userPlace]'] =
+            placeShopkeeperController.text;
+        request.fields['shopkeeperLocation[province]'] = selectedUserProvince!;
+        request.fields['shopkeeperLocation[district]'] = selectedUserDistrict!;
+        request.fields['shopkeeperLocation[subdistrict]'] =
+            selectedUserSubDistrict!;
+        request.fields['shopkeeperLocation[postcode]'] =
+            postcodeShopkeeperController.text;
+
+        // Add image files
+        List<http.MultipartFile> imageFiles = [];
+
+        if (ShopCoverImg != null) {
+          imageFiles.add(await http.MultipartFile.fromPath(
+            'images',
+            ShopCoverImg!.path,
+          ));
+        }
+
+        if (ShopImg != null) {
+          imageFiles.add(await http.MultipartFile.fromPath(
+            'images',
+            ShopImg!.path,
+          ));
+        }
+
+        if (CertificateImg != null) {
+          imageFiles.add(await http.MultipartFile.fromPath(
+            'images',
+            CertificateImg!.path,
+          ));
+        }
+
+        request.files.addAll(imageFiles);
+
+        // Send the request
+        var response = await request.send();
+
+        // Read the response
+        if (response.statusCode == 200) {
+          print('Uploaded successfully');
+        } else {
+          print('Failed to upload');
+        }
       }
     } on FirebaseAuthException catch (e) {
       _auth.handleFirebaseAuthError(e);
       print(e.message);
-      print('dotenv error');
     }
   }
 
@@ -441,8 +620,18 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                           width: double.infinity,
                           child: ElevatedButton(
                             onPressed: () async {
-                              Navigator.pushNamed(context,
-                                  '/registerRole/shopkeeper/selectMap');
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SelectMapLocate()),
+                              );
+                              print(result);
+                              setState(() {
+                                if (result != null) {
+                                  googleLocate = result;
+                                  pinMap = true;
+                                }
+                              });
                             },
                             style: ElevatedButton.styleFrom(
                               side: const BorderSide(color: Color(0xFFD1D1D1)),
@@ -646,13 +835,28 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                     ),
                     const SizedBox(height: 24),
                     CustomImageUploadButton(
-                        label: 'รูปหน้าปกร้าน', onPressed: () {}),
+                        label: 'รูปหน้าปกร้าน',
+                        onPressed: () {
+                          showPicker(
+                            context,
+                          );
+                        }),
                     const SizedBox(height: 16),
                     CustomImageUploadButton(
-                        label: 'รูปประจำร้าน', onPressed: () {}),
+                        label: 'รูปประจำร้าน',
+                        onPressed: () {
+                          showPicker2(
+                            context,
+                          );
+                        }),
                     const SizedBox(height: 16),
                     CustomImageUploadButton(
-                        label: 'ใบทะเบียนพาณิชย์', onPressed: () {}),
+                        label: 'ใบทะเบียนพาณิชย์',
+                        onPressed: () {
+                          showPicker3(
+                            context,
+                          );
+                        }),
                     const SizedBox(height: 166),
                     Center(
                       child: SizedBox(

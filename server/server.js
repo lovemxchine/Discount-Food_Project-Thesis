@@ -16,10 +16,18 @@ const port = 3000;
 const app = express();
 const db = admin.firestore();
 const bucket = admin.storage().bucket(); // Using bucket from Firebase Admin SDK
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+}).array("images", 3); // Allow up to 3 images
 
 // Routes
-const registerRoute = require("./routes/authentication/register")(db, express);
+const registerRoute = require("./routes/authentication/register")(
+  db,
+  express,
+  bucket,
+  upload
+);
 const signInRoute = require("./routes/authentication/signIn")(db, express);
 const shopRoute = require("./routes/shop")(db, express, bucket, upload);
 const customerRoute = require("./routes/customer")(db, express);
@@ -46,7 +54,7 @@ app.use("/guest", guestRoute);
 
 // Cron job to update showStatus
 
-cron.schedule("12 21 * * *", async () => {
+cron.schedule("00 00 * * *", async () => {
   console.log("เช็คสินค้าที่มีส่วนลดเกิน 2 วันแล้ว");
 
   try {
