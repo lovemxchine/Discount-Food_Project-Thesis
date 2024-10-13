@@ -83,6 +83,10 @@ module.exports = (db, express, bucket, upload) => {
             subdistrict: data.shopkeeperLocation.subdistrict,
             postcode: data.shopkeeperLocation.postcode,
           },
+          shopTime: {
+            closeAt: data.closeAt,
+            openAt: data.openAt,
+          },
         });
 
       return res.status(200).send({ status: "success", message: "data saved" });

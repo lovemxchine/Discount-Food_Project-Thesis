@@ -160,6 +160,71 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
     });
   }
 
+  TimeOfDay? openTime;
+  TimeOfDay? closeTime;
+  String formatTimeOfDay(TimeOfDay time) {
+    final now = DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
+    final format = MaterialLocalizations.of(context).formatTimeOfDay(time);
+    return format;
+  }
+
+  Future<void> _selectOpenTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: openTime ?? TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.blue, // Header background color
+              onPrimary: Colors.white, // Header text color
+              surface: Colors.white, // Background color
+              onSurface: Colors.black, // Text color
+            ),
+            dialogBackgroundColor:
+                Colors.white, // Background color of the dialog
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != openTime) {
+      setState(() {
+        openTime = picked;
+        print(openTime);
+      });
+    }
+  }
+
+  Future<void> _selectCloseTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: closeTime ?? TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.blue, // Header background color
+              onPrimary: Colors.white, // Header text color
+              surface: Colors.white, // Background color
+              onSurface: Colors.black, // Text color
+            ),
+            dialogBackgroundColor:
+                Colors.white, // Background color of the dialog
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != closeTime) {
+      setState(() {
+        closeTime = picked;
+        print(closeTime);
+      });
+    }
+  }
+
   void showPicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -404,6 +469,9 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
             selectedUserSubDistrict!;
         request.fields['shopkeeperLocation[postcode]'] =
             postcodeShopkeeperController.text;
+
+        request.fields['openAt'] = openTime.toString();
+        request.fields['closeAt'] = closeTime.toString();
 
         // Add image files
         List<http.MultipartFile> imageFiles = [];
@@ -767,7 +835,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                     children: [
                       const SizedBox(height: 20),
                       const Text(
-                        'รายละเอียดสำหรับติดต่อร้านค้า',
+                        'ติดต่อร้านค้า และ เวลาเปิดปิด',
                         style: TextStyle(
                           fontSize: 24,
                         ),
@@ -777,13 +845,102 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
                         'ลูกค้าอาจติดต่อคุณไปทางเบอร์โทรศัพท์หรืออีเมลนี้',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'และ เวลาเปิดปิดร้านค้าของคุณ',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 10),
                       buildUnderlineTextField(telShopkeeperController,
                           'เบอร์โทรศัพท์', 'เบอร์โทรศัพท์', false, false),
                       const SizedBox(height: 16),
                       buildUnderlineTextField(
                           emailController, 'อีเมล', 'อีเมล', false, true),
-                      const SizedBox(height: 380),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                'เวลาเปิดร้าน',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              if (openTime != null)
+                                Text(
+                                  '${openTime!.format(context)}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              if (openTime == null)
+                                Text(
+                                  '         ',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              Container(
+                                width: 100,
+                                child: ElevatedButton(
+                                  onPressed: () => _selectOpenTime(context),
+                                  child: Text(
+                                    'เวลาเปิดร้าน',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    shadowColor: Colors.transparent,
+                                    backgroundColor: firstPageValidate
+                                        ? Colors.green
+                                        : Colors.grey,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                'เวลาปิดร้าน',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              if (closeTime != null)
+                                Text(
+                                  '${closeTime!.format(context)}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              if (closeTime == null)
+                                Text(
+                                  '         ',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              Container(
+                                width: 100,
+                                child: ElevatedButton(
+                                  onPressed: () => _selectCloseTime(context),
+                                  child: Text(
+                                    'เวลาปิดร้าน',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    shadowColor: Colors.transparent,
+                                    backgroundColor: firstPageValidate
+                                        ? Colors.red
+                                        : Colors.grey,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 300),
                       Center(
                         child: SizedBox(
                           width: 230,

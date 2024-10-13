@@ -26,6 +26,27 @@ module.exports = (db, express, bucket, upload) => {
     return res.status(200).send({ status: "success", data: shopList });
   });
 
+  // Get All Order
+  router.get("/:uid/getAllOrder/", async (req, res) => {
+    const shopUid = req.params.uid;
+    const shop = await db
+      .collection("shop")
+      .doc(shopUid)
+      .collection("orders")
+      .get();
+    const ordersList = [];
+    shop.forEach((doc) => {
+      try {
+        let data = doc.data();
+        // data.expiredDate = data.expiredDate.toDate();
+        shopList.push(data);
+      } catch (e) {
+        console.log("error");
+      }
+    });
+    return res.status(200).send({ status: "success", data: shopList });
+  });
+
   // Add Product
   router.post(
     "/:uid/product/addProduct",
