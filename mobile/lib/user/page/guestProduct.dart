@@ -38,7 +38,7 @@ class _GuestProductInShopState extends State<GuestProductInShop> {
   Future<void> fetchProduct() async {
     // Uri url = "http://10.0.2.2:3000/" as Uri;
     final url = Uri.parse(
-        "http://10.0.2.2:3000/shop/${widget.shopData['uid']}/getAllProduct");
+        "http://10.0.2.2:3000/shop/${widget.shopData['shopkeeperUid']}/getAllProduct");
     var response = await http.get(
       url,
     );

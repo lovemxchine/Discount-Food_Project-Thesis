@@ -17,7 +17,7 @@ class Shopdetail extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context); // แทนที่ Navigator.push ด้วย Navigator.pop
+            Navigator.pop(context); 
           },
         ),
       ),

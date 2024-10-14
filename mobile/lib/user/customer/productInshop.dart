@@ -37,7 +37,7 @@ class _ProductInShopState extends State<ProductInShop> {
 
   Future<void> fetchProduct() async {
     final url = Uri.parse(
-        "http://10.0.2.2:3000/shop/${widget.shopData['uid']}/getAllProduct");
+        "http://10.0.2.2:3000/shop/${widget.shopData['shopkeeperUid']}/getAllProduct");
     var response = await http.get(url);
     final responseData = jsonDecode(response.body);
     setState(() {
@@ -149,13 +149,16 @@ class _ProductInShopState extends State<ProductInShop> {
                           ),
                           itemCount: listProducts.length,
                           itemBuilder: (context, index) {
+                            final item = listProducts[
+                                index]; 
                             return ProductCard(
-                              productName: listProducts[index]['productName'],
-                              expirationDate:
-                                  listProducts[index]['expiredDate'],
-                              oldPrice: listProducts[index]['originalPrice'],
-                              newPrice: listProducts[index]['salePrice'],
-                              imageAsset: listProducts[index]['imageUrl'],
+                              productName: item['productName'],
+                              expirationDate: item['expiredDate'],
+                              oldPrice: item['originalPrice'],
+                              newPrice: item['salePrice'],
+                              imageAsset: item['imageUrl'],
+                              productData:
+                                  item, 
                             );
                           },
                         ),
@@ -226,6 +229,7 @@ class ProductCard extends StatelessWidget {
   final int oldPrice;
   final int newPrice;
   final String imageAsset;
+  final Map<String, dynamic> productData;
 
   ProductCard({
     Key? key,
@@ -233,89 +237,100 @@ class ProductCard extends StatelessWidget {
     required this.expirationDate,
     required this.oldPrice,
     required this.newPrice,
+    required this.productData,
     this.imageAsset = 'assets/images/alt.png',
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetail(shopData: productData),
+          ),
+        );
+      },
+      child: Card(
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
                 ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-                child: Image.network(
-                  imageAsset,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Image.asset('assets/images/alt.png');
-                  },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                  child: Image.network(
+                    imageAsset,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset('assets/images/alt.png');
+                    },
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  productName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                  ),
-                ),
-                SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'ราคาเดิม $oldPrice บาท',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      'เหลือ $newPrice บาท',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4),
-                Center(
-                  child: Text(
-                    'รายละเอียดสินค้า',
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    productName,
                     style: TextStyle(
-                      color: Color.fromARGB(255, 57, 57, 57),
-                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'ราคาเดิม $oldPrice บาท',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'เหลือ $newPrice บาท',
+                        style: TextStyle(
+                          fontSize: 10,
+                          color: Colors.green,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Center(
+                    child: Text(
+                      'รายละเอียดสินค้า',
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 57, 57, 57),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
