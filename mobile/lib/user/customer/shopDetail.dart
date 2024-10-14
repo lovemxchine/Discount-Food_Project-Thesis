@@ -29,7 +29,7 @@ class Shopdetail extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // แผนที่ (คุณสามารถใช้ Google Maps API)
+                  
                   Container(
                     height: 200,
                     child: GoogleMap(
