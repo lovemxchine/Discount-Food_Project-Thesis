@@ -30,7 +30,7 @@ module.exports = (db, express) => {
           shopList.push(shopData);
         }
       }
-
+      console.log(shopList);
       return res.status(200).send({ status: "success", data: shopList });
     } catch (error) {
       console.log(error);

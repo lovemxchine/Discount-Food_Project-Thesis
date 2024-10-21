@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:intl/intl.dart';
+import 'package:mobile/user/shop/shopOrderDetailScreen.dart';
 import 'package:mobile/user/shop/shopProductDetailScreen.dart';
 import 'package:mobile/user/shop/shopProductUpdateScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,6 +76,10 @@ class OrderListScreenState extends State<OrderListScreen> {
     print(listOrder.length);
     print(listOrder);
     print("hi");
+    print(listOrder[0]['status'] == "not confirm yet");
+    if (listOrder[0]['status'] == "not confirm yet") {
+      print("not confirm yet");
+    }
   }
 
   @override
@@ -190,7 +195,8 @@ class OrderListScreenState extends State<OrderListScreen> {
                                 children: [
                                   for (int i = 0; i < listOrder.length; i++)
                                     if (listOrder[i] != null)
-                                      if (listOrder[i]['showStatus'])
+                                      if (listOrder[i]['status'] ==
+                                          "not confirm yet")
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                               vertical: 8, horizontal: 20),
@@ -200,8 +206,8 @@ class OrderListScreenState extends State<OrderListScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      ProductUpdateScreen(
-                                                    productData: listOrder[i],
+                                                      OrderDetailScreen(
+                                                    orderData: listOrder[i],
                                                   ),
                                                 ),
                                               );
@@ -224,116 +230,7 @@ class OrderListScreenState extends State<OrderListScreen> {
                                               child: Row(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                    width: 80,
-                                                    height: 80,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey,
-                                                      image: DecorationImage(
-                                                        image: Image.network(
-                                                                listOrder[i][
-                                                                    'imageUrl'])
-                                                            .image,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 20),
-                                                  Expanded(
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              listOrder[i][
-                                                                  'productName'],
-                                                              style: const TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black),
-                                                            ),
-                                                            Spacer(),
-                                                            RichText(
-                                                              text: TextSpan(
-                                                                text:
-                                                                    'สถานะ : ',
-                                                                style: TextStyle(
-                                                                    fontFamily:
-                                                                        GoogleFonts.mitr()
-                                                                            .fontFamily,
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .black),
-                                                                children: [
-                                                                  TextSpan(
-                                                                    text: listOrder[i]
-                                                                            [
-                                                                            'showStatus']
-                                                                        ? 'กำลังขาย'
-                                                                        : 'ไม่ได้ขาย',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      color: listOrder[i]
-                                                                              [
-                                                                              'showStatus']
-                                                                          ? Colors
-                                                                              .green
-                                                                          : Colors
-                                                                              .red,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            SizedBox(width: 20),
-                                                          ],
-                                                        ),
-                                                        const SizedBox(
-                                                            height: 5),
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              'ราคาเดิม ${listOrder[i]['originalPrice']} บาท',
-                                                              style: const TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black),
-                                                            ),
-                                                            Spacer(),
-                                                            Text(
-                                                              'ราคาขาย ${listOrder[i]['salePrice']} บาท',
-                                                              style: const TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black),
-                                                            ),
-                                                            SizedBox(width: 20),
-                                                          ],
-                                                        ),
-                                                        const SizedBox(
-                                                            height: 5),
-                                                        Text(
-                                                          'วันที่เริ่มขาย : ${formatDiscountDate(listOrder[i]['discountAt'])}',
-                                                          style:
-                                                              const TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
+                                                children: [],
                                               ),
                                             ),
                                           ),

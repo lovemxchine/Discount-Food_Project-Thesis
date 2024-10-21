@@ -505,6 +505,7 @@ class _RegisterShopkeeperState extends State<RegisterShopkeeper> {
         // Read the response
         if (response.statusCode == 200) {
           print('Uploaded successfully');
+          Navigator.pushNamed(context, '/signIn');
         } else {
           print('Failed to upload');
         }

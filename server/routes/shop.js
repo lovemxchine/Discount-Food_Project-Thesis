@@ -27,8 +27,8 @@ module.exports = (db, express, bucket, upload) => {
   });
 
   // Get All Order
-  router.get("/:uid/getAllOrder/", async (req, res) => {
-    const shopUid = req.params.uid;
+  router.get("/:shopUid/getAllOrder/", async (req, res) => {
+    const { shopUid } = req.params;
     const shop = await db
       .collection("shop")
       .doc(shopUid)
@@ -39,12 +39,17 @@ module.exports = (db, express, bucket, upload) => {
       try {
         let data = doc.data();
         // data.expiredDate = data.expiredDate.toDate();
-        shopList.push(data);
+        console.log(data);
+
+        ordersList.push(data);
       } catch (e) {
+        console.log(e);
+
         console.log("error");
       }
     });
-    return res.status(200).send({ status: "success", data: shopList });
+    // return res.status(200).send({ status: "success", data: shopList });
+    return res.status(200).send({ status: "success", data: ordersList });
   });
 
   // Add Product
