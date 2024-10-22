@@ -1,4 +1,5 @@
-const uploadSingleImage = require("../controller/image_controller"); // Adjust the path as necessary
+const { uploadSingleImage } = require("../controller/image_controller");
+
 const { Timestamp } = require("firebase-admin/firestore");
 
 module.exports = (db, express, bucket, upload) => {
@@ -55,15 +56,23 @@ module.exports = (db, express, bucket, upload) => {
   // Add Product
   router.post(
     "/:uid/product/addProduct",
-    upload.array("images", 1),
+    upload.single("image", 1),
     async (req, res) => {
+      console.log("add product");
       try {
         const shopUid = req.params.uid;
-        const imageUrl = await uploadSingleImage(req, bucket);
+        let imageUrl = null;
+
+        // Check if file exists in request
+        if (req.file) {
+          imageUrl = await uploadSingleImage(req.file, bucket);
+        }
         // const shopUid = req.params.uid;
         const data = req.body;
-        const [day, month, year] = data.expired_date.split("/");
-        const formattedDate = new Date(`${year}-${month}-${day}`);
+        const [year, month, day] = data.expired_date.split("/");
+        const isoFormattedDate = `${year}-${month}-${day}T00:00:00.000Z`;
+        const formattedDate = new Date(isoFormattedDate);
+        console.log(formattedDate);
 
         console.log(data);
 
@@ -88,6 +97,8 @@ module.exports = (db, express, bucket, upload) => {
         return res.status(200).send({ status: "success", data: data });
       } catch (err) {
         console.log(err.message);
+
+        return res.status(500).send({ status: "failed" });
       }
     }
   );
