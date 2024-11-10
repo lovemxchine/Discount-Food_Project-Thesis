@@ -58,11 +58,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
+      final responseData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
         print('Product added successfully');
         Navigator.pushNamed(context, '/shop');
+      } else if (responseData["data"] == "failed valid") {
       } else {
+        print(response.body);
         print('Failed to add product with status: ${response.statusCode}');
       }
     } catch (e) {

@@ -3,6 +3,7 @@ const cors = require("cors");
 const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
 const multer = require("multer");
+require("dotenv").config();
 const { getStorage } = require("firebase/storage");
 const cron = require("node-cron");
 const guest = require("./routes/guest");
@@ -16,10 +17,18 @@ const port = 3000;
 const app = express();
 const db = admin.firestore();
 const bucket = admin.storage().bucket(); // Using bucket from Firebase Admin SDK
-const upload = multer({ storage: multer.memoryStorage() });
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+}); // Allow up to 3 images
 
 // Routes
-const registerRoute = require("./routes/authentication/register")(db, express);
+const registerRoute = require("./routes/authentication/register")(
+  db,
+  express,
+  bucket,
+  upload
+);
 const signInRoute = require("./routes/authentication/signIn")(db, express);
 const shopRoute = require("./routes/shop")(db, express, bucket, upload);
 const customerRoute = require("./routes/customer")(db, express);
@@ -36,7 +45,6 @@ app.use("/customer", customerRoute);
 app.use("/shop", shopRoute);
 app.use("/guest", guestRoute);
 
-// Dynamically import the gemini route
 (async () => {
   const { default: geminiRoute } = await import(
     "./routes/gemini/geminiEndpoint.mjs"
@@ -44,26 +52,24 @@ app.use("/guest", guestRoute);
   app.use("/gemini", geminiRoute(express));
 })();
 
-// Cron job to update showStatus
-
-cron.schedule("12 21 * * *", async () => {
+// Check products that expired
+cron.schedule("00 00 * * *", async () => {
   console.log("เช็คสินค้าที่มีส่วนลดเกิน 2 วันแล้ว");
 
   try {
-    // Retrieve all documents in the 'shop' collection
-    const shopsSnapshot = await db.collection("shop").get();
+    const AllShop = await db.collection("shop").get();
     const currentTime = admin.firestore.Timestamp.now();
 
-    for (const shopDoc of shopsSnapshot.docs) {
+    for (const shopDoc of AllShop.docs) {
       const shopId = shopDoc.id;
 
-      const productsSnapshot = await db
+      const AllProducts = await db
         .collection("shop")
         .doc(shopId)
         .collection("products")
         .get();
 
-      for (const productDoc of productsSnapshot.docs) {
+      for (const productDoc of AllProducts.docs) {
         const productData = productDoc.data();
         const productTimestamp = productData.discountAt;
 

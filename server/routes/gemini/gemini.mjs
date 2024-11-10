@@ -1,19 +1,25 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
 
-// ใส่ API key ของคุณที่นี่
-const API_KEY = "AIzaSyBBgn5LBGjqBGKz5HYSh2qOTqnhIQZeTFY";
+const result = dotenv.config();
+if (result.error) {
+  console.error("Error loading .env file:", result.error);
+} else {
+  console.log(".env file loaded successfully");
+}
 
-// เลือกโมเดล
+const API_KEY = process.env.GEMINI_API_KEY;
+// console.log("API_KEY" + API_KEY);
+
+// โมเดล
 const MODEL_NAME = "gemini-1.5-flash-latest";
 
-// สร้าง client
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 export async function analyzeImage(imageBuffer) {
-  // สร้าง model
   const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
-  // เตรียมรูปภาพ
+  // ส่งรูปไปโมเดล
   const imageParts = [
     {
       inlineData: {
@@ -29,7 +35,7 @@ export async function analyzeImage(imageBuffer) {
 2. ราคาเดิม (ถ้ามี)
 3. ราคาใหม่
 4. วันที่หมดอายุ (ถ้ามี) if
-**Important ! Buddhist Era change to BC  DD/MM/YYYY**
+**Important ! Buddhist Era change to BC DD/MM/YYYY **
 
 กรุณาตอบในรูปแบบ JSON ดังนี้:
 {
@@ -44,7 +50,7 @@ export async function analyzeImage(imageBuffer) {
 - ชื่อสินค้าในป้ายบางอันอาจจะมีผสมชื่อแบรนด์
 - ใช้ภาษาไทยสำหรับชื่อสินค้า
 - ใช้ตัวเลขสำหรับราคา (ไม่ต้องมีสัญลักษณ์สกุลเงิน)
-- ใช้รูปแบบ YYYY-MM-DD สำหรับวันที่
+- ใช้รูปแบบ YYYY/MM/DD สำหรับวันที่
 - ตอบเฉพาะ JSON เท่านั้น ไม่ต้องมีข้อความอื่นๆ`;
 
   try {
