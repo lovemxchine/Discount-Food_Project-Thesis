@@ -31,10 +31,7 @@ class _BottomNavShopState extends State<BottomNavShop> {
       child: Scaffold(
         body: Stack(
           children: [
-            // Content
             _pages[_currentIndex],
-
-            // Bottom Navigation Bar
             Positioned(
               left: 0,
               right: 0,

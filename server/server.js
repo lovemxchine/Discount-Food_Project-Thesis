@@ -53,44 +53,107 @@ app.use("/guest", guestRoute);
 })();
 
 // Check products that expired
-cron.schedule("00 00 * * *", async () => {
-  console.log("เช็คสินค้าที่มีส่วนลดเกิน 2 วันแล้ว");
+cron.schedule(
+  "18 21 * * *",
+  async () => {
+    const now = new Date();
+    console.log(
+      `เช็คสินค้าที่มีส่วนลดเกิน 2 วันแล้ว - เริ่มทำงาน: ${now.toLocaleString(
+        "th-TH"
+      )}`
+    );
 
-  try {
-    const AllShop = await db.collection("shop").get();
-    const currentTime = admin.firestore.Timestamp.now();
+    try {
+      // Get all shops first
+      const shopsSnapshot = await db.collection("shop").get();
 
-    for (const shopDoc of AllShop.docs) {
-      const shopId = shopDoc.id;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const twoDaysAgo = new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000);
+      const twoDaysAgoTimestamp =
+        admin.firestore.Timestamp.fromDate(twoDaysAgo);
 
-      const AllProducts = await db
-        .collection("shop")
-        .doc(shopId)
-        .collection("products")
-        .get();
+      let totalUpdated = 0;
+      const batchSize = 500;
+      let currentBatch = db.batch();
+      let batchCount = 0;
 
-      for (const productDoc of AllProducts.docs) {
-        const productData = productDoc.data();
-        const productTimestamp = productData.discountAt;
+      // Process each shop
+      for (const shopDoc of shopsSnapshot.docs) {
+        const shopId = shopDoc.id;
 
-        if (productTimestamp) {
-          const daysDifference =
-            currentTime.toDate() - productTimestamp.toDate();
-          const daysPassed = daysDifference / (1000 * 60 * 60 * 24);
+        // Query products for this shop
+        const productsSnapshot = await db
+          .collection("shop")
+          .doc(shopId)
+          .collection("products")
+          .where("showStatus", "==", true)
+          .where("discountAt", "<", twoDaysAgoTimestamp)
+          .get();
 
-          if (daysPassed > 2) {
-            await productDoc.ref.update({ showStatus: false });
+        // Update products for this shop
+        for (const productDoc of productsSnapshot.docs) {
+          currentBatch.update(productDoc.ref, {
+            showStatus: false,
+            updatedAt: admin.firestore.Timestamp.now(),
+          });
+
+          batchCount++;
+          totalUpdated++;
+
+          console.log(
+            `อัพเดต showStatus เป็น false รหัสสินค้า (productID): ${productDoc.id} รหัสร้านค้า (${shopId})`
+          );
+
+          // Commit batch if it reaches the limit
+          if (batchCount >= batchSize) {
+            await currentBatch.commit();
             console.log(
-              `อัพเดต showStatus เป็น false รหัสสินค้า (productID): ${productDoc.id} รหัสร้านค้า (shopID): ${shopId}`
+              `Committed batch of ${batchCount} updates at ${new Date().toLocaleString(
+                "th-TH"
+              )}`
             );
+            currentBatch = db.batch();
+            batchCount = 0;
           }
         }
       }
+
+      // Commit any remaining updates
+      if (batchCount > 0) {
+        await currentBatch.commit();
+        console.log(
+          `Committed final batch of ${batchCount} updates at ${new Date().toLocaleString(
+            "th-TH"
+          )}`
+        );
+      }
+
+      console.log(
+        `Total products updated: ${totalUpdated} at ${new Date().toLocaleString(
+          "th-TH"
+        )}`
+      );
+
+      if (totalUpdated === 0) {
+        console.log("No products needed updating");
+      }
+    } catch (error) {
+      console.error("Error updating showStatus: ", error);
+
+      // More detailed error logging
+      if (error.code === 9) {
+        console.error(
+          "Index error - Please create the required index in Firebase Console"
+        );
+      }
     }
-  } catch (error) {
-    console.error("Error updating showStatus: ", error);
+  },
+  {
+    scheduled: true,
+    timezone: "Asia/Bangkok",
   }
-});
+);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
