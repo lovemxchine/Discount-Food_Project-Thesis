@@ -65,19 +65,19 @@ class OrderListScreenState extends State<OrderListScreen> {
     setState(() {
       listOrder = responseData['data'];
     });
-    while (responseData['data'].length < 3) {
-      setState(() {
-        listOrder.add(null);
-      });
-    }
+    // while (responseData['data'].length < 3) {
+    //   setState(() {
+    //     listOrder.add(null);
+    //   });
+    // }
     isLoading = false;
 
     // List arrData = decodedData['data'];
     print(listOrder.length);
     print(listOrder);
-    print("hi");
-    print(listOrder[0]['status'] == "not confirm yet");
-    if (listOrder[0]['status'] == "not confirm yet") {
+    print("test log");
+    print(listOrder[1]['status'] == "not confirm yet");
+    if (listOrder[1]['status'] == "not confirm yet") {
       print("not confirm yet");
     }
   }
@@ -168,10 +168,10 @@ class OrderListScreenState extends State<OrderListScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16)
                           .copyWith(top: 16),
-                      child: const Row(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             'ออเดอร์สั่งสินค้า',
                             style: TextStyle(
                               fontSize: 18,
@@ -179,6 +179,20 @@ class OrderListScreenState extends State<OrderListScreen> {
                               color: Colors.grey,
                             ),
                           ),
+                          const Spacer(),
+                          InkWell(
+                            onTap: () {
+                              print("object");
+                            },
+                            child: const Text(
+                              'ดูประวัติทั้งหมด',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
                         ],
                       ),
                     ),
@@ -194,47 +208,47 @@ class OrderListScreenState extends State<OrderListScreen> {
                             : Column(
                                 children: [
                                   for (int i = 0; i < listOrder.length; i++)
-                                    if (listOrder[i] != null)
-                                      if (listOrder[i]['status'] ==
-                                          "not confirm yet")
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              vertical: 8, horizontal: 20),
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      OrderDetailScreen(
-                                                    orderData: listOrder[i],
-                                                  ),
+                                    if (listOrder[i] != null &&
+                                        listOrder[i]['status'] ==
+                                            "not confirm yet")
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8, horizontal: 20),
+                                        child: InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    OrderDetailScreen(
+                                                  orderData: listOrder[i],
                                                 ),
-                                              );
-                                            },
-                                            child: Container(
-                                              height: 90,
-                                              padding: const EdgeInsets.all(12),
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Colors.black26,
-                                                    blurRadius: 1,
-                                                    offset: Offset(0, 4),
-                                                  ),
-                                                ],
                                               ),
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [],
-                                              ),
+                                            );
+                                          },
+                                          child: Container(
+                                            height: 90,
+                                            padding: const EdgeInsets.all(12),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                  color: Colors.black26,
+                                                  blurRadius: 1,
+                                                  offset: Offset(0, 4),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [],
                                             ),
                                           ),
                                         ),
+                                      ),
                                 ],
                               ),
                       ),

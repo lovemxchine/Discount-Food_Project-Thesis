@@ -70,7 +70,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   void initState() {
     super.initState();
     setState(() {
-      currentQuantity = widget.orderData['stock'];
+      // currentQuantity = widget.orderData['stock'];
     });
   }
 
@@ -113,18 +113,10 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         Container(
                           width: double.infinity,
                           height: 250,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: Image.network(widget.orderData['imageUrl'])
-                                  .image,
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
                         ),
                         SizedBox(height: 15),
                         Text(
-                          widget.orderData['productName'],
+                          'ชื่อสินค้า :  ',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -135,7 +127,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           children: [
                             Spacer(),
                             Text(
-                              'ลดเหลือ : ${widget.orderData['salePrice']} บาท',
+                              'ลดเหลือ :  บาท',
                               style: TextStyle(
                                 //bold
                                 fontWeight: FontWeight.bold,
@@ -144,7 +136,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             ),
                             Spacer(),
                             Text(
-                              'ราคาเดิม : ${widget.orderData['originalPrice']} บาท',
+                              '',
                               style: TextStyle(
                                 color: Colors.grey,
                                 fontSize: 16,
@@ -160,7 +152,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           children: [
                             Spacer(),
                             Text(
-                              'วันที่หมดอายุ : ${formatExpiredDate(widget.orderData['expiredDate'])} ', //${formatDiscountDate(productData['expiredDate'])}
+                              'วันที่หมดอายุ :  ', //${formatDiscountDate(productData['expiredDate'])}
                               style: TextStyle(fontSize: 16),
                             ),
                             SizedBox(width: 85),
@@ -176,11 +168,6 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               width: 39,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  if (currentQuantity > 0) {
-                                    setState(() {
-                                      currentQuantity--;
-                                    });
-                                  }
                                   print("Button tapped!");
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -199,7 +186,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             Container(
                               padding: EdgeInsets.all(8),
                               child: Text(
-                                'จำนวน :  ${currentQuantity} ชิ้น',
+                                'จำนวน :  ชิ้น',
                                 style: TextStyle(fontSize: 16),
                               ),
                               decoration: BoxDecoration(
@@ -218,7 +205,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   setState(() {
-                                    currentQuantity++;
+                                    // currentQuantity++;
                                   });
                                   print("Button tapped!");
                                 },
