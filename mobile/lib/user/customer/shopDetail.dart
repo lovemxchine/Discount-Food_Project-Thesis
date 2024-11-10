@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mobile/user/customer/productInshop.dart';
+import 'package:mobile/user/customer/reportShop.dart';
 
 class Shopdetail extends StatelessWidget {
-  const Shopdetail({super.key});
+  const Shopdetail({super.key, required Map<String, dynamic> shopData});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +17,7 @@ class Shopdetail extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProductInShop()),
-            );
+            Navigator.pop(context); 
           },
         ),
       ),
@@ -31,7 +29,7 @@ class Shopdetail extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // แผนที่ (คุณสามารถใช้ Google Maps API)
+                  
                   Container(
                     height: 200,
                     child: GoogleMap(
@@ -155,7 +153,21 @@ class Shopdetail extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: ElevatedButton(
                   onPressed: () {
-                    // ฟังก์ชันเมื่อกดปุ่ม "รายงาน"
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          backgroundColor:
+                              Colors.white, 
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                8), 
+                          ),
+                          child:
+                              Reportshop(), 
+                        );
+                      },
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
@@ -179,6 +191,93 @@ class Shopdetail extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Reportshop extends StatelessWidget {
+  const Reportshop({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min, 
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              icon: Icon(Icons.close_rounded, color: Colors.black),
+              onPressed: () {
+                Navigator.of(context).pop(); 
+              },
+            ),
+          ),
+          Text(
+            "ชื่อหัวข้อ",
+            style: TextStyle(
+                fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+            child: TextField(
+              decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  )),
+            ),
+          ),
+          
+          Text(
+            "เนื้อหา",
+            style: TextStyle(
+                fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+          SizedBox(height: 4,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: TextField(
+              minLines: 8,
+              maxLines: 13,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                hintStyle: TextStyle(
+                  color: Colors.grey,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              padding: EdgeInsets.symmetric(horizontal: 44, vertical: 12),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Text(
+              "ยืนยัน",
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white),
+            ),
+          ),
+          SizedBox(height: 24),
+        ],
       ),
     );
   }

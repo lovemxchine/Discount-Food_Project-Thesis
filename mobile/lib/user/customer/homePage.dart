@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/components/bottomNav.dart';
@@ -5,6 +9,7 @@ import 'package:mobile/user/customer/allshopNear.dart';
 import 'package:mobile/user/customer/homePage.dart';
 import 'package:mobile/user/customer/mailBox.dart';
 import 'package:mobile/user/customer/favoritePage.dart';
+import 'package:mobile/user/customer/productInshop.dart';
 import 'package:mobile/user/customer/settingsPage.dart';
 
 class Homepage extends StatefulWidget {
@@ -13,14 +18,71 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  int _currentIndex = 2;
+  List<dynamic> listProducts = [];
+  List<dynamic> filteredItems = [];
+  TextEditingController searchController = TextEditingController();
+  bool _isLoading = false;
+
+  //int _currentIndex = 2;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+    searchController.addListener(filterItems);
+  }
+
+  @override
+  void dispose() {
+    searchController.removeListener(filterItems);
+    searchController.dispose();
+    super.dispose();
+  }
+
+  void filterItems() {
+    setState(() {
+      filteredItems = listProducts
+          .where((item) => item['name']
+              .toLowerCase()
+              .contains(searchController.text.toLowerCase()))
+          .toList();
+    });
+  }
+
+  Future<void> _fetchData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final url = Uri.parse("http://10.0.2.2:3000/customer/availableShop");
+
+    try {
+      var response = await http.get(url);
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      print(responseData);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          listProducts = responseData['data'];
+          filteredItems = listProducts;
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
+        // Handle error
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: const Color.fromRGBO(255, 104, 56, 1),
+        backgroundColor:  Color.fromRGBO(255, 104, 56, 1),
         body: Column(
           children: [
             Container(
@@ -29,11 +91,11 @@ class _HomepageState extends State<Homepage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(width: 16),
+                  SizedBox(width: 16),
                   Container(
                     width: 60,
                     height: 60,
-                    decoration: const BoxDecoration(
+                    decoration:  BoxDecoration(
                       color: Colors.grey,
                       shape: BoxShape.circle,
                       image: DecorationImage(
@@ -42,15 +104,15 @@ class _HomepageState extends State<Homepage> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'ชาญณรงค์ ชาญเฌอ',
                         style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
-                      const SizedBox(height: 5),
+                       SizedBox(height: 5),
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 4),
@@ -58,7 +120,7 @@ class _HomepageState extends State<Homepage> {
                           color: Colors.white.withOpacity(0.5),
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: const Text(
+                        child:  Text(
                           'ผู้ใช้งานทั่วไป',
                           style: TextStyle(fontSize: 13, color: Colors.white),
                           textAlign: TextAlign.center,
@@ -69,10 +131,10 @@ class _HomepageState extends State<Homepage> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+             SizedBox(height: 20),
             Expanded(
               child: Container(
-                decoration: const BoxDecoration(
+                decoration:  BoxDecoration(
                   color: Color.fromARGB(255, 224, 217, 217),
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(30),
@@ -89,9 +151,9 @@ class _HomepageState extends State<Homepage> {
                           filled: true,
                           fillColor: Colors.white,
                           prefixIcon:
-                              const Icon(Icons.search, color: Colors.grey),
+                               Icon(Icons.search, color: Colors.grey),
                           hintText: 'ค้นหาร้านค้า',
-                          hintStyle: const TextStyle(color: Colors.grey),
+                          hintStyle:  TextStyle(color: Colors.grey),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide.none,
@@ -99,7 +161,7 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
                     ),
-                    const Padding(
+                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -118,25 +180,35 @@ class _HomepageState extends State<Homepage> {
                     ),
                     const SizedBox(height: 20),
                     Expanded(
-                      child: SingleChildScrollView(
+                      child: _isLoading
+                      ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                      : SingleChildScrollView(
                         child: Column(
-                          children: [
-                            for (int i = 0; i < 6; i++)
-                              Padding(
+                          children:  filteredItems.map((item){
+                          return   Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 8, horizontal: 20),
                                 child: InkWell(
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, '/customer/productInshop');
-                                  },
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProductInShop(
+                                                shopData: item,
+                                              ),
+                                            ),
+                                          );
+                                        },
                                   child: Container(
                                     height: 90,
                                     padding: const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(12),
-                                      boxShadow: const [
+                                      boxShadow:  [
                                         BoxShadow(
                                           color: Colors.black26,
                                           blurRadius: 1,
@@ -153,7 +225,7 @@ class _HomepageState extends State<Homepage> {
                                           height: 80,
                                           decoration: BoxDecoration(
                                             color: Colors.grey,
-                                            image: const DecorationImage(
+                                            image:  DecorationImage(
                                               image: AssetImage(
                                                   'assets/images/alt.png'),
                                               fit: BoxFit.cover,
@@ -162,14 +234,14 @@ class _HomepageState extends State<Homepage> {
                                                 BorderRadius.circular(5),
                                           ),
                                         ),
-                                        const SizedBox(width: 20),
-                                        const Expanded(
+                                         SizedBox(width: 20),
+                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                'ชื่อร้านค้า',
+                                                item['name'],
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
@@ -177,7 +249,7 @@ class _HomepageState extends State<Homepage> {
                                               ),
                                               SizedBox(height: 5),
                                               Text(
-                                                'เวลาเปิด-ปิด',
+                                                'เวลาเปิด - ปิด ( ${item['openAt']} -  ${item['closeAt']} )',
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.black,
@@ -200,11 +272,11 @@ class _HomepageState extends State<Homepage> {
                                     ),
                                   ),
                                 ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
+                              );
+                         }).toList(),
+                        ),//นี่
+                      ),//นี้
+                    ), //บรรทัดนี้
                   ],
                 ),
               ),

@@ -38,5 +38,6 @@ module.exports = (db, express) => {
       return res.status(500).send({ status: "failed" });
     }
   });
+
   return router;
 };

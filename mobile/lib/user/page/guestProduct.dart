@@ -186,7 +186,8 @@ class _GuestProductInShopState extends State<GuestProductInShop> {
               mini: true, // Makes the button smaller
             ),
           ),
-        ]),
+        ],
+        ),
       ),
     );
   }
