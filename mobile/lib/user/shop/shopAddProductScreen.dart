@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 import 'package:mobile/components/textFieldComponent.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +34,90 @@ class _AddProductScreenState extends State<AddProductScreen> {
   File? _imageGemini;
   var pathAPI = "http://10.0.2.2:3000";
   var uid = '';
+  Future<File?> cropImage(String imagePath) async {
+    try {
+      final croppedFile = await ImageCropper().cropImage(
+        sourcePath: imagePath,
+        compressFormat: ImageCompressFormat.jpg,
+        compressQuality: 100,
+        uiSettings: [
+          AndroidUiSettings(
+            toolbarTitle: 'ปรับแต่งรูปภาพ',
+            toolbarColor: Colors.green,
+            toolbarWidgetColor: Colors.white,
+            backgroundColor: Colors.white,
+            activeControlsWidgetColor: Colors.green,
+            dimmedLayerColor: Colors.black.withOpacity(0.5),
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false,
+            statusBarColor: Colors.green,
+          ),
+        ],
+      );
+
+      if (croppedFile != null) {
+        return File(croppedFile.path);
+      }
+    } catch (e) {
+      print('Error cropping image: $e');
+      // Show error dialog
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to crop image. Please try again.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+    return null;
+  }
+
+  Future<void> processImage(ImageSource source, bool isGemini) async {
+    try {
+      final XFile? pickedFile = await picker.pickImage(
+        source: source,
+        imageQuality: 100,
+      );
+
+      if (pickedFile != null) {
+        final File? croppedImage = await cropImage(pickedFile.path);
+        if (croppedImage != null && mounted) {
+          setState(() {
+            if (isGemini) {
+              _imageGemini = croppedImage;
+            } else {
+              _image = croppedImage;
+            }
+          });
+        }
+      }
+    } catch (e) {
+      print('Error processing image: $e');
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to process image. Please try again.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
 
   Future<void> addProduct() async {
     uid = await getUID() ?? '';
@@ -119,26 +204,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
   // image picker for gemini
   Future getImageGemini() async {
-    try {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-      setState(() {
-        if (pickedFile != null) {
-          _imageGemini = File(pickedFile.path);
-        }
-      });
-    } on Exception catch (e) {
-      print(e);
-    }
+    await processImage(ImageSource.gallery, true);
   }
 
   Future<void> openCameraGemini(BuildContext context) async {
-    final XFile? _imageGemini =
-        await picker.pickImage(source: ImageSource.camera);
-    if (_imageGemini != null) {
-      // Handle the captured image
-      print('Image path: ${_imageGemini.path}');
-    }
+    await processImage(ImageSource.camera, true);
   }
 
   void showPickerGemini(BuildContext context) {
@@ -173,25 +243,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
 //image picker
   Future getImage() async {
-    try {
-      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-      setState(() {
-        if (pickedFile != null) {
-          _image = File(pickedFile.path);
-        }
-      });
-    } on Exception catch (e) {
-      print(e);
-    }
+    await processImage(ImageSource.gallery, false);
   }
 
   Future<void> openCamera(BuildContext context) async {
-    final XFile? image = await picker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      // Handle the captured image
-      print('Image path: ${image.path}');
-    }
+    await processImage(ImageSource.camera, false);
   }
 
   void showPicker(BuildContext context) {
@@ -258,28 +314,53 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      Container(
-                        height: 200,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.grey, // Set the border color here
-                            width: 1.0, // Set the border width here
+                      if (_image != null)
+                        Container(
+                          height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.grey[200],
                           ),
-                          image: DecorationImage(
-                            image: _image != null && _image!.existsSync()
-                                ? FileImage(_image!)
-                                : const AssetImage('assets/images/alt.png')
-                                    as ImageProvider<Object>,
-                            fit: BoxFit.cover,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Image.file(
+                              _image!,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        )
+                      else
+                        Container(
+                          height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.grey[200],
                           ),
                         ),
-                      ),
+                      // Container(
+                      //   height: 200,
+                      //   width: double.infinity,
+                      //   decoration: BoxDecoration(
+                      //     borderRadius: BorderRadius.circular(8),
+                      //     color: Colors.white,
+                      //     border: Border.all(
+                      //       color: Colors.grey, // Set the border color here
+                      //       width: 1.0, // Set the border width here
+                      //     ),
+                      //     image: DecorationImage(
+                      //       image: _image != null && _image!.existsSync()
+                      //           ? FileImage(_image!)
+                      //           : const AssetImage('assets/images/alt.png')
+                      //               as ImageProvider<Object>,
+                      //       fit: BoxFit.cover,
+                      //     ),
+                      //   ),
+                      // ),
                       const SizedBox(height: 10),
                       GestureDetector(
                         onTap: () => showPicker(context),
@@ -371,20 +452,27 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               ),
                             ),
                           ),
-                          InkWell(
-                            onTap: () {
-                              _imageGemini != null ? sentImageGemini() : null;
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: Colors.white,
+                          Container(
+                            // color: Color(0xFFFF6838),
+                            child: ElevatedButton(
+                              onPressed:
+                                  _imageGemini != null ? sentImageGemini : null,
+                              style: ElevatedButton.styleFrom(
+                                // elevation: 0,
+                                foregroundColor:
+                                    Color.fromARGB(255, 156, 156, 156),
+                                backgroundColor: const Color.fromARGB(
+                                    255, 255, 255, 255), // Text color
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                minimumSize: Size(120, 40), // Width and height
                               ),
-                              child: const Center(
-                                child: Text('ยืนยัน',
-                                    style: TextStyle(color: Colors.grey)),
+                              child: const Text(
+                                'ยืนยัน',
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 141, 141, 141),
+                                ),
                               ),
                             ),
                           ),

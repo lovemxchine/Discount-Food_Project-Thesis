@@ -40,7 +40,7 @@ module.exports = (db, express, bucket, upload) => {
       try {
         let data = doc.data();
         // data.expiredDate = data.expiredDate.toDate();
-        console.log(data);
+        // console.log(data);
 
         ordersList.push(data);
       } catch (e) {
