@@ -54,7 +54,7 @@ app.use("/guest", guestRoute);
 
 // Check products that expired
 cron.schedule(
-  "18 21 * * *",
+  "00 00 * * *",
   async () => {
     const now = new Date();
     console.log(

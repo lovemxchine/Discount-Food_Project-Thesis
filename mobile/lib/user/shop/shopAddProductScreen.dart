@@ -317,25 +317,50 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
-                      Container(
-                        height: 200,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.grey, // Set the border color here
-                            width: 1.0, // Set the border width here
+                      if (_image != null)
+                        Container(
+                          height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.grey[200],
                           ),
-                          image: DecorationImage(
-                            image: _image != null && _image!.existsSync()
-                                ? FileImage(_image!)
-                                : const AssetImage('assets/images/alt.png')
-                                    as ImageProvider<Object>,
-                            fit: BoxFit.cover,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Image.file(
+                              _image!,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        )
+                      else
+                        Container(
+                          height: 200,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.grey[200],
                           ),
                         ),
-                      ),
+                      // Container(
+                      //   height: 200,
+                      //   width: double.infinity,
+                      //   decoration: BoxDecoration(
+                      //     borderRadius: BorderRadius.circular(8),
+                      //     color: Colors.white,
+                      //     border: Border.all(
+                      //       color: Colors.grey, // Set the border color here
+                      //       width: 1.0, // Set the border width here
+                      //     ),
+                      //     image: DecorationImage(
+                      //       image: _image != null && _image!.existsSync()
+                      //           ? FileImage(_image!)
+                      //           : const AssetImage('assets/images/alt.png')
+                      //               as ImageProvider<Object>,
+                      //       fit: BoxFit.cover,
+                      //     ),
+                      //   ),
+                      // ),
                       const SizedBox(height: 10),
                       GestureDetector(
                         onTap: () => showPicker(context),

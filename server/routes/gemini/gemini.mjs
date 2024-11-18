@@ -19,7 +19,6 @@ const genAI = new GoogleGenerativeAI(API_KEY);
 export async function analyzeImage(imageBuffer) {
   const model = genAI.getGenerativeModel({ model: MODEL_NAME });
 
-  // ส่งรูปไปโมเดล
   const imageParts = [
     {
       inlineData: {
@@ -29,14 +28,14 @@ export async function analyzeImage(imageBuffer) {
     },
   ];
 
-  // คำถามที่จะถามเกี่ยวกับรูปภาพ
   const prompt = `สกัดคำรูปภาพนี้และระบุข้อมูลต่อไปนี้:
 1. ชื่อสินค้า
 2. ราคาเดิม (ถ้ามี)
 3. ราคาใหม่
-4. วันที่หมดอายุ (ถ้ามี) if
+4. วันที่หมดอายุ (ถ้ามี)
 **Important ! Buddhist Era change to BC DD/MM/YYYY **
-
+**The 26th Buddhist Century**
+**The 21st Century (AD)**
 กรุณาตอบในรูปแบบ JSON ดังนี้:
 {
   "product_name": "ชื่อสินค้า",
@@ -50,14 +49,22 @@ export async function analyzeImage(imageBuffer) {
 - ชื่อสินค้าในป้ายบางอันอาจจะมีผสมชื่อแบรนด์
 - ใช้ภาษาไทยสำหรับชื่อสินค้า
 - ใช้ตัวเลขสำหรับราคา (ไม่ต้องมีสัญลักษณ์สกุลเงิน)
-- ใช้รูปแบบ YYYY/MM/DD สำหรับวันที่
 - ตอบเฉพาะ JSON เท่านั้น ไม่ต้องมีข้อความอื่นๆ`;
 
   try {
     const result = await model.generateContent([prompt, ...imageParts]);
     const response = await result.response;
-    const text = response.text();
-    return JSON.parse(text);
+    let text = response.text();
+
+    // ลบเครื่องหมาย backticks และช่องว่างที่ไม่จำเป็น
+    text = text.trim().replace(/^```json|```$/g, "");
+    text = text.trim();
+    // ตรวจสอบว่า JSON อยู่ในรูปแบบที่ถูกต้อง
+    if (text.startsWith("{") && text.endsWith("}")) {
+      return JSON.parse(text);
+    } else {
+      throw new Error("Invalid JSON format: " + text);
+    }
   } catch (error) {
     console.error("Error in analyzeImage:", error);
     throw error;
