@@ -19,9 +19,11 @@ module.exports = (db, express, bucket, upload) => {
         let data = doc.data();
         // data.discountAt = data.discountAt.toDate();
         data.expiredDate = data.expiredDate.toDate();
+        console.log(data.expiredDate);
         shopList.push(data);
       } catch (e) {
         console.log("error");
+        console.log(e);
       }
     });
     return res.status(200).send({ status: "success", data: shopList });
@@ -69,9 +71,23 @@ module.exports = (db, express, bucket, upload) => {
         }
         // const shopUid = req.params.uid;
         const data = req.body;
-        const [year, month, day] = data.expired_date.split("/");
+        console.log(data.expired_date);
+
+        let [day, month, year] = data.expired_date.split("/");
+        if (parseInt(year) > 2500) {
+          year = parseInt(year) - 543;
+          console.log("Buddhist Era");
+        }
+        console.log(year, month, day);
         const isoFormattedDate = `${year}-${month}-${day}T00:00:00.000Z`;
+        // console.log(isoFormattedDate);
+
         const formattedDate = new Date(isoFormattedDate);
+        // if (isNaN(formattedDate.getTime())) {
+        //   return res
+        //     .status(400)
+        //     .send({ status: "failed", message: "Invalid date format" });
+        // }
         console.log(formattedDate);
 
         console.log(data);
@@ -85,7 +101,7 @@ module.exports = (db, express, bucket, upload) => {
             salePrice: parseInt(data.sale_price),
             originalPrice: parseInt(data.original_price),
             stock: parseInt(data.stock),
-            expiredDate: formattedDate,
+            expiredDate: isoFormattedDate,
             imageUrl: imageUrl,
             discountAt: Timestamp.now(),
             showStatus: true,
@@ -96,8 +112,8 @@ module.exports = (db, express, bucket, upload) => {
 
         return res.status(200).send({ status: "success", data: data });
       } catch (err) {
+        console.log("error 1");
         console.log(err.message);
-
         return res.status(500).send({ status: "failed" });
       }
     }

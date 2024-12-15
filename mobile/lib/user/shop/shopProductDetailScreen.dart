@@ -27,7 +27,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   List<bool> isSelected = [false, false];
   var pathAPI = "http://10.0.2.2:3000";
   bool showStatus = true;
-
   Future<String?> getUID() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('user_uid');
@@ -99,6 +98,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     dateController.text = formatExpiredDate(widget.productData['expiredDate']);
     showStatus = widget.productData['showStatus'];
     isSelected = [showStatus, !showStatus];
+    print(widget.productData);
   }
 
   @override

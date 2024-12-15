@@ -29,27 +29,23 @@ export async function analyzeImage(imageBuffer) {
   ];
 
   const prompt = `สกัดคำรูปภาพนี้และระบุข้อมูลต่อไปนี้:
-1. ชื่อสินค้า
-2. ราคาเดิม (ถ้ามี)
-3. ราคาใหม่
-4. วันที่หมดอายุ (ถ้ามี)
+**The 26th Buddhist Century if in image expired year is between 2500-2600 **
+**The 21st Century (AD) if in image expired year is between 2000-2100 **
 **Important ! Buddhist Era change to BC DD/MM/YYYY **
-**The 26th Buddhist Century**
-**The 21st Century (AD)**
 กรุณาตอบในรูปแบบ JSON ดังนี้:
 {
   "product_name": "ชื่อสินค้า",
   "old_price": "ราคาเดิม (หรือ null ถ้าไม่มี)",
   "new_price": "ราคาใหม่",
-  "expiry_date": "วันที่หมดอายุ (หรือ null ถ้าไม่มี)"
+  "expiry_date": "วันที่หมดอายุ(หรือ null ถ้าไม่มี)"
 }
-
 หมายเหตุ:
 - ลองวิเคราะห์ว่าคำไหนเป็นชื่ออาหาร
 - ชื่อสินค้าในป้ายบางอันอาจจะมีผสมชื่อแบรนด์
 - ใช้ภาษาไทยสำหรับชื่อสินค้า
 - ใช้ตัวเลขสำหรับราคา (ไม่ต้องมีสัญลักษณ์สกุลเงิน)
-- ตอบเฉพาะ JSON เท่านั้น ไม่ต้องมีข้อความอื่นๆ`;
+- ตอบเฉพาะ JSON เท่านั้น ไม่ต้องมีข้อความอื่นๆ
+`;
 
   try {
     const result = await model.generateContent([prompt, ...imageParts]);

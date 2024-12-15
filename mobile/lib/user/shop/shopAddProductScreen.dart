@@ -338,8 +338,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
                           height: 200,
                           width: double.infinity,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(8),
                             color: Colors.grey[200],
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/alt.png'),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       // Container(
